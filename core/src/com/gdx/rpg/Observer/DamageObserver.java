@@ -1,8 +1,8 @@
 package com.gdx.rpg.Observer;
 
-import com.gdx.rpg.Entity;
+import com.gdx.rpg.Entities.Entity;
 import com.gdx.rpg.MainGame;
-import com.gdx.rpg.Player;
+import com.gdx.rpg.Entities.Player;
 import com.gdx.rpg.Statics;
 
 /**

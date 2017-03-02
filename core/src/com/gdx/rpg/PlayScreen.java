@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -16,7 +15,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.gdx.rpg.Enemy.Enemy;
+import com.gdx.rpg.Entities.Enemy;
+import com.gdx.rpg.Entities.Entity;
+import com.gdx.rpg.Entities.NPC;
+import com.gdx.rpg.Entities.Player;
 import com.gdx.rpg.HUD.HUD;
 
 /**
@@ -38,7 +40,8 @@ public class PlayScreen implements Screen{
 
     public PlayScreen(MainGame game){
         this.game = game;
-        player = new Player(new Texture("player.png"), new Vector2(1, 1));
+        MainGame.player = new Player(new Vector2(1, 1));
+        player = MainGame.player;
 
         camera = new OrthographicCamera();
         viewport = new FitViewport(MainGame.vWidth / MainGame.PPM, MainGame.vHeight / MainGame.PPM, camera);
@@ -51,6 +54,9 @@ public class PlayScreen implements Screen{
 
         MainGame.enemyFactory.createEnemy(Enemy.EnemyType.SLIME, new Vector2(5, 5));
         MainGame.enemyFactory.createEnemy(Enemy.EnemyType.SLIME, new Vector2(3, 3));
+        MainGame.enemyFactory.createEnemy(Enemy.EnemyType.BAT, new Vector2(7, 7));
+        MainGame.npcFactory.createNPC(NPC.NPCType.NORMAL, new Vector2(2, 2));
+
 
         game.hud = new HUD(game.batch);
         game.hud.health = player.health;
@@ -62,12 +68,10 @@ public class PlayScreen implements Screen{
     private void update(float delta){
         game.world.step(1/60f, 6, 2);
 
-        player.updatePlayer(delta);
-        for(Enemy enemy : MainGame.enemies.values()){
-            enemy.UpdateEnemy();
-            if(enemy.flaggedForDelete){
-                game.world.destroyBody(enemy.body);
-            }
+        player.updatePlayer(delta, camera);
+        for(Entity entity : MainGame.entities.values()){
+            entity.entityUpdateComponent.Update();
+            checkIfAlive(entity);
         }
         camera.position.set(player.body.getPosition().x, player.body.getPosition().y, 0);
         camera.update();
@@ -75,6 +79,13 @@ public class PlayScreen implements Screen{
         renderer.setView(camera);
     }
 
+    private void checkIfAlive(Entity entity){
+            if(entity.flaggedForDelete){
+                MainGame.entities.values().remove(entity);
+                game.world.destroyBody(entity.body);
+            }
+
+    }
     @Override
     public void render(float delta) {
         update(delta);
@@ -89,10 +100,11 @@ public class PlayScreen implements Screen{
         game.batch.enableBlending();
         game.batch.begin();
         player.sprite.draw(game.batch);
-        for(Enemy enemy : MainGame.enemies.values()){
-            enemy.sprite.draw(game.batch);
+
+        for(Entity entity : MainGame.entities.values()){
+            entity.sprite.draw(game.batch);
         }
-        game.hud.updateHud();
+        player.cursor.draw(game.batch);
         game.batch.end();
 
         debugRenderer.render(game.world, camera.combined);
@@ -100,6 +112,10 @@ public class PlayScreen implements Screen{
         game.batch.setProjectionMatrix(game.hud.stage.getCamera().combined);
         game.hud.stage.act(Gdx.graphics.getDeltaTime());
         game.hud.stage.draw();
+
+        game.batch.begin();
+        game.hud.updateHud();
+        game.batch.end();
 
     }
 

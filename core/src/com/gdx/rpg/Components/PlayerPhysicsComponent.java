@@ -2,12 +2,10 @@ package com.gdx.rpg.Components;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.*;
 import com.gdx.rpg.MainGame;
-import com.gdx.rpg.Player;
+import com.gdx.rpg.Entities.Player;
+import com.gdx.rpg.RevoluteJoint;
 import com.gdx.rpg.Statics;
 
 /**
@@ -17,11 +15,19 @@ public class PlayerPhysicsComponent {
 
     private Body body;
     private Body attackBody;
+    private RevoluteJoint revoluteJoint;
+    private Joint joint;
 
     public PlayerPhysicsComponent(Player player, Vector2 position){
         createBody(player, position);
         this.body = player.body;
         this.attackBody = player.attackBody;
+
+        /*revoluteJoint = new RevoluteJoint(body, attackBody, false);
+        revoluteJoint.SetAnchorA(body.getWorldCenter().x / 2, body.getWorldCenter().y / 2);
+        revoluteJoint.SetAnchorB(0, 1);
+        revoluteJoint.SetMotor(20, 360);
+        joint = revoluteJoint.CreateJoint(MainGame.world);*/
     }
 
     private void createBody(Player player, Vector2 position){
@@ -61,13 +67,12 @@ public class PlayerPhysicsComponent {
     }
 
     public void updatePhysics(Player player, float speed){
-
             switch (player.direction) {
                 case DOWN:
                     if(player.playerState == Player.PlayerState.MOVING)
                         body.applyLinearImpulse(new Vector2(0, -speed), body.getWorldCenter(), true);
                     attackBody.applyLinearImpulse(new Vector2(0, -speed), body.getWorldCenter(), true);
-                    attackBody.setTransform(body.getWorldCenter().x, body.getWorldCenter().y - (48 / MainGame.PPM), 0);
+                    attackBody.setTransform(body.getWorldCenter().x, body.getWorldCenter().y - (48 / MainGame.PPM), player.angle);
                     break;
                 case UP:
                     if(player.playerState == Player.PlayerState.MOVING)

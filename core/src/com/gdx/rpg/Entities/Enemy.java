@@ -1,10 +1,12 @@
-package com.gdx.rpg.Enemy;
+package com.gdx.rpg.Entities;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
-import com.gdx.rpg.Entity;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.gdx.rpg.Components.EnemyUpdateComponent;
 import com.gdx.rpg.MainGame;
 import com.gdx.rpg.Observer.DamageObserver;
 import com.gdx.rpg.Observer.EnemySubject;
@@ -16,22 +18,23 @@ import com.gdx.rpg.Observer.EnemySubject;
 public class Enemy extends Entity {
 
     public enum EnemyType{
-        SLIME
+        SLIME,
+        BAT
     };
 
-
-    public boolean flaggedForDelete = false;
 
     public EnemyType enemyType;
 
     public EnemySubject enemySubject;
+    public Body chaseBody;
 
-    public Enemy(Vector2 position, Texture texture){
-        super(texture, position);
-        sprite = new Sprite(texture);
+    public Enemy(Vector2 position, String id){
+        super( position, id);
 
+        enemyState = EnemyState.IDLE;
         enemySubject = new EnemySubject();
         enemySubject.AddObserver(new DamageObserver());
+        entityUpdateComponent = new EnemyUpdateComponent(this);
     }
 
     @Override
@@ -52,19 +55,19 @@ public class Enemy extends Entity {
         body.setUserData(this);
         fixtureDef.shape = shape;
         body.createFixture(fixtureDef);
-    }
 
-    public void UpdateEnemy(){
-        sprite.setPosition(body.getPosition().x - sprite.getWidth() / 2, body.getPosition().y - sprite.getHeight() / 2);
+        BodyDef chaseDef = new BodyDef();
+        chaseDef.position.set(position.x, position.y);
+        chaseDef.type = BodyDef.BodyType.DynamicBody;
 
-        checkIfAlive();
-    }
+        chaseBody = MainGame.world.createBody(chaseDef);
 
-    public void checkIfAlive(){
-        if(health <= 0) {
-            MainGame.enemies.values().remove(this);
-            flaggedForDelete = true;
-        }
-
+        FixtureDef chaseFixture = new FixtureDef();
+        PolygonShape chaseShape = new PolygonShape();
+        chaseShape.setAsBox(texture.getWidth() * 3 / MainGame.PPM, texture.getWidth() * 3 / MainGame.PPM);
+        chaseBody.setUserData("CHASE_BODY");
+        chaseFixture.shape = chaseShape;
+        chaseFixture.isSensor = true;
+        chaseBody.createFixture(chaseFixture).setUserData(this);
     }
 }

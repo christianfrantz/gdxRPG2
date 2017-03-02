@@ -5,5 +5,6 @@ package com.gdx.rpg.Observer;
  */
 public enum Event {
     PLAYER_DAMAGE,
-    ENEMY_DAMAGE
+    ENEMY_DAMAGE,
+    CLICKED_ENTITY
 }

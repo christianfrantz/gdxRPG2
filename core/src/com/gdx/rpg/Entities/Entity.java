@@ -1,4 +1,4 @@
-package com.gdx.rpg;
+package com.gdx.rpg.Entities;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -7,9 +7,11 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.gdx.rpg.Components.EntityUpdateComponent;
+import com.gdx.rpg.MainGame;
 
 /**
- * Created by imont_000 on 2/28/2017.
+ * if object is entity, set sprite, health
  */
 public class Entity {
     public enum Direction{
@@ -19,6 +21,13 @@ public class Entity {
         UP
     }
 
+    public enum EnemyState{
+        NULL,
+        IDLE,
+        ATTACKING
+    }
+
+    public EnemyState enemyState;
     public Direction direction;
     public Sprite sprite;
     public Body body;
@@ -27,12 +36,16 @@ public class Entity {
     public int health;
     public String id;
 
-    public Entity(Texture texture, Vector2 position){
-        sprite = new Sprite(texture);
-        speed = 2;
+    public boolean flaggedForDelete = false;
+    public EntityUpdateComponent entityUpdateComponent;
 
-        //createBody(position, texture);
+    public Entity( Vector2 position, String id){
+        speed = 2;
         direction = Direction.DOWN;
+        enemyState = EnemyState.NULL;
+        this.id = id;
+
+        entityUpdateComponent = new EntityUpdateComponent(this);
     }
 
     public void createBody(Vector2 position, Texture texture){

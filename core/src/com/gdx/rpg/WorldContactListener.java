@@ -1,7 +1,10 @@
 package com.gdx.rpg;
 
+import com.badlogic.gdx.assets.loaders.SynchronousAssetLoader;
 import com.badlogic.gdx.physics.box2d.*;
-import com.gdx.rpg.Enemy.Enemy;
+import com.gdx.rpg.Entities.Enemy;
+import com.gdx.rpg.Entities.Entity;
+import com.gdx.rpg.Entities.Player;
 import com.gdx.rpg.Observer.DamageObserver;
 import com.gdx.rpg.Observer.Event;
 import com.gdx.rpg.Observer.Subject;
@@ -45,6 +48,13 @@ public class WorldContactListener implements ContactListener{
             subject.notify(player, Event.PLAYER_DAMAGE);
         }
 
+        if(isEnemyChasePlayer(fixtureA, fixtureB)){
+            enemy = fixtureA.getBody().getUserData().equals("CHASE_BODY") ? (Entity)fixtureA.getUserData() : (Entity)fixtureB.getUserData();
+            System.out.println(enemy.id);
+            enemy.enemyState = Enemy.EnemyState.ATTACKING;
+
+        }
+
     }
 
     @Override
@@ -75,6 +85,15 @@ public class WorldContactListener implements ContactListener{
 
     public boolean isOtherContactPlayer(Fixture a, Fixture b){
         if (a.getBody().getUserData() instanceof Enemy|| b.getBody().getUserData() instanceof Enemy){
+            if(a.getBody().getUserData().equals(Statics.PLAYER_BODY) || b.getBody().getUserData().equals(Statics.PLAYER_BODY)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isEnemyChasePlayer(Fixture a, Fixture b){
+        if(a.getBody().getUserData().equals("CHASE_BODY") || b.getBody().getUserData().equals("CHASE_BODY")){
             if(a.getBody().getUserData().equals(Statics.PLAYER_BODY) || b.getBody().getUserData().equals(Statics.PLAYER_BODY)){
                 return true;
             }

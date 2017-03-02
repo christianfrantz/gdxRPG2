@@ -2,8 +2,10 @@ package com.gdx.rpg.Components;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.gdx.rpg.Entity;
-import com.gdx.rpg.Player;
+import com.gdx.rpg.Entities.Entity;
+import com.gdx.rpg.MainGame;
+import com.gdx.rpg.Observer.Event;
+import com.gdx.rpg.Entities.Player;
 
 
 /**
@@ -38,6 +40,14 @@ public class PlayerInputComponent {
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.F) && player.playerState != Player.PlayerState.ATTACKING){
             player.playerState = Player.PlayerState.ATTACKING;
+        }
+
+        if(Gdx.input.justTouched()){
+            for(Entity entity : MainGame.entities.values()){
+                if(entity.sprite.getBoundingRectangle().contains(player.cursor.getBoundingRectangle())){
+                    player.playerSubject.notify(entity, Event.CLICKED_ENTITY);
+                }
+            }
         }
     }
 }
