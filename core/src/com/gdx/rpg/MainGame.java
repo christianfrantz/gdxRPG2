@@ -9,9 +9,12 @@ import com.gdx.rpg.Entities.Entity;
 import com.gdx.rpg.Entities.NPCFactory;
 import com.gdx.rpg.Entities.Player;
 import com.gdx.rpg.HUD.HUD;
+import com.gdx.rpg.Quests.Quest;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by imont_000 on 2/26/2017.
@@ -30,11 +33,12 @@ public class MainGame extends Game {
 
     public static HUD hud;
 
-    public static HashMap<String, Entity> entities = new HashMap<String, Entity>();
+    public static ArrayList< Entity> entities = new ArrayList<Entity>();
     public static Player player;
+    public static HashMap<String, Quest> availableQuests = new HashMap<String, Quest>();
 
     public MainGame(){
-
+        availableQuests.put(Statics.KILL_SLIMES, new Quest(Statics.KILL_SLIMES, Quest.QuestType.KILL));
     }
 
     @Override

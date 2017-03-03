@@ -35,7 +35,7 @@ public  class EnemyFactory {
                 enemy.createBody(position, enemy.sprite.getTexture());
                 enemy.health = 10;
                 enemy.enemyType = EnemyType.SLIME;
-                MainGame.entities.put(id, enemy);
+                MainGame.entities.add(enemy);
                 break;
             case BAT:
                 id = "bat" + idNumber;
@@ -44,7 +44,7 @@ public  class EnemyFactory {
                 enemy.createBody(position, enemy.sprite.getTexture());
                 enemy.health = 10;
                 enemy.enemyType = EnemyType.BAT;
-                MainGame.entities.put(id, enemy);
+                MainGame.entities.add(enemy);
                 break;
         }
 

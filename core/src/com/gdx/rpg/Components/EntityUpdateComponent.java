@@ -25,6 +25,7 @@ public class EntityUpdateComponent {
     public void checkIfAlive(){
         if(entity.health <= 0) {
             entity.flaggedForDelete = true;
+            entity.Destroy();
         }
 
     }

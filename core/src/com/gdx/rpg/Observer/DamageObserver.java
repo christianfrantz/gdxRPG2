@@ -16,7 +16,7 @@ public class DamageObserver implements Observer {
         switch (event){
             case ENEMY_DAMAGE:{
                 enemy.health -= 10;
-                System.out.println("ENEMY_DAMAGE : " + enemy.health + " " + enemy.id);
+                //System.out.println("ENEMY_DAMAGE : " + enemy.health + " " + enemy.id + " " + enemy.flaggedForDelete);
                 break;
             }
         }
@@ -39,7 +39,7 @@ public class DamageObserver implements Observer {
         switch (event) {
             case ENEMY_DAMAGE:
                 enemy.health -= player.damage;
-                System.out.println("ENEMY_DAMAGE : " + enemy.health);
+                System.out.println("ENEMY_DAMAGE : " + enemy.health  + " " + enemy.id + " " + enemy.flaggedForDelete);
                 break;
             case PLAYER_DAMAGE:
                 player.health -= 10;

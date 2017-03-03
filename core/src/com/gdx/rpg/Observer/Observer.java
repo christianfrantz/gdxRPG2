@@ -16,4 +16,5 @@ public interface Observer {
     void onNotify(Player player, Entity enemy, Event event);
 
     void onNotify(Quest quest, Event event);
+
 }

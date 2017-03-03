@@ -13,6 +13,8 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.IdentityMap;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.gdx.rpg.Entities.Enemy;
@@ -20,6 +22,10 @@ import com.gdx.rpg.Entities.Entity;
 import com.gdx.rpg.Entities.NPC;
 import com.gdx.rpg.Entities.Player;
 import com.gdx.rpg.HUD.HUD;
+import com.gdx.rpg.Observer.Event;
+
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * Created by imont_000 on 2/26/2017.
@@ -37,7 +43,6 @@ public class PlayScreen implements Screen{
 
     Viewport viewport;
 
-
     public PlayScreen(MainGame game){
         this.game = game;
         MainGame.player = new Player(new Vector2(1, 1));
@@ -53,6 +58,7 @@ public class PlayScreen implements Screen{
         createContactListener();
 
         MainGame.npcFactory.createNPC(NPC.NPCType.NORMAL, new Vector2(2, 2));
+        MainGame.enemyFactory.createEnemy(Enemy.EnemyType.SLIME, new Vector2(3, 3));
 
         game.hud = new HUD(game.batch);
         game.hud.health = player.health;
@@ -65,9 +71,10 @@ public class PlayScreen implements Screen{
         game.world.step(1/60f, 6, 2);
 
         player.updatePlayer(delta, camera);
-        for(Entity entity : MainGame.entities.values()){
-            entity.entityUpdateComponent.Update();
-            checkIfAlive(entity);
+
+        for(int i = MainGame.entities.size() - 1; i >= 0; i--){
+            if(!MainGame.entities.get(i).flaggedForDelete)
+                 MainGame.entities.get(i).entityUpdateComponent.Update();
         }
         camera.position.set(player.body.getPosition().x, player.body.getPosition().y, 0);
         camera.update();
@@ -75,13 +82,6 @@ public class PlayScreen implements Screen{
         renderer.setView(camera);
     }
 
-    private void checkIfAlive(Entity entity){
-            if(entity.flaggedForDelete){
-                MainGame.entities.values().remove(entity);
-                game.world.destroyBody(entity.body);
-            }
-
-    }
     @Override
     public void render(float delta) {
         update(delta);
@@ -97,7 +97,7 @@ public class PlayScreen implements Screen{
         game.batch.begin();
         player.sprite.draw(game.batch);
 
-        for(Entity entity : MainGame.entities.values()){
+        for(Entity entity : MainGame.entities){
             entity.sprite.draw(game.batch);
         }
         player.cursor.draw(game.batch);
@@ -138,7 +138,7 @@ public class PlayScreen implements Screen{
         for(MapObject object : tiledMap.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)){
             Rectangle rect = ((RectangleMapObject)object).getRectangle();
             if(object.getProperties().containsKey("slime")){
-               MainGame.enemyFactory.createEnemy(Enemy.EnemyType.SLIME, new Vector2(rect.getX() / MainGame.PPM, rect.getY() / MainGame.PPM));
+                MainGame.enemyFactory.createEnemy(Enemy.EnemyType.SLIME, new Vector2(rect.getX() / MainGame.PPM, rect.getY() / MainGame.PPM));
             }
             if(object.getProperties().containsKey("bat")){
                 MainGame.enemyFactory.createEnemy(Enemy.EnemyType.BAT, new Vector2(rect.getX() / MainGame.PPM, rect.getY() / MainGame.PPM));

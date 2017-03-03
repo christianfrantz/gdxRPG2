@@ -12,4 +12,5 @@ public interface Statics {
     public static String PLAYER_ATTACK_BODY = "playerAttackBody";
     public static String SLIME_BODY = "slime";
     public static String HUD_HEALTH = "Health: ";
+    String KILL_SLIMES = "KILL_SLIMES";
 }

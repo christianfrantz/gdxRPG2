@@ -1,5 +1,6 @@
 package com.gdx.rpg.Entities;
 
+import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
@@ -7,8 +8,13 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.utils.Array;
 import com.gdx.rpg.Components.EntityUpdateComponent;
 import com.gdx.rpg.MainGame;
+import com.gdx.rpg.Observer.Event;
+
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * if object is entity, set sprite, health
@@ -69,5 +75,19 @@ public class Entity {
         fixtureDef.density = 100f;
 
         body.createFixture(fixtureDef);
+    }
+
+    public void Destroy(){
+        for(int i = 0; i < body.getFixtureList().size; i++){
+            body.destroyFixture(body.getFixtureList().get(i));
+        }
+        for(Iterator<Entity> it = MainGame.entities.iterator(); it.hasNext();){
+            Entity e = it.next();
+            if(e.flaggedForDelete){
+                it.remove();
+            }
+        }
+
+        MainGame.player.playerSubject.notify(this, Event.UPDATE_QUEST);
     }
 }

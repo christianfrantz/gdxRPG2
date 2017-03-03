@@ -8,5 +8,6 @@ public enum Event {
     ENEMY_DAMAGE,
     CLICKED_ENTITY,
     ACCEPT_QUEST,
-    UPDATE_QUEST
+    UPDATE_QUEST,
+    COMPLETE_QUEST
 }

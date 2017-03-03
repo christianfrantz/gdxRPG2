@@ -25,7 +25,7 @@ public class NPCFactory {
             case NORMAL:
                 String id = "normal" + idNumber;
                 npc = new NPC(position, id);
-                MainGame.entities.put(id, npc);
+                MainGame.entities.add( npc);
                 break;
         }
 

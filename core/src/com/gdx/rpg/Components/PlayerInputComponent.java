@@ -43,7 +43,7 @@ public class PlayerInputComponent {
         }
 
         if(Gdx.input.justTouched()){
-            for(Entity entity : MainGame.entities.values()){
+            for(Entity entity : MainGame.entities){
                 if(entity.sprite.getBoundingRectangle().contains(player.cursor.getBoundingRectangle())){
                     player.playerSubject.notify(entity, Event.CLICKED_ENTITY);
                 }

@@ -4,7 +4,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.gdx.rpg.Components.NPCUpdateComponent;
+import com.gdx.rpg.MainGame;
 import com.gdx.rpg.Quests.Quest;
+import com.gdx.rpg.Statics;
 
 /**
  * if object is entity, set sprite, health, call
@@ -31,7 +33,7 @@ public class NPC extends Entity {
 
         hasQuest = true;
         if(hasQuest){
-            currentQuest = new Quest("KILL_SLIMES");
+            currentQuest = MainGame.availableQuests.get(Statics.KILL_SLIMES);
         }
     }
 
