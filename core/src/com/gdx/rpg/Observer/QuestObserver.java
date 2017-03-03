@@ -2,6 +2,7 @@ package com.gdx.rpg.Observer;
 
 import com.gdx.rpg.Entities.Enemy;
 import com.gdx.rpg.Entities.Entity;
+import com.gdx.rpg.Entities.NPC;
 import com.gdx.rpg.Entities.Player;
 import com.gdx.rpg.MainGame;
 import com.gdx.rpg.Quests.Quest;
@@ -23,7 +24,8 @@ public class QuestObserver implements Observer{
                 break;
 
             case COMPLETE_QUEST:
-
+                NPC npc = (NPC)quest.questGiver;
+                npc.currentDialogue = quest.afterQuest;
                 break;
         }
 
@@ -45,9 +47,12 @@ public class QuestObserver implements Observer{
                         System.out.println("UPDATE QUEST " + quest.questDescription + "Slime " + quest.questRequirement.numberKilled);
                         if(quest.questRequirement.numberKilled == quest.questRequirement.numberNeeded){
                             quest.questCompleted = true;
+                            onNotify(quest, Event.COMPLETE_QUEST);
                         }
                     }
                 }
+                break;
+
         }
     }
 
@@ -60,17 +65,4 @@ public class QuestObserver implements Observer{
     public void onNotify(Player player, Entity enemy, Event event) {
 
     }
-
-    /*private void checkQuest(Entity enemy){
-        switch ((Enemy)enemy.enemyType){
-            Quest quest;
-            if(Enemy.EnemyType.SLIME == enemy.enemyType && MainGame.player.playerQuests.contains(Statics.KILL_SLIMES)){
-                quest.questRequirement.numberKilled++;
-                System.out.println("Slime " + quest.questRequirement.numberKilled);
-                if(quest.questRequirement.numberKilled == quest.questRequirement.numberNeeded){
-                    quest.questCompleted = true;
-                }
-            }
-        }
-    }*/
 }

@@ -18,7 +18,12 @@ public class NPC extends Entity {
     }
 
     public NPCType npcType;
-    public String dialogue;
+
+    public String currentDialogue;
+
+    public String dialogue = "Hello";
+
+
     public boolean hasQuest;
     public Quest currentQuest;
 
@@ -26,14 +31,21 @@ public class NPC extends Entity {
         super(position, id);
         sprite = new Sprite(new Texture("player.png"));
         createBody(position, sprite.getTexture());
-        dialogue = "HELLO";
+
         entityUpdateComponent = new NPCUpdateComponent(this);
         health = 10;
         npcType = NPCType.NORMAL;
 
-        hasQuest = true;
+    }
+
+    public void setUpQuest(){
         if(hasQuest){
-            currentQuest = MainGame.availableQuests.get(Statics.KILL_SLIMES);
+            currentQuest.questGiver = this;
+            currentDialogue = currentQuest.beforeQuest;
+
+        }
+        else {
+            currentDialogue = dialogue;
         }
     }
 

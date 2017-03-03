@@ -24,6 +24,16 @@ public class QuestRequirement {
                 if(quest.questDescription == Statics.KILL_SLIMES) {
                     numberNeeded = 3;
                     enemyNeeded = Enemy.EnemyType.SLIME;
+                    quest.beforeQuest = "Kill 3 slimes";
+                    quest.duringQuest = "Come back when you kill 3 slimes";
+                    quest.afterQuest = "Thank you";
+                }
+                if(quest.questDescription == Statics.KILL_BATS){
+                    numberNeeded = 5;
+                    enemyNeeded = Enemy.EnemyType.BAT;
+                    quest.beforeQuest = "Kill 5 bats";
+                    quest.duringQuest = "Come back when you kill 5 bats";
+                    quest.afterQuest = "Thank you";
                 }
                 break;
             case FETCH:

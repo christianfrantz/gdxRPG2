@@ -57,7 +57,9 @@ public class PlayScreen implements Screen{
 
         createContactListener();
 
-        MainGame.npcFactory.createNPC(NPC.NPCType.NORMAL, new Vector2(2, 2));
+        MainGame.npcFactory.createNPC(NPC.NPCType.NORMAL, new Vector2(6, 4), null);
+        MainGame.npcFactory.createNPC(NPC.NPCType.NORMAL, new Vector2(4, 4), MainGame.availableQuests.get(Statics.KILL_SLIMES));
+        MainGame.npcFactory.createNPC(NPC.NPCType.NORMAL, new Vector2(2, 2), MainGame.availableQuests.get(Statics.KILL_BATS));
         MainGame.enemyFactory.createEnemy(Enemy.EnemyType.SLIME, new Vector2(3, 3));
 
         game.hud = new HUD(game.batch);

@@ -13,4 +13,5 @@ public interface Statics {
     public static String SLIME_BODY = "slime";
     public static String HUD_HEALTH = "Health: ";
     String KILL_SLIMES = "KILL_SLIMES";
+    String KILL_BATS = "KILL_BATS";
 }
