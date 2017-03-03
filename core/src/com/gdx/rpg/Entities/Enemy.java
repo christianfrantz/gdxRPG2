@@ -54,6 +54,7 @@ public class Enemy extends Entity {
 
         body.setUserData(this);
         fixtureDef.shape = shape;
+        fixtureDef.restitution = 3f;
         body.createFixture(fixtureDef);
 
         BodyDef chaseDef = new BodyDef();
@@ -69,5 +70,9 @@ public class Enemy extends Entity {
         chaseFixture.shape = chaseShape;
         chaseFixture.isSensor = true;
         chaseBody.createFixture(chaseFixture).setUserData(this);
+
+        body.setLinearDamping(5f);
+        chaseBody.setLinearDamping(5);
+
     }
 }

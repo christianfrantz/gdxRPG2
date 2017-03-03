@@ -1,5 +1,9 @@
 package com.gdx.rpg;
 
+import com.gdx.rpg.Quests.Quest;
+
+import java.util.ArrayList;
+
 /**
  * Created by imont_000 on 2/27/2017.
  */

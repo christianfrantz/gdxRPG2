@@ -1,6 +1,5 @@
 package com.gdx.rpg;
 
-import com.badlogic.gdx.assets.loaders.SynchronousAssetLoader;
 import com.badlogic.gdx.physics.box2d.*;
 import com.gdx.rpg.Entities.Enemy;
 import com.gdx.rpg.Entities.Entity;
@@ -26,7 +25,7 @@ public class WorldContactListener implements ContactListener{
     public void beginContact(Contact contact) {
         Fixture fixtureA = contact.getFixtureA();
         Fixture fixtureB = contact.getFixtureB();
-        //Gdx.app.log("begin contact", "between " + fixtureA.getBody().getUserData() + " and " + fixtureB.getBody().getUserData());
+
         Player player;
         Entity enemy;
 
@@ -45,14 +44,12 @@ public class WorldContactListener implements ContactListener{
         if(isOtherContactPlayer(fixtureA, fixtureB)){
             player = fixtureA.getBody().getUserData().equals(Statics.PLAYER_BODY) ? (Player)fixtureA.getUserData() : (Player)fixtureB.getUserData();
             enemy = fixtureB.getBody().getUserData() instanceof Enemy ? (Enemy)fixtureB.getBody().getUserData() : (Enemy)fixtureA.getBody().getUserData();
-            subject.notify(player, Event.PLAYER_DAMAGE);
+            subject.notify(player,enemy, Event.PLAYER_DAMAGE);
         }
 
         if(isEnemyChasePlayer(fixtureA, fixtureB)){
             enemy = fixtureA.getBody().getUserData().equals("CHASE_BODY") ? (Entity)fixtureA.getUserData() : (Entity)fixtureB.getUserData();
-            System.out.println(enemy.id);
             enemy.enemyState = Enemy.EnemyState.ATTACKING;
-
         }
 
     }
@@ -61,7 +58,6 @@ public class WorldContactListener implements ContactListener{
     public void endContact(Contact contact) {
         Fixture fixtureA = contact.getFixtureA();
         Fixture fixtureB = contact.getFixtureB();
-        //Gdx.app.log("end contact", "between " + fixtureA.getBody().getUserData() + " and " + fixtureB.getBody().getUserData());
     }
 
     @Override

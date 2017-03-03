@@ -4,6 +4,7 @@ package com.gdx.rpg.Observer;
 
 import com.gdx.rpg.Entities.Entity;
 import com.gdx.rpg.Entities.Player;
+import com.gdx.rpg.Quests.Quest;
 
 import java.util.LinkedList;
 
@@ -37,6 +38,12 @@ public class Subject {
         public void notify(Player player, Entity enemy, Event event){
             for(int i = 0; i < numOfObservers; i++){
                 observers.get(i).onNotify(player, enemy, event);
+            }
+        }
+
+        public void notify(Quest quest, Event event){
+            for(int i = 0; i < numOfObservers; i++){
+                observers.get(i).onNotify(quest, event);
             }
         }
 

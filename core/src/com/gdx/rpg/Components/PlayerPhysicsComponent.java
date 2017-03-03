@@ -42,7 +42,6 @@ public class PlayerPhysicsComponent {
         shape.setAsBox(32 / MainGame.PPM, 32 / MainGame.PPM);
 
         fixtureDef.shape = shape;
-
         player.body.setUserData(Statics.PLAYER_BODY);
         player.body.createFixture(fixtureDef).setUserData(player);
 
@@ -56,8 +55,8 @@ public class PlayerPhysicsComponent {
         PolygonShape attackShape = new PolygonShape();
         attackShape.setAsBox(64 / MainGame.PPM, 18 / MainGame.PPM);
         attackFixture.isSensor = true;
+        attackFixture.restitution = 3f;
         attackFixture.shape = attackShape;
-
 
         player.attackBody.setUserData(Statics.PLAYER_ATTACK_BODY);
         player.attackBody.createFixture(attackFixture).setUserData(player);

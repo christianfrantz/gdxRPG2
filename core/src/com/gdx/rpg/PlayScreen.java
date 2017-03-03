@@ -52,11 +52,7 @@ public class PlayScreen implements Screen{
 
         createContactListener();
 
-        MainGame.enemyFactory.createEnemy(Enemy.EnemyType.SLIME, new Vector2(5, 5));
-        MainGame.enemyFactory.createEnemy(Enemy.EnemyType.SLIME, new Vector2(3, 3));
-        MainGame.enemyFactory.createEnemy(Enemy.EnemyType.BAT, new Vector2(7, 7));
         MainGame.npcFactory.createNPC(NPC.NPCType.NORMAL, new Vector2(2, 2));
-
 
         game.hud = new HUD(game.batch);
         game.hud.health = player.health;
@@ -112,11 +108,6 @@ public class PlayScreen implements Screen{
         game.batch.setProjectionMatrix(game.hud.stage.getCamera().combined);
         game.hud.stage.act(Gdx.graphics.getDeltaTime());
         game.hud.stage.draw();
-
-        game.batch.begin();
-        game.hud.updateHud();
-        game.batch.end();
-
     }
 
     private void createContactListener(){
@@ -142,6 +133,16 @@ public class PlayScreen implements Screen{
             fixtureDef.shape = shape;
             body.createFixture(fixtureDef);
             body.setUserData("wall");
+        }
+
+        for(MapObject object : tiledMap.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)){
+            Rectangle rect = ((RectangleMapObject)object).getRectangle();
+            if(object.getProperties().containsKey("slime")){
+               MainGame.enemyFactory.createEnemy(Enemy.EnemyType.SLIME, new Vector2(rect.getX() / MainGame.PPM, rect.getY() / MainGame.PPM));
+            }
+            if(object.getProperties().containsKey("bat")){
+                MainGame.enemyFactory.createEnemy(Enemy.EnemyType.BAT, new Vector2(rect.getX() / MainGame.PPM, rect.getY() / MainGame.PPM));
+            }
         }
     }
 

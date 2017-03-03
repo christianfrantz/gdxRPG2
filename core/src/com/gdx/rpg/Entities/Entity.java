@@ -56,6 +56,7 @@ public class Entity {
         bodyDef.position.set(position.x, position.y);
         bodyDef.type = BodyDef.BodyType.DynamicBody;
 
+        bodyDef.fixedRotation = true;
         body = MainGame.world.createBody(bodyDef);
 
         FixtureDef fixtureDef = new FixtureDef();
@@ -64,6 +65,9 @@ public class Entity {
 
         body.setUserData(this);
         fixtureDef.shape = shape;
+        fixtureDef.restitution = 0.001f;
+        fixtureDef.density = 100f;
+
         body.createFixture(fixtureDef);
     }
 }

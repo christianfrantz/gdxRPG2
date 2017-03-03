@@ -1,7 +1,10 @@
 package com.gdx.rpg.Components;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.collision.Ray;
 import com.gdx.rpg.Entities.Enemy;
 import com.gdx.rpg.Entities.Entity;
 import com.gdx.rpg.MainGame;
@@ -21,12 +24,13 @@ public class EnemyUpdateComponent extends EntityUpdateComponent{
 
     Random random;
     int moveDirection;
+    float movementSpeed = 0.1f;
 
     public EnemyUpdateComponent(Enemy entity){
         super(entity);
         this.entity = entity;
 
-        moveTimer = 1;
+        moveTimer = 2;
         moveCount = 0;
 
         random = new Random();
@@ -59,21 +63,24 @@ public class EnemyUpdateComponent extends EntityUpdateComponent{
             }
             switch (moveDirection) {
                 case 0:
-                    entity.body.applyLinearImpulse(new Vector2(-0.01f, 0), entity.body.getWorldCenter(), true);
+                    entity.body.applyLinearImpulse(new Vector2(-movementSpeed, 0), entity.body.getWorldCenter(), true);
                     break;
                 case 1:
-                    entity.body.applyLinearImpulse(new Vector2(0.01f, 0), entity.body.getWorldCenter(), true);
+                    entity.body.applyLinearImpulse(new Vector2(movementSpeed, 0), entity.body.getWorldCenter(), true);
                     break;
                 case 2:
-                    entity.body.applyLinearImpulse(new Vector2(0, -0.01f), entity.body.getWorldCenter(), true);
+                    entity.body.applyLinearImpulse(new Vector2(0, -movementSpeed), entity.body.getWorldCenter(), true);
                     break;
                 case 3:
-                    entity.body.applyLinearImpulse(new Vector2(0, 0.01f), entity.body.getWorldCenter(), true);
+                    entity.body.applyLinearImpulse(new Vector2(0, movementSpeed), entity.body.getWorldCenter(), true);
                     break;
             }
         }
         else if(entity.enemyState == Entity.EnemyState.ATTACKING){
-            //entity.body.applyLinearImpulse(MainGame.player.body.getWorldCenter(), entity.body.getWorldCenter(), true);
+            float speed = 10f;
+            Vector2 force = new Vector2();
+            force.set(MainGame.player.body.getPosition()).sub(entity.body.getPosition()).nor().scl(speed);
+            entity.body.applyForceToCenter(force, true);
         }
     }
 
@@ -81,10 +88,14 @@ public class EnemyUpdateComponent extends EntityUpdateComponent{
         entity.chaseBody.setTransform(entity.body.getWorldCenter(), 0);
 
         if(entity.enemyState == Enemy.EnemyState.IDLE) {
-            entity.body.applyLinearImpulse(new Vector2(-0.01f, 0), entity.body.getWorldCenter(), true);
+            entity.body.applyLinearImpulse(new Vector2(-movementSpeed, 0), entity.body.getWorldCenter(), true);
         }
         else if(entity.enemyState == Entity.EnemyState.ATTACKING){
-            //entity.body.applyLinearImpulse(new Vector2(MainGame.player.body.getWorldCenter().x / MainGame.PPM, MainGame.player.body.getWorldCenter().y / MainGame.PPM), entity.body.getWorldCenter(), true);
+            float speed = 10f;
+            Vector2 force = new Vector2();
+            force.set(MainGame.player.body.getPosition()).sub(entity.body.getPosition()).nor().scl(speed);
+            entity.body.applyForceToCenter(force, true);
         }
+
     }
 }
