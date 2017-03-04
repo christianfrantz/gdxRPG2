@@ -52,6 +52,11 @@ public class WorldContactListener implements ContactListener{
             enemy.enemyState = Enemy.EnemyState.ATTACKING;
         }
 
+        if(isPlayerTeleport(fixtureA, fixtureB)){
+            System.out.println(fixtureA.getUserData().toString());
+            MainGame.ChangeMap(fixtureA.getUserData().toString());
+        }
+
     }
 
     @Override
@@ -91,6 +96,15 @@ public class WorldContactListener implements ContactListener{
     public boolean isEnemyChasePlayer(Fixture a, Fixture b){
         if(a.getBody().getUserData().equals("CHASE_BODY") || b.getBody().getUserData().equals("CHASE_BODY")){
             if(a.getBody().getUserData().equals(Statics.PLAYER_BODY) || b.getBody().getUserData().equals(Statics.PLAYER_BODY)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isPlayerTeleport(Fixture a, Fixture b){
+        if(a.getBody().getUserData().equals(Statics.PLAYER_BODY) || b.getBody().getUserData().equals(Statics.PLAYER_BODY)){
+            if(a.getBody().getUserData().equals("teleport") || b.getBody().getUserData().equals("teleport")){
                 return true;
             }
         }

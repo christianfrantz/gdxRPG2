@@ -7,6 +7,7 @@ import com.gdx.rpg.Components.EnemyUpdateComponent;
 import com.gdx.rpg.Entities.Enemy.EnemyType;
 import com.gdx.rpg.MainGame;
 
+import java.util.ArrayList;
 
 
 /**
@@ -23,7 +24,7 @@ public  class EnemyFactory {
 
     public int idNumber = 0;
 
-    public Enemy createEnemy(EnemyType type, Vector2 position){
+    public Enemy createEnemy(EnemyType type, ArrayList<Entity> list, Vector2 position){
 
         Enemy enemy = null;
         String id;
@@ -35,7 +36,7 @@ public  class EnemyFactory {
                 enemy.createBody(position, enemy.sprite.getTexture());
                 enemy.health = 10;
                 enemy.enemyType = EnemyType.SLIME;
-                MainGame.entities.add(enemy);
+                list.add(enemy);
                 break;
             case BAT:
                 id = "bat" + idNumber;
@@ -44,7 +45,7 @@ public  class EnemyFactory {
                 enemy.createBody(position, enemy.sprite.getTexture());
                 enemy.health = 10;
                 enemy.enemyType = EnemyType.BAT;
-                MainGame.entities.add(enemy);
+                list.add(enemy);
                 break;
         }
 

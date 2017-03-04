@@ -50,6 +50,8 @@ public class Player extends Entity {
     public Sprite cursor;
     public float angle;
 
+    public boolean needToMove = false;
+
     public Player( Vector2 position){
         super( position, "PLAYER");
 

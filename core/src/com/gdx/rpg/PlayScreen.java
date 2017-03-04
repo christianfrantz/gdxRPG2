@@ -22,10 +22,6 @@ import com.gdx.rpg.Entities.Entity;
 import com.gdx.rpg.Entities.NPC;
 import com.gdx.rpg.Entities.Player;
 import com.gdx.rpg.HUD.HUD;
-import com.gdx.rpg.Observer.Event;
-
-import java.util.Iterator;
-import java.util.Map;
 
 /**
  * Created by imont_000 on 2/26/2017.
@@ -35,17 +31,14 @@ public class PlayScreen implements Screen{
     private MainGame game;
     Player player;
 
-    TiledMap tiledMap;
     OrthographicCamera camera;
-    TiledMapRenderer renderer;
-
     Box2DDebugRenderer debugRenderer;
 
     Viewport viewport;
 
     public PlayScreen(MainGame game){
         this.game = game;
-        MainGame.player = new Player(new Vector2(1, 1));
+        MainGame.player = new Player(game.currentMap.playerSpawn);
         player = MainGame.player;
 
         camera = new OrthographicCamera();
@@ -53,14 +46,12 @@ public class PlayScreen implements Screen{
         camera.position.set(viewport.getWorldWidth() / 2, viewport.getWorldHeight() / 2, 0);
         camera.update();
 
-        loadMap();
-
         createContactListener();
 
-        MainGame.npcFactory.createNPC(NPC.NPCType.NORMAL, new Vector2(6, 4), null);
-        MainGame.npcFactory.createNPC(NPC.NPCType.NORMAL, new Vector2(4, 4), MainGame.availableQuests.get(Statics.KILL_SLIMES));
-        MainGame.npcFactory.createNPC(NPC.NPCType.NORMAL, new Vector2(2, 2), MainGame.availableQuests.get(Statics.KILL_BATS));
-        MainGame.enemyFactory.createEnemy(Enemy.EnemyType.SLIME, new Vector2(3, 3));
+        MainGame.npcFactory.createNPC(NPC.NPCType.NORMAL, MainGame.currentMap.mapEntities, new Vector2(6, 4), null);
+        MainGame.npcFactory.createNPC(NPC.NPCType.NORMAL, MainGame.currentMap.mapEntities,new Vector2(4, 4), MainGame.availableQuests.get(Statics.KILL_SLIMES));
+        MainGame.npcFactory.createNPC(NPC.NPCType.NORMAL, MainGame.currentMap.mapEntities,new Vector2(2, 2), MainGame.availableQuests.get(Statics.KILL_BATS));
+        //MainGame.enemyFactory.createEnemy(Enemy.EnemyType.SLIME, MainGame.currentMap.mapEntities, new Vector2(3, 3));
 
         game.hud = new HUD(game.batch);
         game.hud.health = player.health;
@@ -70,18 +61,24 @@ public class PlayScreen implements Screen{
     }
 
     private void update(float delta){
-        game.world.step(1/60f, 6, 2);
+        game.currentWorld.step(1/60f, 6, 2);
+
+        if(player.needToMove){
+            player.body.setTransform(game.currentMap.playerSpawn.x, game.currentMap.playerSpawn.y, 0);
+            player.needToMove = false;
+            player.body.setAwake(true);
+        }
 
         player.updatePlayer(delta, camera);
 
-        for(int i = MainGame.entities.size() - 1; i >= 0; i--){
-            if(!MainGame.entities.get(i).flaggedForDelete)
-                 MainGame.entities.get(i).entityUpdateComponent.Update();
+        for(int i = MainGame.currentMap.mapEntities.size() - 1; i >= 0; i--){
+            if(!MainGame.currentMap.mapEntities.get(i).flaggedForDelete)
+                 MainGame.currentMap.mapEntities.get(i).entityUpdateComponent.Update();
         }
         camera.position.set(player.body.getPosition().x, player.body.getPosition().y, 0);
         camera.update();
 
-        renderer.setView(camera);
+        game.renderer.setView(camera);
     }
 
     @Override
@@ -91,7 +88,7 @@ public class PlayScreen implements Screen{
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        renderer.render();
+        game.renderer.render();
 
         game.batch.setProjectionMatrix(camera.combined);
 
@@ -99,53 +96,22 @@ public class PlayScreen implements Screen{
         game.batch.begin();
         player.sprite.draw(game.batch);
 
-        for(Entity entity : MainGame.entities){
+        for(Entity entity : MainGame.currentMap.mapEntities){
             entity.sprite.draw(game.batch);
         }
         player.cursor.draw(game.batch);
         game.batch.end();
 
-        debugRenderer.render(game.world, camera.combined);
+        debugRenderer.render(game.currentWorld, camera.combined);
 
         game.batch.setProjectionMatrix(game.hud.stage.getCamera().combined);
         game.hud.stage.act(Gdx.graphics.getDeltaTime());
         game.hud.stage.draw();
+
     }
 
     private void createContactListener(){
-        MainGame.world.setContactListener(new WorldContactListener());
-    }
-
-    private void loadMap(){
-        tiledMap = new TmxMapLoader().load("untitled.tmx");
-        renderer = new OrthogonalTiledMapRenderer(tiledMap, 1 / MainGame.PPM);
-
-        BodyDef def = new BodyDef();
-        PolygonShape shape = new PolygonShape();
-        FixtureDef fixtureDef = new FixtureDef();
-        Body body;
-
-        for(MapObject object : tiledMap.getLayers().get(1).getObjects().getByType(RectangleMapObject.class)){
-            Rectangle rect = ((RectangleMapObject)object).getRectangle();
-            def.type = BodyDef.BodyType.StaticBody;
-            def.position.set((rect.getX() + rect.getWidth() / 2) / MainGame.PPM , (rect.getY() + rect.getHeight() /2) / MainGame.PPM  );
-            body = game.world.createBody(def);
-
-            shape.setAsBox(rect.getWidth() / 2 / MainGame.PPM , rect.getHeight() / 2 / MainGame.PPM);
-            fixtureDef.shape = shape;
-            body.createFixture(fixtureDef);
-            body.setUserData("wall");
-        }
-
-        for(MapObject object : tiledMap.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)){
-            Rectangle rect = ((RectangleMapObject)object).getRectangle();
-            if(object.getProperties().containsKey("slime")){
-                MainGame.enemyFactory.createEnemy(Enemy.EnemyType.SLIME, new Vector2(rect.getX() / MainGame.PPM, rect.getY() / MainGame.PPM));
-            }
-            if(object.getProperties().containsKey("bat")){
-                MainGame.enemyFactory.createEnemy(Enemy.EnemyType.BAT, new Vector2(rect.getX() / MainGame.PPM, rect.getY() / MainGame.PPM));
-            }
-        }
+        MainGame.currentWorld.setContactListener(new WorldContactListener());
     }
 
     @Override

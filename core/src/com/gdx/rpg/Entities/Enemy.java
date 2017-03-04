@@ -46,7 +46,7 @@ public class Enemy extends Entity {
         bodyDef.position.set(position.x, position.y);
         bodyDef.type = BodyDef.BodyType.DynamicBody;
 
-        body = MainGame.world.createBody(bodyDef);
+        body = MainGame.currentWorld.createBody(bodyDef);
 
         FixtureDef fixtureDef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
@@ -61,7 +61,7 @@ public class Enemy extends Entity {
         chaseDef.position.set(position.x, position.y);
         chaseDef.type = BodyDef.BodyType.DynamicBody;
 
-        chaseBody = MainGame.world.createBody(chaseDef);
+        chaseBody = MainGame.currentWorld.createBody(chaseDef);
 
         FixtureDef chaseFixture = new FixtureDef();
         PolygonShape chaseShape = new PolygonShape();

@@ -6,6 +6,8 @@ import com.gdx.rpg.MainGame;
 import com.gdx.rpg.Quests.Quest;
 import com.gdx.rpg.Statics;
 
+import java.util.ArrayList;
+
 /**
  * For each entity create id first
  * entity = new entity(position, id)
@@ -19,7 +21,7 @@ import com.gdx.rpg.Statics;
 public class NPCFactory {
     public int idNumber = 0;
 
-    public NPC createNPC(NPC.NPCType type, Vector2 position, Quest quest){
+    public NPC createNPC(NPC.NPCType type, ArrayList<Entity> list, Vector2 position, Quest quest){
 
         NPC npc = null;
 
@@ -34,7 +36,7 @@ public class NPCFactory {
                     npc.hasQuest = false;
                 npc.currentQuest = quest;
                 npc.setUpQuest();
-                MainGame.entities.add( npc);
+                list.add( npc);
                 break;
         }
 

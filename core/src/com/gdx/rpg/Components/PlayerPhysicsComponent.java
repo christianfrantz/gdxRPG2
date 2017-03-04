@@ -35,7 +35,7 @@ public class PlayerPhysicsComponent {
         bodyDef.position.set(position.x, position.y);
         bodyDef.type = BodyDef.BodyType.DynamicBody;
 
-        player.body = MainGame.world.createBody(bodyDef);
+        player.body = MainGame.currentWorld.createBody(bodyDef);
 
         FixtureDef fixtureDef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
@@ -49,7 +49,7 @@ public class PlayerPhysicsComponent {
         attackBodyDef.position.set(position.x, (position.y - 0.5f));
         attackBodyDef.type = BodyDef.BodyType.DynamicBody;
 
-        player.attackBody = MainGame.world.createBody(attackBodyDef);
+        player.attackBody = MainGame.currentWorld.createBody(attackBodyDef);
 
         FixtureDef attackFixture = new FixtureDef();
         PolygonShape attackShape = new PolygonShape();

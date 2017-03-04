@@ -63,7 +63,7 @@ public class Entity {
         bodyDef.type = BodyDef.BodyType.DynamicBody;
 
         bodyDef.fixedRotation = true;
-        body = MainGame.world.createBody(bodyDef);
+        body = MainGame.currentWorld.createBody(bodyDef);
 
         FixtureDef fixtureDef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
@@ -81,7 +81,7 @@ public class Entity {
         for(int i = 0; i < body.getFixtureList().size; i++){
             body.destroyFixture(body.getFixtureList().get(i));
         }
-        for(Iterator<Entity> it = MainGame.entities.iterator(); it.hasNext();){
+        for(Iterator<Entity> it = MainGame.currentMap.mapEntities.iterator(); it.hasNext();){
             Entity e = it.next();
             if(e.flaggedForDelete){
                 it.remove();
