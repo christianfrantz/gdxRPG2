@@ -24,7 +24,7 @@ public  class EnemyFactory {
 
     public int idNumber = 0;
 
-    public Enemy createEnemy(EnemyType type, ArrayList<Entity> list, Vector2 position){
+    public Enemy createEnemy(EnemyType type, Vector2 position){
 
         Enemy enemy = null;
         String id;
@@ -32,20 +32,20 @@ public  class EnemyFactory {
             case SLIME:
                 id = "slime" + idNumber;
                 enemy = new Enemy(position, id);
+                enemy.isEnemy = true;
                 enemy.sprite = new Sprite(new Texture("slime.png"));
                 enemy.createBody(position, enemy.sprite.getTexture());
                 enemy.health = 10;
                 enemy.enemyType = EnemyType.SLIME;
-                list.add(enemy);
                 break;
             case BAT:
                 id = "bat" + idNumber;
                 enemy = new Enemy(position, id);
+                enemy.isEnemy = true;
                 enemy.sprite = new Sprite(new Texture("bat.png"));
                 enemy.createBody(position, enemy.sprite.getTexture());
                 enemy.health = 10;
                 enemy.enemyType = EnemyType.BAT;
-                list.add(enemy);
                 break;
         }
 

@@ -17,7 +17,7 @@ public class ClickObserver implements Observer{
             case CLICKED_ENTITY:
                 if(entity instanceof NPC)
                     MainGame.hud.ShowDialogue((NPC)entity);
-                else
+                //else
                     System.out.println(entity.id);
         }
     }

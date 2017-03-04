@@ -4,20 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.IdentityMap;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.gdx.rpg.Entities.Enemy;
 import com.gdx.rpg.Entities.Entity;
 import com.gdx.rpg.Entities.NPC;
 import com.gdx.rpg.Entities.Player;
@@ -61,9 +53,28 @@ public class PlayScreen implements Screen{
     }
 
     private void update(float delta){
-        game.currentWorld.step(1/60f, 6, 2);
+        game.world.step(1/60f, 6, 2);
 
         if(player.needToMove){
+            Array<Body> bodies = new Array<Body>();
+            MainGame.world.getBodies(bodies);
+            for(Body b : bodies){
+                if(b.getUserData().equals("wall")){
+                    MainGame.world.destroyBody(b);
+                }
+            }
+
+            for(int i = 0; i < game.currentMap.mapEntities.size(); i++){
+                if(game.currentMap.mapEntities.get(i).isEnemy){
+                    game.currentMap.mapEntities.remove(i);
+                }
+            }
+
+            game.mapToLoad.loadMap();
+            game.currentMap = game.mapToLoad;
+
+            MainGame.renderer = new OrthogonalTiledMapRenderer(game.currentMap.tiledMap, 1 / MainGame.PPM);
+
             player.body.setTransform(game.currentMap.playerSpawn.x, game.currentMap.playerSpawn.y, 0);
             player.needToMove = false;
             player.body.setAwake(true);
@@ -102,7 +113,7 @@ public class PlayScreen implements Screen{
         player.cursor.draw(game.batch);
         game.batch.end();
 
-        debugRenderer.render(game.currentWorld, camera.combined);
+        debugRenderer.render(game.world, camera.combined);
 
         game.batch.setProjectionMatrix(game.hud.stage.getCamera().combined);
         game.hud.stage.act(Gdx.graphics.getDeltaTime());
@@ -111,7 +122,7 @@ public class PlayScreen implements Screen{
     }
 
     private void createContactListener(){
-        MainGame.currentWorld.setContactListener(new WorldContactListener());
+        MainGame.world.setContactListener(new WorldContactListener());
     }
 
     @Override

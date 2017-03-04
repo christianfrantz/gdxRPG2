@@ -1,14 +1,17 @@
 package com.gdx.rpg;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.gdx.rpg.Entities.EnemyFactory;
+import com.gdx.rpg.Entities.Entity;
 import com.gdx.rpg.Entities.NPCFactory;
 import com.gdx.rpg.Entities.Player;
 import com.gdx.rpg.HUD.HUD;
@@ -38,11 +41,11 @@ public class MainGame extends Game {
 
     public static HashMap<String, Map> gameMaps = new HashMap<String, Map>();
     public static Map currentMap;
-    public static Map previousMap;
-    public static World currentWorld;
+    public static Map mapToLoad;
+    public static World world;
     public static TiledMapRenderer renderer;
 
-    private TmxMapLoader mapLoader;
+    public static TmxMapLoader mapLoader;
 
     public MainGame(){
         availableQuests.put(Statics.KILL_SLIMES, new Quest(Statics.KILL_SLIMES, Quest.QuestType.KILL));
@@ -59,21 +62,18 @@ public class MainGame extends Game {
         gameMaps.put(Statics.M_HOUSE, new Map(Statics.M_HOUSE, mapLoader));
 
         currentMap = gameMaps.get(Statics.M_MAIN_MAP);
-        previousMap = currentMap;
-        currentWorld = currentMap.world;
 
-        gameMaps.get(Statics.M_HOUSE).loadMap();
+        world = new World(new Vector2(0, 0), true);
+
         gameMaps.get(Statics.M_MAIN_MAP).loadMap();
 
         renderer = new OrthogonalTiledMapRenderer(MainGame.currentMap.tiledMap, 1 / MainGame.PPM);
-        System.out.println(currentMap.playerSpawn);
+
         setScreen(new PlayScreen(this));
     }
 
     public static void ChangeMap(String name){
-        currentMap = gameMaps.get(name);
-        currentWorld = currentMap.world;
-        renderer = new OrthogonalTiledMapRenderer(currentMap.tiledMap, 1 / MainGame.PPM);
         player.needToMove = true;
+        mapToLoad = gameMaps.get(name);
     }
 }

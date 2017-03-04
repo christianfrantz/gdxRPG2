@@ -1,6 +1,5 @@
 package com.gdx.rpg.Entities;
 
-import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
@@ -8,13 +7,11 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.utils.Array;
 import com.gdx.rpg.Components.EntityUpdateComponent;
 import com.gdx.rpg.MainGame;
 import com.gdx.rpg.Observer.Event;
 
 import java.util.Iterator;
-import java.util.Map;
 
 /**
  * if object is entity, set sprite, health
@@ -42,6 +39,7 @@ public class Entity {
     public int health;
     public String id;
 
+    public boolean isEnemy = false;
     public boolean flaggedForDelete = false;
     public EntityUpdateComponent entityUpdateComponent;
 
@@ -63,7 +61,7 @@ public class Entity {
         bodyDef.type = BodyDef.BodyType.DynamicBody;
 
         bodyDef.fixedRotation = true;
-        body = MainGame.currentWorld.createBody(bodyDef);
+        body = MainGame.world.createBody(bodyDef);
 
         FixtureDef fixtureDef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
