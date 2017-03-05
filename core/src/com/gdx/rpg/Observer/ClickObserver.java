@@ -19,6 +19,9 @@ public class ClickObserver implements Observer{
                 if(entity instanceof NPC) {
                     MainGame.hud.ShowDialogue((NPC) entity);
                     ((NPC) entity).isClicked = true;
+                    if(((NPC) entity).hasQuest){
+
+                    }
                 }
                 //else
                     System.out.println(entity.id);

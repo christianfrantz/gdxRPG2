@@ -43,17 +43,24 @@ public class NPC extends Entity {
         if(hasQuest){
             currentQuest.questGiver = this;
             currentDialogue = currentQuest.beforeQuest;
-            for(int i = 0; i < MainGame.player.playerQuests.size(); i++){
-                if(MainGame.player.playerQuests.contains(i) &&
-                        MainGame.player.playerQuests.get(i).isQuestCompleted()){
+            for(int i = 0; i < MainGame.playerQuests.size(); i++){
+                if(MainGame.playerQuests.contains(i) &&
+                        MainGame.playerQuests.get(i).isQuestCompleted()){
                     currentDialogue = currentQuest.afterQuest;
                 }
+                else if(MainGame.playerQuests.contains(i) &&
+                        !MainGame.playerQuests.get(i).isQuestCompleted()){
+                    currentDialogue = currentQuest.duringQuest;
+                }
+                else if(!MainGame.playerQuests.contains(i))
+                {
+                    currentDialogue = currentQuest.beforeQuest;
+                }
             }
-            //
         }
-        else {
+        else
             currentDialogue = dialogue;
-        }
+
     }
 
 

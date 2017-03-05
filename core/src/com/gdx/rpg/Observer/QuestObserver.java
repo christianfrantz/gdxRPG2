@@ -18,18 +18,20 @@ public class QuestObserver implements Observer{
     public void onNotify(Quest quest, Event event) {
         switch (event) {
             case ACCEPT_QUEST:
-                if (!MainGame.player.playerQuests.contains(quest))
-                    MainGame.player.playerQuests.add(quest);
+                if (!MainGame.playerQuests.contains(quest))
+                    MainGame.playerQuests.add(quest);
                 System.out.println(quest.questDescription + " added " + quest.questRequirement.numberKilled);
-                System.out.println(MainGame.player.playerQuests.size());
+                System.out.println(MainGame.playerQuests.size());
                 break;
 
             case COMPLETE_QUEST:
                 NPC npc = (NPC)quest.questGiver;
                 npc.currentDialogue = quest.afterQuest;
+                System.out.println("QUEST COMPLETED " + quest.questDescription);
                 if(quest.questType == Quest.QuestType.FETCH && ((NPC) quest.questGiver).isClicked){
                     for(int i = 0; i < quest.questRequirement.numberNeeded; i++){
                         MainGame.player.inventory.RemoveItem(quest.questRequirement.itemNeeded);
+                        System.out.println("SDFSDF");
                     }
                 }
                 break;
@@ -43,25 +45,22 @@ public class QuestObserver implements Observer{
         switch (event){
             case UPDATE_FETCH_QUEST:
 
-                for(int i = 0; i < MainGame.player.playerQuests.size(); i++){
-                    if(MainGame.player.playerQuests.get(i).questType == Quest.QuestType.FETCH
-                            && MainGame.player.playerQuests.get(i).questRequirement.itemNeeded == item.id){
-                        quest = MainGame.player.playerQuests.get(i);
+                for(int i = 0; i < MainGame.playerQuests.size(); i++){
+                    if(MainGame.playerQuests.get(i).questType == Quest.QuestType.FETCH
+                            && MainGame.playerQuests.get(i).questRequirement.itemNeeded == item.id){
+                        quest = MainGame.playerQuests.get(i);
                         for(int x = 0; x < MainGame.player.inventory.inventorySlots.length; x++){
                             if(quest.questRequirement.itemNeeded == MainGame.player.inventory.inventorySlots[x].itemInSlot.id
                                     && quest.questRequirement.numberNeeded == MainGame.player.inventory.inventorySlots[x].itemCount){
-                                        quest.questCompleted = true;
+                                quest.questCompleted = true;
                                 onNotify(quest, Event.COMPLETE_QUEST);
                             }
                         }
                     }
                 }
-
-
                 break;
         }
     }
-
 
     @Override
     public void onNotify(Entity enemy, Event event) {
@@ -70,20 +69,19 @@ public class QuestObserver implements Observer{
                 Enemy e = (Enemy)enemy;
                 Quest quest;
 
-                for(int i = 0; i < MainGame.player.playerQuests.size(); i++){
-                    if(MainGame.player.playerQuests.get(i).equals(MainGame.availableQuests.get(Statics.KILL_SLIMES)) &&
-                            MainGame.availableQuests.get(Statics.KILL_SLIMES).questRequirement.enemyNeeded.equals(e.enemyType)){
-                        quest = MainGame.player.playerQuests.get(i);
+                for(int i = 0; i < MainGame.playerQuests.size(); i++) {
+                    if (MainGame.playerQuests.get(i).questType == Quest.QuestType.KILL &&
+                            MainGame.playerQuests.get(i).questRequirement.enemyNeeded == ((Enemy) enemy).enemyType) {
+                        quest = MainGame.playerQuests.get(i);
                         quest.questRequirement.numberKilled++;
-                        System.out.println("UPDATE QUEST " + quest.questDescription + "Slime " + quest.questRequirement.numberKilled);
-                        if(quest.questRequirement.numberKilled == quest.questRequirement.numberNeeded){
+                        System.out.println("UPDATE QUEST " + quest.questDescription + " " + quest.questRequirement.numberKilled);
+                        if (quest.questRequirement.numberKilled == quest.questRequirement.numberNeeded) {
                             quest.questCompleted = true;
                             onNotify(quest, Event.COMPLETE_QUEST);
                         }
                     }
+                    break;
                 }
-                break;
-
         }
     }
 

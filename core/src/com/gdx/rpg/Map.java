@@ -11,6 +11,8 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.gdx.rpg.Entities.Enemy;
 import com.gdx.rpg.Entities.Entity;
+import com.gdx.rpg.Entities.NPC;
+import com.gdx.rpg.Quests.Quest;
 
 import java.util.ArrayList;
 
@@ -38,6 +40,16 @@ public class Map {
         FixtureDef fixtureDef = new FixtureDef();
         Body body;
 
+        Array<Body> bodies = new Array<Body>();
+        MainGame.world.getBodies(bodies);
+        for(Body b : bodies){
+            if(!b.getUserData().equals(Statics.PLAYER_BODY) && !b.getUserData().equals(Statics.PLAYER_ATTACK_BODY)){
+                MainGame.world.destroyBody(b);
+            }
+        }
+
+        mapEntities.clear();
+
         for(MapObject object : tiledMap.getLayers().get("CollisionLayer").getObjects().getByType(RectangleMapObject.class)){
             Rectangle rect = ((RectangleMapObject)object).getRectangle();
             def.type = BodyDef.BodyType.StaticBody;
@@ -60,6 +72,9 @@ public class Map {
             }
             if(object.getProperties().containsKey("player")){
                 playerSpawn = new Vector2(rect.getX() / MainGame.PPM, rect.getY() / MainGame.PPM);
+            }
+            if(object.getProperties().containsKey("npc")){
+                mapEntities.add(MainGame.npcFactory.createNPC(NPC.NPCType.NORMAL, MainGame.currentMap.mapEntities, new Vector2(rect.getX() / MainGame.PPM, rect.getY() / MainGame.PPM), MainGame.availableQuests.get(object.getProperties().get("npc"))));
             }
         }
 

@@ -47,8 +47,6 @@ public class Player extends Entity {
     public float attackCounter = 0;
 
     public PlayerSubject playerSubject;
-    public ArrayList<Quest> playerQuests;
-
     public Sprite cursor;
     public float angle;
 
@@ -77,7 +75,6 @@ public class Player extends Entity {
         cursor = new Sprite(new Texture("cursor.png"));
         cursor.setBounds(0, 0, 16 / MainGame.PPM, 16 / MainGame.PPM);
 
-        playerQuests = new ArrayList<Quest>();
         inventory = new Inventory();
         inventory.AddItem(new Item("stick"));
         inventory.AddItem(new Item("stick"));

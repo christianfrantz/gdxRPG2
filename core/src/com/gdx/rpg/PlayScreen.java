@@ -12,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.gdx.rpg.Entities.Enemy;
 import com.gdx.rpg.Entities.Entity;
 import com.gdx.rpg.Entities.NPC;
 import com.gdx.rpg.Entities.Player;
@@ -44,11 +45,6 @@ public class PlayScreen implements Screen{
 
         createContactListener();
 
-        MainGame.npcFactory.createNPC(NPC.NPCType.NORMAL, MainGame.currentMap.mapEntities, new Vector2(6, 4), null);
-        MainGame.npcFactory.createNPC(NPC.NPCType.NORMAL, MainGame.currentMap.mapEntities,new Vector2(4, 4), MainGame.availableQuests.get(Statics.FETCH_SLIMES));
-        MainGame.npcFactory.createNPC(NPC.NPCType.NORMAL, MainGame.currentMap.mapEntities,new Vector2(2, 2), MainGame.availableQuests.get(Statics.KILL_BATS));
-        //MainGame.enemyFactory.createEnemy(Enemy.EnemyType.SLIME, MainGame.currentMap.mapEntities, new Vector2(3, 3));
-
         game.hud = new HUD(game.batch);
         game.hud.health = player.health;
         game.hud.playerHealthLabel.setText(Statics.HUD_HEALTH + player.health);
@@ -63,21 +59,6 @@ public class PlayScreen implements Screen{
         game.world.step(1/60f, 6, 2);
 
         if(player.needToMove){
-            Array<Body> bodies = new Array<Body>();
-            MainGame.world.getBodies(bodies);
-            for(Body b : bodies){
-                if(b.getUserData().equals("wall")){
-                    MainGame.world.destroyBody(b);
-                }
-            }
-
-            for(int i = 0; i < game.currentMap.mapEntities.size(); i++){
-                if(game.currentMap.mapEntities.get(i).isEnemy){
-                    game.currentMap.mapEntities.get(i).Destroy();
-                    game.currentMap.mapEntities.remove(i);
-                }
-            }
-
             game.mapToLoad.loadMap();
             game.currentMap = game.mapToLoad;
 

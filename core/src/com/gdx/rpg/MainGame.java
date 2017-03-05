@@ -18,6 +18,7 @@ import com.gdx.rpg.HUD.HUD;
 import com.gdx.rpg.Quests.Quest;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -37,6 +38,7 @@ public class MainGame extends Game {
 
     public static Player player;
 
+    public static ArrayList<Quest> playerQuests;
     public static HashMap<String, Quest> availableQuests = new HashMap<String, Quest>();
 
     public static HashMap<String, Map> gameMaps = new HashMap<String, Map>();
@@ -57,6 +59,7 @@ public class MainGame extends Game {
     public void create() {
         batch = new SpriteBatch();
 
+        playerQuests = new ArrayList<Quest>();
         mapLoader = new TmxMapLoader();
 
         gameMaps.put(Statics.M_MAIN_MAP, new Map(Statics.M_MAIN_MAP, mapLoader));
