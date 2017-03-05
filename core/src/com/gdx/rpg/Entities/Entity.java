@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.gdx.rpg.Components.EntityUpdateComponent;
+import com.gdx.rpg.Item;
 import com.gdx.rpg.MainGame;
 import com.gdx.rpg.Observer.Event;
 
@@ -43,11 +44,14 @@ public class Entity {
     public boolean flaggedForDelete = false;
     public EntityUpdateComponent entityUpdateComponent;
 
+    public Item itemToDrop;
+
     public Entity( Vector2 position, String id){
         speed = 2;
         direction = Direction.DOWN;
         enemyState = EnemyState.NULL;
         this.id = id;
+        itemToDrop = new Item("null");
 
         entityUpdateComponent = new EntityUpdateComponent(this);
     }
@@ -85,7 +89,21 @@ public class Entity {
                 it.remove();
             }
         }
+    }
 
-        MainGame.player.playerSubject.notify(this, Event.UPDATE_QUEST);
+    public void IsKilled(){
+        for(int i = 0; i < body.getFixtureList().size; i++){
+            body.destroyFixture(body.getFixtureList().get(i));
+        }
+        for(Iterator<Entity> it = MainGame.currentMap.mapEntities.iterator(); it.hasNext();){
+            Entity e = it.next();
+            if(e.flaggedForDelete){
+                it.remove();
+            }
+        }
+
+        MainGame.player.playerSubject.notify(this, Event.UPDATE_KILL_QUEST);
+        MainGame.player.inventory.AddItem(itemToDrop);
+        MainGame.player.playerSubject.notify(itemToDrop, Event.UPDATE_FETCH_QUEST);
     }
 }

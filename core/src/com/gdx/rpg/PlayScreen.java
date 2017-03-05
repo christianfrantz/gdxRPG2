@@ -2,8 +2,10 @@ package com.gdx.rpg;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
@@ -28,6 +30,8 @@ public class PlayScreen implements Screen{
 
     Viewport viewport;
 
+    BitmapFont font;
+
     public PlayScreen(MainGame game){
         this.game = game;
         MainGame.player = new Player(game.currentMap.playerSpawn);
@@ -41,7 +45,7 @@ public class PlayScreen implements Screen{
         createContactListener();
 
         MainGame.npcFactory.createNPC(NPC.NPCType.NORMAL, MainGame.currentMap.mapEntities, new Vector2(6, 4), null);
-        MainGame.npcFactory.createNPC(NPC.NPCType.NORMAL, MainGame.currentMap.mapEntities,new Vector2(4, 4), MainGame.availableQuests.get(Statics.KILL_SLIMES));
+        MainGame.npcFactory.createNPC(NPC.NPCType.NORMAL, MainGame.currentMap.mapEntities,new Vector2(4, 4), MainGame.availableQuests.get(Statics.FETCH_SLIMES));
         MainGame.npcFactory.createNPC(NPC.NPCType.NORMAL, MainGame.currentMap.mapEntities,new Vector2(2, 2), MainGame.availableQuests.get(Statics.KILL_BATS));
         //MainGame.enemyFactory.createEnemy(Enemy.EnemyType.SLIME, MainGame.currentMap.mapEntities, new Vector2(3, 3));
 
@@ -50,6 +54,9 @@ public class PlayScreen implements Screen{
         game.hud.playerHealthLabel.setText(Statics.HUD_HEALTH + player.health);
 
         debugRenderer = new Box2DDebugRenderer();
+
+        font = new BitmapFont();
+        font.setColor(Color.RED);
     }
 
     private void update(float delta){
@@ -66,6 +73,7 @@ public class PlayScreen implements Screen{
 
             for(int i = 0; i < game.currentMap.mapEntities.size(); i++){
                 if(game.currentMap.mapEntities.get(i).isEnemy){
+                    game.currentMap.mapEntities.get(i).Destroy();
                     game.currentMap.mapEntities.remove(i);
                 }
             }
@@ -118,6 +126,15 @@ public class PlayScreen implements Screen{
         game.batch.setProjectionMatrix(game.hud.stage.getCamera().combined);
         game.hud.stage.act(Gdx.graphics.getDeltaTime());
         game.hud.stage.draw();
+
+
+        game.batch.begin();
+        font.draw(game.batch, 0 + " " + player.inventory.inventorySlots[0].itemInSlot.id + " " + player.inventory.inventorySlots[0].itemCount, 10, 800);
+        font.draw(game.batch, 1 + " " + player.inventory.inventorySlots[1].itemInSlot.id + " " + player.inventory.inventorySlots[1].itemCount, 10, 780);
+        font.draw(game.batch, 2 + " " + player.inventory.inventorySlots[2].itemInSlot.id + " " + player.inventory.inventorySlots[2].itemCount, 10, 760);
+        font.draw(game.batch, 3 + " " + player.inventory.inventorySlots[3].itemInSlot.id + " " + player.inventory.inventorySlots[3].itemCount, 10, 740);
+        font.draw(game.batch, 4 + " " + player.inventory.inventorySlots[4].itemInSlot.id + " " + player.inventory.inventorySlots[4].itemCount, 10, 720);
+        game.batch.end();
 
     }
 

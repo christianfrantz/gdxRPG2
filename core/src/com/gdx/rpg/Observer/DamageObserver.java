@@ -1,6 +1,7 @@
 package com.gdx.rpg.Observer;
 
 import com.gdx.rpg.Entities.Entity;
+import com.gdx.rpg.Item;
 import com.gdx.rpg.MainGame;
 import com.gdx.rpg.Entities.Player;
 import com.gdx.rpg.Quests.Quest;
@@ -50,6 +51,11 @@ public class DamageObserver implements Observer {
 
     @Override
     public void onNotify(Quest quest, Event event) {
+
+    }
+
+    @Override
+    public void onNotify(Item item, Event event) {
 
     }
 

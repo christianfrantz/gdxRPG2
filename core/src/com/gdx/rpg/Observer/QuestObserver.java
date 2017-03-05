@@ -4,6 +4,7 @@ import com.gdx.rpg.Entities.Enemy;
 import com.gdx.rpg.Entities.Entity;
 import com.gdx.rpg.Entities.NPC;
 import com.gdx.rpg.Entities.Player;
+import com.gdx.rpg.Item;
 import com.gdx.rpg.MainGame;
 import com.gdx.rpg.Quests.Quest;
 import com.gdx.rpg.Statics;
@@ -26,16 +27,46 @@ public class QuestObserver implements Observer{
             case COMPLETE_QUEST:
                 NPC npc = (NPC)quest.questGiver;
                 npc.currentDialogue = quest.afterQuest;
+                if(quest.questType == Quest.QuestType.FETCH && ((NPC) quest.questGiver).isClicked){
+                    for(int i = 0; i < quest.questRequirement.numberNeeded; i++){
+                        MainGame.player.inventory.RemoveItem(quest.questRequirement.itemNeeded);
+                    }
+                }
                 break;
         }
 
+    }
+
+    @Override
+    public void onNotify(Item item, Event event) {
+        Quest quest;
+        switch (event){
+            case UPDATE_FETCH_QUEST:
+
+                for(int i = 0; i < MainGame.player.playerQuests.size(); i++){
+                    if(MainGame.player.playerQuests.get(i).questType == Quest.QuestType.FETCH
+                            && MainGame.player.playerQuests.get(i).questRequirement.itemNeeded == item.id){
+                        quest = MainGame.player.playerQuests.get(i);
+                        for(int x = 0; x < MainGame.player.inventory.inventorySlots.length; x++){
+                            if(quest.questRequirement.itemNeeded == MainGame.player.inventory.inventorySlots[x].itemInSlot.id
+                                    && quest.questRequirement.numberNeeded == MainGame.player.inventory.inventorySlots[x].itemCount){
+                                        quest.questCompleted = true;
+                                onNotify(quest, Event.COMPLETE_QUEST);
+                            }
+                        }
+                    }
+                }
+
+
+                break;
+        }
     }
 
 
     @Override
     public void onNotify(Entity enemy, Event event) {
         switch (event){
-            case UPDATE_QUEST:
+            case UPDATE_KILL_QUEST:
                 Enemy e = (Enemy)enemy;
                 Quest quest;
 

@@ -26,6 +26,7 @@ public class NPC extends Entity {
 
     public boolean hasQuest;
     public Quest currentQuest;
+    public boolean isClicked;
 
     public NPC( Vector2 position, String id) {
         super(position, id);
@@ -35,14 +36,20 @@ public class NPC extends Entity {
         entityUpdateComponent = new NPCUpdateComponent(this);
         health = 10;
         npcType = NPCType.NORMAL;
-
+        isClicked = false;
     }
 
     public void setUpQuest(){
         if(hasQuest){
             currentQuest.questGiver = this;
             currentDialogue = currentQuest.beforeQuest;
-
+            for(int i = 0; i < MainGame.player.playerQuests.size(); i++){
+                if(MainGame.player.playerQuests.contains(i) &&
+                        MainGame.player.playerQuests.get(i).isQuestCompleted()){
+                    currentDialogue = currentQuest.afterQuest;
+                }
+            }
+            //
         }
         else {
             currentDialogue = dialogue;

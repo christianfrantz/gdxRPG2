@@ -9,6 +9,8 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.gdx.rpg.Components.PlayerInputComponent;
 import com.gdx.rpg.Components.PlayerPhysicsComponent;
+import com.gdx.rpg.Inventory;
+import com.gdx.rpg.Item;
 import com.gdx.rpg.MainGame;
 import com.gdx.rpg.Observer.ClickObserver;
 import com.gdx.rpg.Observer.DamageObserver;
@@ -52,6 +54,8 @@ public class Player extends Entity {
 
     public boolean needToMove = false;
 
+    public Inventory inventory;
+
     public Player( Vector2 position){
         super( position, "PLAYER");
 
@@ -74,6 +78,11 @@ public class Player extends Entity {
         cursor.setBounds(0, 0, 16 / MainGame.PPM, 16 / MainGame.PPM);
 
         playerQuests = new ArrayList<Quest>();
+        inventory = new Inventory();
+        inventory.AddItem(new Item("stick"));
+        inventory.AddItem(new Item("stick"));
+        inventory.AddItem(new Item("slime"));
+        inventory.RemoveItem(("stick"));
     }
 
     public void updatePlayer(float delta, Camera cam){

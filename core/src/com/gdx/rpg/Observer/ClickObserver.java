@@ -3,6 +3,7 @@ package com.gdx.rpg.Observer;
 import com.gdx.rpg.Entities.Entity;
 import com.gdx.rpg.Entities.NPC;
 import com.gdx.rpg.Entities.Player;
+import com.gdx.rpg.Item;
 import com.gdx.rpg.MainGame;
 import com.gdx.rpg.Quests.Quest;
 
@@ -15,8 +16,10 @@ public class ClickObserver implements Observer{
     public void onNotify(Entity entity, Event event) {
         switch (event){
             case CLICKED_ENTITY:
-                if(entity instanceof NPC)
-                    MainGame.hud.ShowDialogue((NPC)entity);
+                if(entity instanceof NPC) {
+                    MainGame.hud.ShowDialogue((NPC) entity);
+                    ((NPC) entity).isClicked = true;
+                }
                 //else
                     System.out.println(entity.id);
         }
@@ -34,6 +37,11 @@ public class ClickObserver implements Observer{
 
     @Override
     public void onNotify(Quest quest, Event event) {
+
+    }
+
+    @Override
+    public void onNotify(Item item, Event event) {
 
     }
 }

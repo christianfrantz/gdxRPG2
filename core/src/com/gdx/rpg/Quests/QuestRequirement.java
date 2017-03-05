@@ -2,6 +2,7 @@ package com.gdx.rpg.Quests;
 
 import com.gdx.rpg.Entities.Enemy;
 import com.gdx.rpg.Entities.Entity;
+import com.gdx.rpg.Item;
 import com.gdx.rpg.Statics;
 
 /**
@@ -13,6 +14,7 @@ public class QuestRequirement {
     public int numberNeeded;
 
     public Enemy.EnemyType enemyNeeded;
+    public String itemNeeded;
 
     public QuestRequirement(Quest quest, Quest.QuestType questType){
         init(quest, questType);
@@ -37,7 +39,13 @@ public class QuestRequirement {
                 }
                 break;
             case FETCH:
-
+                if(quest.questDescription == Statics.FETCH_SLIMES){
+                    numberNeeded = 2;
+                    itemNeeded = "slimeGoo";
+                    quest.beforeQuest = "Collect 2 slime goo";
+                    quest.duringQuest = "Come back when you get 2 slime goos";
+                    quest.afterQuest = "Thank you";
+                }
                 break;
         }
     }

@@ -3,6 +3,7 @@ package com.gdx.rpg.Observer;
 
 import com.gdx.rpg.Entities.Entity;
 import com.gdx.rpg.Entities.Player;
+import com.gdx.rpg.Item;
 import com.gdx.rpg.Quests.Quest;
 
 /**
@@ -17,4 +18,5 @@ public interface Observer {
 
     void onNotify(Quest quest, Event event);
 
+    void onNotify(Item item, Event event);
 }

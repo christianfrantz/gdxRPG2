@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.gdx.rpg.Components.EnemyUpdateComponent;
 import com.gdx.rpg.Entities.Enemy.EnemyType;
+import com.gdx.rpg.Item;
 import com.gdx.rpg.MainGame;
 
 import java.util.ArrayList;
@@ -37,6 +38,7 @@ public  class EnemyFactory {
                 enemy.createBody(position, enemy.sprite.getTexture());
                 enemy.health = 10;
                 enemy.enemyType = EnemyType.SLIME;
+                enemy.itemToDrop = new Item("slimeGoo");
                 break;
             case BAT:
                 id = "bat" + idNumber;
@@ -46,6 +48,7 @@ public  class EnemyFactory {
                 enemy.createBody(position, enemy.sprite.getTexture());
                 enemy.health = 10;
                 enemy.enemyType = EnemyType.BAT;
+                enemy.itemToDrop = new Item("batWing");
                 break;
         }
 
