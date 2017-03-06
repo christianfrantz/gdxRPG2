@@ -1,5 +1,6 @@
 package com.gdx.rpg.Observer;
 
+import com.badlogic.gdx.math.Vector2;
 import com.gdx.rpg.Entities.Entity;
 import com.gdx.rpg.Item;
 import com.gdx.rpg.MainGame;
@@ -15,11 +16,6 @@ public class DamageObserver implements Observer {
     @Override
     public void onNotify(Entity enemy, Event event) {
         switch (event){
-            case ENEMY_DAMAGE:{
-                enemy.health -= 10;
-                //System.out.println("ENEMY_DAMAGE : " + enemy.health + " " + enemy.id + " " + enemy.flaggedForDelete);
-                break;
-            }
         }
     }
 
@@ -46,6 +42,7 @@ public class DamageObserver implements Observer {
                 player.health -= 10;
                 MainGame.hud.health = player.health;
                 MainGame.hud.playerHealthLabel.setText(Statics.HUD_HEALTH + player.health);
+                break;
         }
     }
 

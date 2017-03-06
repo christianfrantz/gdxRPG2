@@ -26,7 +26,7 @@ import java.util.ArrayList;
  */
 public class Player extends Entity {
     public int health = 100;
-    public int damage = 5;
+    public int damage = 3;
 
     public enum PlayerState{
         IDLE,
@@ -40,6 +40,7 @@ public class Player extends Entity {
     public Body body;
     public Body attackBody;
 
+    public float attackForce = 4f;
     private float speed = 0.5f;
     public PlayerState playerState;
 

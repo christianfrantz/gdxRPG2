@@ -21,7 +21,7 @@ import java.util.ArrayList;
 public class NPCFactory {
     public int idNumber = 0;
 
-    public NPC createNPC(NPC.NPCType type, ArrayList<Entity> list, Vector2 position, Quest quest){
+    public NPC createNPC(NPC.NPCType type, Vector2 position, Quest quest){
 
         NPC npc = null;
 
@@ -36,7 +36,6 @@ public class NPCFactory {
                     npc.hasQuest = false;
                 npc.currentQuest = quest;
                 npc.setUpQuest();
-                list.add( npc);
                 break;
         }
 

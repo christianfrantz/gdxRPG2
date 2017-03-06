@@ -115,6 +115,13 @@ public class PlayScreen implements Screen{
         font.draw(game.batch, 2 + " " + player.inventory.inventorySlots[2].itemInSlot.id + " " + player.inventory.inventorySlots[2].itemCount, 10, 760);
         font.draw(game.batch, 3 + " " + player.inventory.inventorySlots[3].itemInSlot.id + " " + player.inventory.inventorySlots[3].itemCount, 10, 740);
         font.draw(game.batch, 4 + " " + player.inventory.inventorySlots[4].itemInSlot.id + " " + player.inventory.inventorySlots[4].itemCount, 10, 720);
+
+        if(game.playerQuests.size() > 0){
+            for(int i = 0; i < game.playerQuests.size(); i++){
+                font.draw(game.batch, game.playerQuests.get(i).questDescription + " " + game.playerQuests.get(i).questCompleted, 10, 700 - i * 20);
+
+            }
+        }
         game.batch.end();
 
     }

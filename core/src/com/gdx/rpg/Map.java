@@ -74,7 +74,7 @@ public class Map {
                 playerSpawn = new Vector2(rect.getX() / MainGame.PPM, rect.getY() / MainGame.PPM);
             }
             if(object.getProperties().containsKey("npc")){
-                mapEntities.add(MainGame.npcFactory.createNPC(NPC.NPCType.NORMAL, MainGame.currentMap.mapEntities, new Vector2(rect.getX() / MainGame.PPM, rect.getY() / MainGame.PPM), MainGame.availableQuests.get(object.getProperties().get("npc"))));
+                mapEntities.add(MainGame.npcFactory.createNPC(NPC.NPCType.NORMAL, new Vector2(rect.getX() / MainGame.PPM, rect.getY() / MainGame.PPM), MainGame.availableQuests.get(object.getProperties().get("npc"))));
             }
         }
 

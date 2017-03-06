@@ -1,6 +1,7 @@
 package com.gdx.rpg;
 
 import com.badlogic.gdx.assets.loaders.SynchronousAssetLoader;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.gdx.rpg.Entities.Enemy;
 import com.gdx.rpg.Entities.Entity;
@@ -38,6 +39,11 @@ public class WorldContactListener implements ContactListener{
             player = fixtureA.getBody().getUserData().equals(Statics.PLAYER_ATTACK_BODY) ? (Player)fixtureA.getUserData() : (Player)fixtureB.getUserData();
 
             if(player.playerState == Player.PlayerState.ATTACKING) {
+                float x = enemy.body.getLinearVelocity().x * player.attackForce;
+                x = x * -1;
+                float y = enemy.body.getLinearVelocity().y * player.attackForce;
+                y = y * -1;
+                enemy.body.applyLinearImpulse(new Vector2(x, y), enemy.body.getWorldCenter(), true);
                 subject.notify(player, enemy, Event.ENEMY_DAMAGE);
             }
         }
@@ -83,7 +89,7 @@ public class WorldContactListener implements ContactListener{
     public boolean isPlayerAttackContact(Fixture a, Fixture b){
        if (a.getBody().getUserData().equals(Statics.PLAYER_ATTACK_BODY) || b.getBody().getUserData().equals(Statics.PLAYER_ATTACK_BODY)){
             if(a.getBody().getUserData() instanceof Enemy || b.getBody().getUserData() instanceof Enemy){
-               return true;
+                return true;
            }
         }
         return false;
