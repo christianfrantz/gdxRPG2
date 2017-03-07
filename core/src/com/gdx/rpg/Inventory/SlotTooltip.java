@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Window;
  * if object is entity, set sprite, health, call
  * createBody(position, sprite.texture), set type
  */
-public class SlotTooltip extends Window implements SlotListener{
+public class SlotTooltip extends Window implements SlotObserver {
 
     private Skin skin;
     private InventorySlot slot;

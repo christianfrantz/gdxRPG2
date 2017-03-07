@@ -23,6 +23,16 @@ public class QuestObserver implements Observer{
                     MainGame.playerQuests.add(quest);
                 System.out.println(quest.questDescription + " added " + quest.questRequirement.numberKilled);
                 System.out.println(MainGame.playerQuests.size());
+                if(quest.questType == Quest.QuestType.FETCH){
+                    for(int i = 0; i < MainGame.player.inventory.inventorySlots.length; i++){
+                        if (MainGame.player.inventory.inventorySlots[i].itemInSlot == quest.questRequirement.itemNeeded &&
+                                MainGame.player.inventory.inventorySlots[i].itemCount == quest.questRequirement.numberNeeded)
+                        {
+                            quest.questCompleted = true;
+                            this.onNotify(quest, Event.COMPLETE_QUEST);
+                        }
+                    }
+                }
                 break;
 
             case COMPLETE_QUEST:

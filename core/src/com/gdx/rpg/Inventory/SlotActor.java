@@ -1,19 +1,17 @@
 package com.gdx.rpg.Inventory;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.gdx.rpg.HUD.HUD;
-import com.gdx.rpg.MainGame;
 
 /**
  * if object is entity, set sprite, health, call
  * createBody(position, sprite.texture), set type
  */
-public class SlotActor extends ImageButton implements SlotListener{
+public class SlotActor extends ImageButton implements SlotObserver {
 
     private InventorySlot slot;
     private Skin skin;

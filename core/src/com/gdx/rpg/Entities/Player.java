@@ -78,11 +78,6 @@ public class Player extends Entity {
         cursor.setBounds(0, 0, 16 / MainGame.PPM, 16 / MainGame.PPM);
 
         inventory = new Inventory();
-        inventory.AddItem(Item.BAT_WING);
-        inventory.AddItem(Item.BAT_WING);
-        //inventory.AddItem(Item.SLIME_GOO);
-        inventory.RemoveItem(Item.BAT_WING);
-        inventory.AddItem(Item.STICK);
     }
 
     public void updatePlayer(float delta, Camera cam){

@@ -58,7 +58,7 @@ public class MainGame extends Game {
     @Override
     public void create() {
         batch = new SpriteBatch();
-
+       
         playerQuests = new ArrayList<Quest>();
         mapLoader = new TmxMapLoader();
 

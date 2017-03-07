@@ -1,6 +1,5 @@
 package com.gdx.rpg.Inventory;
 
-import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.badlogic.gdx.utils.Array;
 import com.gdx.rpg.Item;
 
@@ -13,7 +12,7 @@ public class InventorySlot {
     public Item itemInSlot;
     public boolean hasItem;
 
-    private Array<SlotListener> slotListener = new Array<SlotListener>();
+    private Array<SlotObserver> slotListener = new Array<SlotObserver>();
 
     public InventorySlot(){
         this.itemInSlot = null;
@@ -21,13 +20,13 @@ public class InventorySlot {
         this.itemCount = 0;
     }
 
-    public void addListener(SlotListener listener){
+    public void addListener(SlotObserver listener){
         slotListener.add(listener);
     }
 
     public void notifyListeners(){
         System.out.println("SLOT NOTIFIED");
-        for(SlotListener listener : slotListener) {
+        for(SlotObserver listener : slotListener) {
             listener.hasChanged(this);
         }
     }

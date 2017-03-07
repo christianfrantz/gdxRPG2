@@ -43,10 +43,5 @@ public class ClickObserver implements Observer{
 
     @Override
     public void onNotify(Item item, Event event) {
-        switch (event){
-            case CLICKED_ITEM:
-                System.out.println(item);
-                break;
-        }
     }
 }

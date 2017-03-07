@@ -41,6 +41,7 @@ public class Inventory {
                 inventorySlots[i].notifyListeners();
                 if(inventorySlots[i].itemCount == 0)
                     inventorySlots[i].itemInSlot = null;
+//                inventorySlots[i].notifyListeners();
                 return;
             }
         }
