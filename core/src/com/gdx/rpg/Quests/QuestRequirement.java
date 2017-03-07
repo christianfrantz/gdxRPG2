@@ -14,7 +14,7 @@ public class QuestRequirement {
     public int numberNeeded;
 
     public Enemy.EnemyType enemyNeeded;
-    public String itemNeeded;
+    public Item itemNeeded;
 
     public QuestRequirement(Quest quest, Quest.QuestType questType){
         init(quest, questType);
@@ -41,7 +41,7 @@ public class QuestRequirement {
             case FETCH:
                 if(quest.questDescription == Statics.FETCH_SLIMES){
                     numberNeeded = 2;
-                    itemNeeded = "slimeGoo";
+                    itemNeeded = Item.SLIME_GOO;
                     quest.beforeQuest = "Collect 2 slime goo";
                     quest.duringQuest = "Come back when you get 2 slime goos";
                     quest.afterQuest = "Thank you";

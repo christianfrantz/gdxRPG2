@@ -38,7 +38,7 @@ public  class EnemyFactory {
                 enemy.createBody(position, enemy.sprite.getTexture());
                 enemy.health = 10;
                 enemy.enemyType = EnemyType.SLIME;
-                enemy.itemToDrop = new Item("slimeGoo");
+                enemy.itemToDrop = Item.SLIME_GOO;
                 break;
             case BAT:
                 id = "bat" + idNumber;
@@ -48,7 +48,7 @@ public  class EnemyFactory {
                 enemy.createBody(position, enemy.sprite.getTexture());
                 enemy.health = 10;
                 enemy.enemyType = EnemyType.BAT;
-                enemy.itemToDrop = new Item("batWing");
+                enemy.itemToDrop = Item.BAT_WING;
                 break;
         }
 

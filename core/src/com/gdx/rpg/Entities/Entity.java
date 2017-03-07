@@ -51,7 +51,7 @@ public class Entity {
         direction = Direction.DOWN;
         enemyState = EnemyState.NULL;
         this.id = id;
-        itemToDrop = new Item("null");
+        itemToDrop = null;
 
         entityUpdateComponent = new EntityUpdateComponent(this);
     }

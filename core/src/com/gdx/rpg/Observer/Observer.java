@@ -1,6 +1,7 @@
 package com.gdx.rpg.Observer;
 
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.gdx.rpg.Entities.Entity;
 import com.gdx.rpg.Entities.Player;
 import com.gdx.rpg.Item;
@@ -19,4 +20,5 @@ public interface Observer {
     void onNotify(Quest quest, Event event);
 
     void onNotify(Item item, Event event);
+
 }

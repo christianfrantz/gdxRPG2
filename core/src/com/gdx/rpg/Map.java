@@ -43,7 +43,7 @@ public class Map {
         Array<Body> bodies = new Array<Body>();
         MainGame.world.getBodies(bodies);
         for(Body b : bodies){
-            if(!b.getUserData().equals(Statics.PLAYER_BODY) && !b.getUserData().equals(Statics.PLAYER_ATTACK_BODY)){
+            if(!b.getUserData().equals(Statics.PLAYER_BODY) && !b.getUserData().equals(Statics.PLAYER_ATTACK_BODY) && !b.getUserData().equals(Statics.PLAYER_DIALOG_BODY)){
                 MainGame.world.destroyBody(b);
             }
         }

@@ -1,5 +1,6 @@
 package com.gdx.rpg.Observer;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.gdx.rpg.Entities.Enemy;
 import com.gdx.rpg.Entities.Entity;
 import com.gdx.rpg.Entities.NPC;
@@ -47,10 +48,10 @@ public class QuestObserver implements Observer{
 
                 for(int i = 0; i < MainGame.playerQuests.size(); i++){
                     if(MainGame.playerQuests.get(i).questType == Quest.QuestType.FETCH
-                            && MainGame.playerQuests.get(i).questRequirement.itemNeeded == item.id){
+                            && MainGame.playerQuests.get(i).questRequirement.itemNeeded == item){
                         quest = MainGame.playerQuests.get(i);
                         for(int x = 0; x < MainGame.player.inventory.inventorySlots.length; x++){
-                            if(quest.questRequirement.itemNeeded == MainGame.player.inventory.inventorySlots[x].itemInSlot.id
+                            if(quest.questRequirement.itemNeeded == MainGame.player.inventory.inventorySlots[x].itemInSlot
                                     && quest.questRequirement.numberNeeded == MainGame.player.inventory.inventorySlots[x].itemCount){
                                 quest.questCompleted = true;
                                 onNotify(quest, Event.COMPLETE_QUEST);
@@ -61,6 +62,7 @@ public class QuestObserver implements Observer{
                 break;
         }
     }
+
 
     @Override
     public void onNotify(Entity enemy, Event event) {

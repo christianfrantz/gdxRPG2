@@ -1,4 +1,6 @@
-package com.gdx.rpg;
+package com.gdx.rpg.Inventory;
+
+import com.gdx.rpg.Item;
 
 /**
  * if object is entity, set sprite, health, call
@@ -8,7 +10,7 @@ public class Inventory {
     public InventorySlot[] inventorySlots;
 
     public Inventory(){
-        inventorySlots = new InventorySlot[5];
+        inventorySlots = new InventorySlot[10];
         for(int i = 0; i < inventorySlots.length; i++){
             inventorySlots[i] = (new InventorySlot());
         }
@@ -16,26 +18,29 @@ public class Inventory {
 
     public void AddItem(Item item){
         for(int i = 0; i < inventorySlots.length; i++){
-            if(inventorySlots[i].itemInSlot.id == item.id){
+            if(inventorySlots[i].itemInSlot == item){
                 inventorySlots[i].itemCount++;
+                inventorySlots[i].notifyListeners();
                 return;
             }
             else if(!inventorySlots[i].hasItem) {
                 inventorySlots[i].itemInSlot = item;
                 inventorySlots[i].hasItem = true;
                 inventorySlots[i].itemCount++;
+                inventorySlots[i].notifyListeners();
                 return;
             }
 
         }
     }
 
-    public void RemoveItem(String item){
+    public void RemoveItem(Item item){
         for(int i = 0; i <inventorySlots.length; i++){
-            if(inventorySlots[i].itemInSlot.id == item){
+            if(inventorySlots[i].itemInSlot == item){
                 inventorySlots[i].itemCount--;
+                inventorySlots[i].notifyListeners();
                 if(inventorySlots[i].itemCount == 0)
-                    inventorySlots[i].itemInSlot = new Item("null");
+                    inventorySlots[i].itemInSlot = null;
                 return;
             }
         }

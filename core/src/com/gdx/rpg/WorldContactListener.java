@@ -1,10 +1,12 @@
 package com.gdx.rpg;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.loaders.SynchronousAssetLoader;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.gdx.rpg.Entities.Enemy;
 import com.gdx.rpg.Entities.Entity;
+import com.gdx.rpg.Entities.NPC;
 import com.gdx.rpg.Entities.Player;
 import com.gdx.rpg.Observer.DamageObserver;
 import com.gdx.rpg.Observer.Event;
@@ -29,34 +31,34 @@ public class WorldContactListener implements ContactListener{
         Fixture fixtureB = contact.getFixtureB();
 
         Player player;
-        Entity enemy;
+        Entity entity;
 
         if(fixtureA == null || fixtureB == null)return;
         if(fixtureA.getBody().getUserData() == null || fixtureB.getBody().getUserData() == null)return;
 
         if(isPlayerAttackContact(fixtureA, fixtureB)){
-            enemy = fixtureB.getBody().getUserData() instanceof Entity ? (Enemy)fixtureB.getBody().getUserData() : (Enemy)fixtureA.getBody().getUserData();
+            entity = fixtureB.getBody().getUserData() instanceof Entity ? (Enemy)fixtureB.getBody().getUserData() : (Enemy)fixtureA.getBody().getUserData();
             player = fixtureA.getBody().getUserData().equals(Statics.PLAYER_ATTACK_BODY) ? (Player)fixtureA.getUserData() : (Player)fixtureB.getUserData();
 
             if(player.playerState == Player.PlayerState.ATTACKING) {
-                float x = enemy.body.getLinearVelocity().x * player.attackForce;
+                float x = entity.body.getLinearVelocity().x * player.attackForce;
                 x = x * -1;
-                float y = enemy.body.getLinearVelocity().y * player.attackForce;
+                float y = entity.body.getLinearVelocity().y * player.attackForce;
                 y = y * -1;
-                enemy.body.applyLinearImpulse(new Vector2(x, y), enemy.body.getWorldCenter(), true);
-                subject.notify(player, enemy, Event.ENEMY_DAMAGE);
+                entity.body.applyLinearImpulse(new Vector2(x, y), entity.body.getWorldCenter(), true);
+                subject.notify(player, entity, Event.ENEMY_DAMAGE);
             }
         }
 
         if(isOtherContactPlayer(fixtureA, fixtureB)){
             player = fixtureA.getBody().getUserData().equals(Statics.PLAYER_BODY) ? (Player)fixtureA.getUserData() : (Player)fixtureB.getUserData();
-            enemy = fixtureB.getBody().getUserData() instanceof Enemy ? (Enemy)fixtureB.getBody().getUserData() : (Enemy)fixtureA.getBody().getUserData();
-            subject.notify(player,enemy, Event.PLAYER_DAMAGE);
+            entity = fixtureB.getBody().getUserData() instanceof Enemy ? (Enemy)fixtureB.getBody().getUserData() : (Enemy)fixtureA.getBody().getUserData();
+            subject.notify(player,entity, Event.PLAYER_DAMAGE);
         }
 
         if(isEnemyChasePlayer(fixtureA, fixtureB)){
-            enemy = fixtureA.getBody().getUserData().equals("CHASE_BODY") ? (Entity)fixtureA.getUserData() : (Entity)fixtureB.getUserData();
-            enemy.enemyState = Enemy.EnemyState.ATTACKING;
+            entity = fixtureA.getBody().getUserData().equals("CHASE_BODY") ? (Entity)fixtureA.getUserData() : (Entity)fixtureB.getUserData();
+            entity.enemyState = Enemy.EnemyState.ATTACKING;
         }
 
         if(isPlayerTeleport(fixtureA, fixtureB)){
@@ -66,6 +68,10 @@ public class WorldContactListener implements ContactListener{
             else if(fixtureA.getBody().getUserData().equals("teleport")){
                 MainGame.ChangeMap(fixtureB.getUserData().toString());
             }
+        }
+
+        if(isPlayerContactNPC(fixtureA, fixtureB)){
+            entity = fixtureA.getBody().getUserData() instanceof NPC ? (NPC)fixtureA.getBody().getUserData() : (NPC)fixtureB.getBody().getUserData();
         }
 
     }
@@ -119,6 +125,16 @@ public class WorldContactListener implements ContactListener{
                 return true;
             }
         }
+        return false;
+    }
+
+    public boolean isPlayerContactNPC(Fixture a, Fixture b){
+        if(a.getBody().getUserData().equals(Statics.PLAYER_DIALOG_BODY) || b.getBody().getUserData().equals(Statics.PLAYER_DIALOG_BODY)){
+            if(a.getBody().getUserData() instanceof NPC || b.getBody().getUserData() instanceof NPC){
+                return true;
+            }
+        }
+
         return false;
     }
 }

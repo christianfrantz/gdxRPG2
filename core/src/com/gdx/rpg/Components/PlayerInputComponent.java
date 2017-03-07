@@ -42,6 +42,18 @@ public class PlayerInputComponent {
             player.playerState = Player.PlayerState.ATTACKING;
         }
 
+        if(Gdx.input.isKeyJustPressed(Input.Keys.T)){
+            player.nextDialog = true;
+        }
+        else{
+            player.nextDialog = false;
+        }
+
+        if(Gdx.input.isKeyJustPressed(Input.Keys.I) && player.showInventory)
+            player.showInventory = false;
+        else if(Gdx.input.isKeyJustPressed(Input.Keys.I) && !player.showInventory)
+            player.showInventory = true;
+
         if(Gdx.input.justTouched()){
             for(Entity entity : MainGame.currentMap.mapEntities){
                 if(entity.sprite.getBoundingRectangle().contains(player.cursor.getBoundingRectangle())){

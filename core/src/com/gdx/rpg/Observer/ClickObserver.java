@@ -1,5 +1,6 @@
 package com.gdx.rpg.Observer;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.gdx.rpg.Entities.Entity;
 import com.gdx.rpg.Entities.NPC;
 import com.gdx.rpg.Entities.Player;
@@ -19,9 +20,6 @@ public class ClickObserver implements Observer{
                 if(entity instanceof NPC) {
                     MainGame.hud.ShowDialogue((NPC) entity);
                     ((NPC) entity).isClicked = true;
-                    if(((NPC) entity).hasQuest){
-
-                    }
                 }
                 //else
                     System.out.println(entity.id);
@@ -45,6 +43,10 @@ public class ClickObserver implements Observer{
 
     @Override
     public void onNotify(Item item, Event event) {
-
+        switch (event){
+            case CLICKED_ITEM:
+                System.out.println(item);
+                break;
+        }
     }
 }

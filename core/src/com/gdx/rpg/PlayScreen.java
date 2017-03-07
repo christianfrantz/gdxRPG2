@@ -106,15 +106,20 @@ public class PlayScreen implements Screen{
 
         game.batch.setProjectionMatrix(game.hud.stage.getCamera().combined);
         game.hud.stage.act(Gdx.graphics.getDeltaTime());
+        if(player.showInventory){
+            game.hud.inventoryActor.setVisible(true);
+        }
+        else if(player.showInventory == false)
+            game.hud.inventoryActor.setVisible(false);
         game.hud.stage.draw();
 
 
         game.batch.begin();
-        font.draw(game.batch, 0 + " " + player.inventory.inventorySlots[0].itemInSlot.id + " " + player.inventory.inventorySlots[0].itemCount, 10, 800);
-        font.draw(game.batch, 1 + " " + player.inventory.inventorySlots[1].itemInSlot.id + " " + player.inventory.inventorySlots[1].itemCount, 10, 780);
-        font.draw(game.batch, 2 + " " + player.inventory.inventorySlots[2].itemInSlot.id + " " + player.inventory.inventorySlots[2].itemCount, 10, 760);
-        font.draw(game.batch, 3 + " " + player.inventory.inventorySlots[3].itemInSlot.id + " " + player.inventory.inventorySlots[3].itemCount, 10, 740);
-        font.draw(game.batch, 4 + " " + player.inventory.inventorySlots[4].itemInSlot.id + " " + player.inventory.inventorySlots[4].itemCount, 10, 720);
+        font.draw(game.batch, 0 + " " + player.inventory.inventorySlots[0].itemInSlot + " " + player.inventory.inventorySlots[0].itemCount, 10, 800);
+        font.draw(game.batch, 1 + " " + player.inventory.inventorySlots[1].itemInSlot + " " + player.inventory.inventorySlots[1].itemCount, 10, 780);
+        font.draw(game.batch, 2 + " " + player.inventory.inventorySlots[2].itemInSlot + " " + player.inventory.inventorySlots[2].itemCount, 10, 760);
+        font.draw(game.batch, 3 + " " + player.inventory.inventorySlots[3].itemInSlot + " " + player.inventory.inventorySlots[3].itemCount, 10, 740);
+        font.draw(game.batch, 4 + " " + player.inventory.inventorySlots[4].itemInSlot + " " + player.inventory.inventorySlots[4].itemCount, 10, 720);
 
         if(game.playerQuests.size() > 0){
             for(int i = 0; i < game.playerQuests.size(); i++){

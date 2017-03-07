@@ -1,6 +1,7 @@
 package com.gdx.rpg.Observer;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.gdx.rpg.Entities.Entity;
 import com.gdx.rpg.Item;
 import com.gdx.rpg.MainGame;

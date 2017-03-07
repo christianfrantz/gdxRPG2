@@ -3,6 +3,8 @@ package com.gdx.rpg;
 public interface Statics {
     String PLAYER_BODY = "player";
     String PLAYER_ATTACK_BODY = "playerAttackBody";
+    String PLAYER_DIALOG_BODY = "playerDialogBody";
+
     String SLIME_BODY = "slime";
     String HUD_HEALTH = "Health: ";
 

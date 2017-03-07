@@ -6,7 +6,11 @@ package com.gdx.rpg.Observer;
 public enum Event {
     PLAYER_DAMAGE,
     ENEMY_DAMAGE,
+
     CLICKED_ENTITY,
+    CLICKED_ITEM,
+    CLICKED_HIDE,
+
     ACCEPT_QUEST,
     UPDATE_KILL_QUEST,
     UPDATE_FETCH_QUEST,

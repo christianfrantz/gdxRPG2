@@ -8,13 +8,11 @@ import com.gdx.rpg.Entities.Player;
 import com.gdx.rpg.RevoluteJoint;
 import com.gdx.rpg.Statics;
 
-/**
- * Created by imont_000 on 2/28/2017.
- */
 public class PlayerPhysicsComponent {
 
     private Body body;
     private Body attackBody;
+    private Body dialogBody;
     private RevoluteJoint revoluteJoint;
     private Joint joint;
 
@@ -22,7 +20,7 @@ public class PlayerPhysicsComponent {
         createBody(player, position);
         this.body = player.body;
         this.attackBody = player.attackBody;
-
+        this.dialogBody = player.dialogBody;
         /*revoluteJoint = new RevoluteJoint(body, attackBody, false);
         revoluteJoint.SetAnchorA(body.getWorldCenter().x / 2, body.getWorldCenter().y / 2);
         revoluteJoint.SetAnchorB(0, 1);
@@ -61,35 +59,66 @@ public class PlayerPhysicsComponent {
         player.attackBody.setUserData(Statics.PLAYER_ATTACK_BODY);
         player.attackBody.createFixture(attackFixture).setUserData(player);
 
+        BodyDef dialogBodyDef = new BodyDef();
+        dialogBodyDef.position.set(position.x, position.y);
+        dialogBodyDef.type = BodyDef.BodyType.DynamicBody;
+
+        player.dialogBody = MainGame.world.createBody(dialogBodyDef);
+
+        FixtureDef dialogFixture = new FixtureDef();
+        PolygonShape dialogShape = new PolygonShape();
+        dialogShape.setAsBox(80 / MainGame.PPM, 80 / MainGame.PPM);
+        dialogFixture.isSensor = true;
+        dialogFixture.shape = dialogShape;
+
+        player.dialogBody.setUserData(Statics.PLAYER_DIALOG_BODY);
+        player.dialogBody.createFixture(dialogFixture).setUserData(player);
+
+        player.dialogBody.setFixedRotation(true);
         player.body.setLinearDamping(10f);
         player.attackBody.setLinearDamping(10f);
+        player.dialogBody.setLinearDamping(10f);
     }
 
     public void updatePhysics(Player player, float speed){
             switch (player.direction) {
                 case DOWN:
-                    if(player.playerState == Player.PlayerState.MOVING)
+                    if(player.playerState == Player.PlayerState.MOVING) {
                         body.applyLinearImpulse(new Vector2(0, -speed), body.getWorldCenter(), true);
-                    attackBody.applyLinearImpulse(new Vector2(0, -speed), body.getWorldCenter(), true);
-                    attackBody.setTransform(body.getWorldCenter().x, body.getWorldCenter().y - (48 / MainGame.PPM), player.angle);
+                        attackBody.applyLinearImpulse(new Vector2(0, -speed), body.getWorldCenter(), true);
+                        dialogBody.applyLinearImpulse(new Vector2(0, -speed), body.getWorldCenter(), true);
+                    }
+                    attackBody.setTransform(body.getWorldCenter().x, body.getWorldCenter().y - (48 / MainGame.PPM), 0);
+                    dialogBody.setTransform(body.getWorldCenter().x, body.getWorldCenter().y, 0);
+
                     break;
                 case UP:
-                    if(player.playerState == Player.PlayerState.MOVING)
+                    if(player.playerState == Player.PlayerState.MOVING) {
                         body.applyLinearImpulse(new Vector2(0, speed), body.getWorldCenter(), true);
-                    attackBody.applyLinearImpulse(new Vector2(0, speed), body.getWorldCenter(), true);
+                        attackBody.applyLinearImpulse(new Vector2(0, speed), body.getWorldCenter(), true);
+                        dialogBody.applyLinearImpulse(new Vector2(0, speed), body.getWorldCenter(), true);
+                    }
                     attackBody.setTransform(body.getWorldCenter().x, body.getWorldCenter().y + (48 / MainGame.PPM), 0);
+                    dialogBody.setTransform(body.getWorldCenter().x, body.getWorldCenter().y, 0);
                     break;
                 case LEFT:
-                    if(player.playerState == Player.PlayerState.MOVING)
+                    if(player.playerState == Player.PlayerState.MOVING) {
                         body.applyLinearImpulse(new Vector2(-speed, 0), body.getWorldCenter(), true);
-                    attackBody.applyLinearImpulse(new Vector2(-speed, 0), body.getWorldCenter(), true);
+                        attackBody.applyLinearImpulse(new Vector2(-speed, 0), body.getWorldCenter(), true);
+                        dialogBody.applyLinearImpulse(new Vector2(-speed, 0), body.getWorldCenter(), true);
+
+                    }
                     attackBody.setTransform(body.getWorldCenter().x - (48 / MainGame.PPM), body.getWorldCenter().y, 90 * MathUtils.degreesToRadians);
+                    dialogBody.setTransform(body.getWorldCenter().x, body.getWorldCenter().y, 0);
                     break;
                 case RIGHT:
-                    if(player.playerState == Player.PlayerState.MOVING)
+                    if(player.playerState == Player.PlayerState.MOVING) {
                         body.applyLinearImpulse(new Vector2(speed, 0), body.getWorldCenter(), true);
-                    attackBody.applyLinearImpulse(new Vector2(speed, 0), body.getWorldCenter(), true);
+                        dialogBody.applyLinearImpulse(new Vector2(speed, 0), body.getWorldCenter(), true);
+                        attackBody.applyLinearImpulse(new Vector2(speed, 0), body.getWorldCenter(), true);
+                    }
                     attackBody.setTransform(body.getWorldCenter().x + (48 / MainGame.PPM), body.getWorldCenter().y, 90 * MathUtils.degreesToRadians);
+                    dialogBody.setTransform(body.getWorldCenter().x, body.getWorldCenter().y, 0);
                     break;
             }
 
