@@ -30,6 +30,7 @@ public class QuestObserver implements Observer{
                         {
                             quest.questCompleted = true;
                             this.onNotify(quest, Event.COMPLETE_QUEST);
+                            System.out.println("SDHITS");
                         }
                     }
                 }
@@ -40,6 +41,7 @@ public class QuestObserver implements Observer{
                 npc.currentDialogue = quest.afterQuest;
                 System.out.println("QUEST COMPLETED " + quest.questDescription);
                 if(quest.questType == Quest.QuestType.FETCH && ((NPC) quest.questGiver).isClicked){
+
                     for(int i = 0; i < quest.questRequirement.numberNeeded; i++){
                         MainGame.player.inventory.RemoveItem(quest.questRequirement.itemNeeded);
                         System.out.println("SDFSDF");

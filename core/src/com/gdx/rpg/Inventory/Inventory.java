@@ -47,7 +47,4 @@ public class Inventory {
         }
     }
 
-    public void EquipItem(Item item){
-
-    }
 }

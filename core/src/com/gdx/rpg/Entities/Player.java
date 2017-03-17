@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.collision.Ray;
 import com.badlogic.gdx.physics.box2d.*;
 import com.gdx.rpg.Components.PlayerInputComponent;
 import com.gdx.rpg.Components.PlayerPhysicsComponent;
+import com.gdx.rpg.Equips.Equips;
 import com.gdx.rpg.Inventory.Inventory;
 import com.gdx.rpg.Item;
 import com.gdx.rpg.MainGame;
@@ -60,7 +61,7 @@ public class Player extends Entity {
     public boolean needToMove = false;
 
     public Inventory inventory;
-    public Inventory equips;
+    public Equips equips;
 
     public boolean showInventory;
 
@@ -91,7 +92,7 @@ public class Player extends Entity {
         cursor.setBounds(0, 0, 16 / MainGame.PPM, 16 / MainGame.PPM);
 
         inventory = new Inventory(10);
-        equips = new Inventory(4);
+        equips = new Equips(4);
     }
 
     public void updatePlayer(float delta, Camera cam){

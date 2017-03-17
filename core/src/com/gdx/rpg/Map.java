@@ -94,6 +94,5 @@ public class Map {
             body.createFixture(fixtureDef).setUserData(object);
             body.setUserData("teleport");
         }
-        System.out.println(mapEntities.size());
     }
 }

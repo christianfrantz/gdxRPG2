@@ -64,7 +64,7 @@ public class PlayScreen implements Screen{
 
             MainGame.renderer = new OrthogonalTiledMapRenderer(game.currentMap.tiledMap, 1 / MainGame.PPM);
 
-            player.body.setTransform(game.currentMap.playerSpawns.get(MainGame.currentPlayerSpawn).x, game.currentMap.playerSpawns.get(MainGame.currentPlayerSpawn).y, 0);
+            player.body.setTransform(game.currentMap.playerSpawns.get(MainGame.getCurrentPlayerSpawn()).x, game.currentMap.playerSpawns.get(MainGame.getCurrentPlayerSpawn()).y, 0);
             player.needToMove = false;
             player.body.setAwake(true);
         }

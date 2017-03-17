@@ -3,6 +3,7 @@ package com.gdx.rpg.Inventory;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.gdx.rpg.Equips.EquipSlot;
 
 /**
  * if object is entity, set sprite, health, call
@@ -21,6 +22,7 @@ public class SlotTooltip extends Window implements SlotObserver {
         slot.addListener(this);
         setVisible(false);
     }
+
 
     public void hasChanged(InventorySlot slot){
         if(!slot.hasItem){

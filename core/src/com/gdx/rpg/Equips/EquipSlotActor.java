@@ -1,36 +1,41 @@
-package com.gdx.rpg.Inventory;
+package com.gdx.rpg.Equips;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.gdx.rpg.Equips.EquipSlot;
 import com.gdx.rpg.HUD.HUD;
+import com.gdx.rpg.Inventory.InventorySlot;
+import com.gdx.rpg.Inventory.SlotObserver;
+import com.gdx.rpg.Inventory.SlotTooltip;
+import com.gdx.rpg.Inventory.TooltipListener;
+import com.gdx.rpg.Equips.EquipSlot;
 
 /**
  * if object is entity, set sprite, health, call
  * createBody(position, sprite.texture), set type
  */
-public class SlotActor extends ImageButton implements SlotObserver {
+public class EquipSlotActor extends ImageButton implements EquipSlotObserver {
 
-    private InventorySlot slot;
+    private EquipSlot slot;
     private Skin skin;
 
-    public SlotActor(Skin skin, InventorySlot slot, HUD hud) {
+    public EquipSlotActor(Skin skin, EquipSlot slot, HUD hud) {
         super(createStyle(skin, slot));
         this.slot = slot;
         this.skin = skin;
 
         slot.addListener(this);
 
-        SlotTooltip tooltip = new SlotTooltip(slot, skin);
+        EquipSlotTooltip tooltip = new EquipSlotTooltip(slot, skin);
         hud.stage.addActor(tooltip);
         addListener(new TooltipListener(tooltip, true));
 
     }
 
-    private static ImageButtonStyle createStyle(Skin skin, InventorySlot slot){
+    private static ImageButton.ImageButtonStyle createStyle(Skin skin, EquipSlot slot){
         TextureAtlas icons = new TextureAtlas("ItemIcons.pack");
         TextureRegion image;
         if(slot.hasItem){
@@ -39,19 +44,15 @@ public class SlotActor extends ImageButton implements SlotObserver {
         else{
             image = icons.findRegion("empty");
         }
-        ImageButtonStyle style = new ImageButtonStyle(skin.get(ButtonStyle.class));
+        ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle(skin.get(Button.ButtonStyle.class));
         style.imageUp = new TextureRegionDrawable(image);
         style.imageDown = new TextureRegionDrawable(image);
         return style;
     }
 
     @Override
-    public void hasChanged(InventorySlot slot){
+    public void hasChanged(EquipSlot slot){
         setStyle(createStyle(skin, slot));
         System.out.println("SDF");
-    }
-
-    public InventorySlot getSlot(){
-        return slot;
     }
 }

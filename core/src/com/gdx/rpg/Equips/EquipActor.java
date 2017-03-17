@@ -1,10 +1,13 @@
-package com.gdx.rpg.Inventory;
+package com.gdx.rpg.Equips;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.gdx.rpg.HUD.HUD;
+import com.gdx.rpg.Inventory.Inventory;
+import com.gdx.rpg.Inventory.InventorySlot;
+import com.gdx.rpg.Inventory.SlotActor;
 
 
 /**
@@ -12,7 +15,7 @@ import com.gdx.rpg.HUD.HUD;
  * createBody(position, sprite.texture), set type
  */
 public class EquipActor extends Window {
-    public EquipActor(Inventory equips, HUD hud, Skin skin) {
+    public EquipActor(Equips equips, HUD hud, Skin skin) {
         super("Equips", skin);
 
         TextButton closeButton = new TextButton("x", skin);
@@ -24,8 +27,8 @@ public class EquipActor extends Window {
         row().fill().expandX();
 
         int i = 0;
-        for(InventorySlot slot : equips.inventorySlots){
-            SlotActor actor = new SlotActor(skin, slot, hud);
+        for(EquipSlot slot : equips.equipSlots){
+            EquipSlotActor actor = new EquipSlotActor(skin, slot, hud);
             add(actor);
 
             i++;
