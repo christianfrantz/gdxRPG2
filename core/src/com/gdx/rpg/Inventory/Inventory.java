@@ -9,8 +9,8 @@ import com.gdx.rpg.Item;
 public class Inventory {
     public InventorySlot[] inventorySlots;
 
-    public Inventory(){
-        inventorySlots = new InventorySlot[10];
+    public Inventory(int num){
+        inventorySlots = new InventorySlot[num];
         for(int i = 0; i < inventorySlots.length; i++){
             inventorySlots[i] = (new InventorySlot());
         }
@@ -45,5 +45,9 @@ public class Inventory {
                 return;
             }
         }
+    }
+
+    public void EquipItem(Item item){
+
     }
 }

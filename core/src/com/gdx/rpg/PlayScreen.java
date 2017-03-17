@@ -35,7 +35,7 @@ public class PlayScreen implements Screen{
 
     public PlayScreen(MainGame game){
         this.game = game;
-        MainGame.player = new Player(game.currentMap.playerSpawn);
+        MainGame.player = new Player(game.currentMap.playerSpawns.get("main_start"));
         player = MainGame.player;
 
         camera = new OrthographicCamera();
@@ -64,7 +64,7 @@ public class PlayScreen implements Screen{
 
             MainGame.renderer = new OrthogonalTiledMapRenderer(game.currentMap.tiledMap, 1 / MainGame.PPM);
 
-            player.body.setTransform(game.currentMap.playerSpawn.x, game.currentMap.playerSpawn.y, 0);
+            player.body.setTransform(game.currentMap.playerSpawns.get(MainGame.currentPlayerSpawn).x, game.currentMap.playerSpawns.get(MainGame.currentPlayerSpawn).y, 0);
             player.needToMove = false;
             player.body.setAwake(true);
         }
@@ -108,9 +108,12 @@ public class PlayScreen implements Screen{
         game.hud.stage.act(Gdx.graphics.getDeltaTime());
         if(player.showInventory){
             game.hud.inventoryActor.setVisible(true);
+            game.hud.equipActor.setVisible(true);
         }
-        else if(player.showInventory == false)
+        else if(player.showInventory == false) {
             game.hud.inventoryActor.setVisible(false);
+            game.hud.equipActor.setVisible(false);
+        }
         game.hud.stage.draw();
 
 
@@ -118,8 +121,8 @@ public class PlayScreen implements Screen{
         font.draw(game.batch, 0 + " " + player.inventory.inventorySlots[0].itemInSlot + " " + player.inventory.inventorySlots[0].itemCount, 10, 800);
         font.draw(game.batch, 1 + " " + player.inventory.inventorySlots[1].itemInSlot + " " + player.inventory.inventorySlots[1].itemCount, 10, 780);
         font.draw(game.batch, 2 + " " + player.inventory.inventorySlots[2].itemInSlot + " " + player.inventory.inventorySlots[2].itemCount, 10, 760);
-        font.draw(game.batch, 3 + " " + player.inventory.inventorySlots[3].itemInSlot + " " + player.inventory.inventorySlots[3].itemCount, 10, 740);
-        font.draw(game.batch, 4 + " " + player.inventory.inventorySlots[4].itemInSlot + " " + player.inventory.inventorySlots[4].itemCount, 10, 720);
+        font.draw(game.batch, player.direction.toString(), 10, 740);
+        font.draw(game.batch, player.mouseRelativePlayer.toString(), 10, 720);
 
         if(game.playerQuests.size() > 0){
             for(int i = 0; i < game.playerQuests.size(); i++){

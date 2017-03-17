@@ -15,6 +15,7 @@ import com.gdx.rpg.Entities.NPC;
 import com.gdx.rpg.Quests.Quest;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * if object is entity, set sprite, health, call
@@ -23,14 +24,13 @@ import java.util.ArrayList;
 public class Map {
     public String mapName;
     public ArrayList<Entity> mapEntities = new ArrayList<Entity>();
-    private ArrayList<Entity> e;
+    public HashMap<String, Vector2> playerSpawns;
     public TiledMap tiledMap;
     public Vector2 playerSpawn;
 
     public Map( String name, TmxMapLoader loader){
         this.mapName = name;
         tiledMap = loader.load(name + ".tmx");
-        e = new ArrayList<Entity>();
     }
 
 
@@ -41,6 +41,8 @@ public class Map {
         Body body;
 
         Array<Body> bodies = new Array<Body>();
+        playerSpawns = new HashMap<String, Vector2>();
+
         MainGame.world.getBodies(bodies);
         for(Body b : bodies){
             if(!b.getUserData().equals(Statics.PLAYER_BODY) && !b.getUserData().equals(Statics.PLAYER_ATTACK_BODY) && !b.getUserData().equals(Statics.PLAYER_DIALOG_BODY)){
@@ -49,6 +51,7 @@ public class Map {
         }
 
         mapEntities.clear();
+        playerSpawns.clear();
 
         for(MapObject object : tiledMap.getLayers().get("CollisionLayer").getObjects().getByType(RectangleMapObject.class)){
             Rectangle rect = ((RectangleMapObject)object).getRectangle();
@@ -70,8 +73,9 @@ public class Map {
             if(object.getProperties().containsKey("bat")){
                mapEntities.add( MainGame.enemyFactory.createEnemy(Enemy.EnemyType.BAT, new Vector2(rect.getX() / MainGame.PPM, rect.getY() / MainGame.PPM)));
             }
-            if(object.getProperties().containsKey("player")){
+            if(object.getProperties().containsKey("player_start")){
                 playerSpawn = new Vector2(rect.getX() / MainGame.PPM, rect.getY() / MainGame.PPM);
+                playerSpawns.put(object.getProperties().get("player_start").toString(), new Vector2(rect.getX() / MainGame.PPM, rect.getY() / MainGame.PPM));
             }
             if(object.getProperties().containsKey("npc")){
                 mapEntities.add(MainGame.npcFactory.createNPC(NPC.NPCType.NORMAL, new Vector2(rect.getX() / MainGame.PPM, rect.getY() / MainGame.PPM), MainGame.availableQuests.get(object.getProperties().get("npc"))));
@@ -87,7 +91,7 @@ public class Map {
             shape.setAsBox(rect.getWidth() / 2 / MainGame.PPM , rect.getHeight() / 2 / MainGame.PPM);
             fixtureDef.shape = shape;
             fixtureDef.isSensor = true;
-            body.createFixture(fixtureDef).setUserData(object.getName());
+            body.createFixture(fixtureDef).setUserData(object);
             body.setUserData("teleport");
         }
         System.out.println(mapEntities.size());

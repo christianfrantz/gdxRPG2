@@ -20,19 +20,19 @@ public class PlayerInputComponent {
     public void updateInput(Player player){
         if(Gdx.input.isKeyPressed(Input.Keys.A) && player.playerState != Player.PlayerState.ATTACKING){
             player.playerState = Player.PlayerState.MOVING;
-            player.direction = Entity.Direction.LEFT;
+            player.moveDirection = Entity.Direction.LEFT;
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.D) && player.playerState != Player.PlayerState.ATTACKING){
             player.playerState = Player.PlayerState.MOVING;
-            player.direction = Entity.Direction.RIGHT;
+            player.moveDirection = Entity.Direction.RIGHT;
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.W) && player.playerState != Player.PlayerState.ATTACKING){
             player.playerState = Player.PlayerState.MOVING;
-            player.direction = Entity.Direction.UP;
+            player.moveDirection = Entity.Direction.UP;
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.S)  && player.playerState != Player.PlayerState.ATTACKING){
             player.playerState = Player.PlayerState.MOVING;
-            player.direction = Entity.Direction.DOWN;
+            player.moveDirection = Entity.Direction.DOWN;
         }
         else if(player.attackCounter == 0){
             player.playerState = Player.PlayerState.IDLE;
@@ -47,6 +47,19 @@ public class PlayerInputComponent {
         }
         else{
             player.nextDialog = false;
+        }
+
+        if(player.mouseRelativePlayer.y > 01)
+            player.direction = Entity.Direction.UP;
+        if(player.mouseRelativePlayer.y < -01)
+            player.direction = Entity.Direction.DOWN;
+        if(player.mouseRelativePlayer.x < -01)
+            player.direction = Entity.Direction.LEFT;
+        if(player.mouseRelativePlayer.x > 01)
+            player.direction = Entity.Direction.RIGHT;
+
+        if(Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_LEFT)){
+            player.playerState = Player.PlayerState.DODGING;
         }
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.I) && player.showInventory)

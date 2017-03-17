@@ -48,6 +48,7 @@ public class MainGame extends Game {
     public static TiledMapRenderer renderer;
 
     public static TmxMapLoader mapLoader;
+    public static String currentPlayerSpawn;
 
     public MainGame(){
         availableQuests.put(Statics.KILL_SLIMES, new Quest(Statics.KILL_SLIMES, Quest.QuestType.KILL));
@@ -64,6 +65,7 @@ public class MainGame extends Game {
 
         gameMaps.put(Statics.M_MAIN_MAP, new Map(Statics.M_MAIN_MAP, mapLoader));
         gameMaps.put(Statics.M_HOUSE, new Map(Statics.M_HOUSE, mapLoader));
+        gameMaps.put(Statics.M_HOUSE_2, new Map(Statics.M_HOUSE_2, mapLoader));
 
         currentMap = gameMaps.get(Statics.M_MAIN_MAP);
 
@@ -79,5 +81,13 @@ public class MainGame extends Game {
     public static void ChangeMap(String name){
         player.needToMove = true;
         mapToLoad = gameMaps.get(name);
+    }
+
+    public static String getCurrentPlayerSpawn(){
+        return currentPlayerSpawn;
+    }
+
+    public static void setCurrentPlayerSpawn(String s){
+        currentPlayerSpawn = s;
     }
 }

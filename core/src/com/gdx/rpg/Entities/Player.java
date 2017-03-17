@@ -4,8 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.collision.Ray;
 import com.badlogic.gdx.physics.box2d.*;
 import com.gdx.rpg.Components.PlayerInputComponent;
 import com.gdx.rpg.Components.PlayerPhysicsComponent;
@@ -23,12 +25,16 @@ import com.gdx.rpg.Observer.QuestObserver;
  */
 public class Player extends Entity {
     public int health = 100;
+    public int stamina = 100;
+    public int mana = 0;
+    public int gold = 10;
     public int damage = 3;
 
     public enum PlayerState{
         IDLE,
         MOVING,
-        ATTACKING
+        ATTACKING,
+        DODGING
     }
 
     private PlayerPhysicsComponent physicsComponent;
@@ -38,6 +44,7 @@ public class Player extends Entity {
     public Body attackBody;
     public Body dialogBody;
 
+    public float dodgeSpeed = 6f;
     public float attackForce = 4f;
     private float speed = 0.5f;
     public PlayerState playerState;
@@ -48,13 +55,18 @@ public class Player extends Entity {
     public PlayerSubject playerSubject;
     public Sprite cursor;
     public float angle;
+    public Vector2 mouseRelativePlayer;
 
     public boolean needToMove = false;
 
     public Inventory inventory;
+    public Inventory equips;
+
     public boolean showInventory;
 
     public boolean nextDialog = false;
+
+    public Direction moveDirection;
 
     public Player( Vector2 position){
         super( position, "PLAYER");
@@ -64,6 +76,7 @@ public class Player extends Entity {
         sprite.setOrigin(32 / MainGame.PPM, 32 / MainGame.PPM);
 
         direction = Direction.DOWN;
+        moveDirection = Direction.DOWN;
         playerState = PlayerState.IDLE;
 
         playerSubject = new PlayerSubject();
@@ -77,7 +90,8 @@ public class Player extends Entity {
         cursor = new Sprite(new Texture("cursor.png"));
         cursor.setBounds(0, 0, 16 / MainGame.PPM, 16 / MainGame.PPM);
 
-        inventory = new Inventory();
+        inventory = new Inventory(10);
+        equips = new Inventory(4);
     }
 
     public void updatePlayer(float delta, Camera cam){
@@ -87,7 +101,7 @@ public class Player extends Entity {
         cam.unproject(pos);
         cursor.setPosition(pos.x - (8 /MainGame.PPM), pos.y - (8 / MainGame.PPM));
 
-        Vector2 mouseRelativePlayer = new Vector2(cursor.getX() - sprite.getX(), cursor.getY() - sprite.getY());
+        mouseRelativePlayer = new Vector2(cursor.getX() - sprite.getX(), cursor.getY() - sprite.getY());
         angle = mouseRelativePlayer.angle();
 
         inputComponent.updateInput(this);
@@ -98,14 +112,21 @@ public class Player extends Entity {
                 attackBody.setActive(false);
                 break;
             case ATTACKING:
-            {
+
                 attackCounter += Gdx.graphics.getDeltaTime();
                 attackBody.setActive(true);
                 if(attackCounter >= attackTime){
                     playerState = PlayerState.IDLE;
                     attackCounter = 0;
                 }
-            }
+                break;
+
+            case DODGING:
+                Ray ray = new Ray();
+                ray.set(new Vector3(body.getWorldCenter().x, body.getWorldCenter().y, 0), pos);
+                System.out.println(ray.direction);
+                body.applyLinearImpulse(new Vector2(body.getLinearVelocity().x * dodgeSpeed, body.getLinearVelocity().y * dodgeSpeed), body.getWorldCenter(), true);
+                break;
         }
 
     }

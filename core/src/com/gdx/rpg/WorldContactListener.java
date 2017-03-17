@@ -2,6 +2,7 @@ package com.gdx.rpg;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.loaders.SynchronousAssetLoader;
+import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.gdx.rpg.Entities.Enemy;
@@ -62,11 +63,15 @@ public class WorldContactListener implements ContactListener{
         }
 
         if(isPlayerTeleport(fixtureA, fixtureB)){
-            System.out.println(fixtureA.getUserData().toString());
-            if(fixtureA.getBody().getUserData().equals("teleport"))
-                MainGame.ChangeMap(fixtureA.getUserData().toString());
+            if(fixtureA.getBody().getUserData().equals("teleport")) {
+                MapObject object = (MapObject)fixtureA.getUserData();
+                MainGame.ChangeMap(object.getName());
+                MainGame.setCurrentPlayerSpawn(object.getProperties().get(object.getName()).toString());
+            }
             else if(fixtureA.getBody().getUserData().equals("teleport")){
-                MainGame.ChangeMap(fixtureB.getUserData().toString());
+                MapObject object = (MapObject)fixtureB.getUserData();
+                MainGame.ChangeMap(object.getName());
+                MainGame.setCurrentPlayerSpawn(object.getProperties().get(object.getName()).toString());
             }
         }
 

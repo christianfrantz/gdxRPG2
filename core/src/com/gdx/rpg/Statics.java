@@ -14,4 +14,5 @@ public interface Statics {
 
     String M_MAIN_MAP = "untitled";
     String M_HOUSE = "house";
+    String M_HOUSE_2 = "house2";
 }
