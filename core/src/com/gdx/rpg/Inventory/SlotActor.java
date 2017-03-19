@@ -2,11 +2,16 @@ package com.gdx.rpg.Inventory;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.gdx.rpg.Equips.EquipSlot;
 import com.gdx.rpg.HUD.HUD;
+import com.gdx.rpg.Item;
+import com.gdx.rpg.MainGame;
 
 /**
  * if object is entity, set sprite, health, call
@@ -27,7 +32,47 @@ public class SlotActor extends ImageButton implements SlotObserver {
         SlotTooltip tooltip = new SlotTooltip(slot, skin);
         hud.stage.addActor(tooltip);
         addListener(new TooltipListener(tooltip, true));
+        addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                useItem(getSlot());
+            }
+        });
+    }
 
+    private void useItem(InventorySlot slot){
+        if(!slot.hasItem)
+            return;
+        if(slot.itemInSlot.getItemType() == Item.ItemType.EQUIP) {
+            if(slot.itemInSlot.armorType != null) {
+                switch (slot.itemInSlot.armorType) {
+                    case CHEST:
+                        MainGame.player.equips.AddToSlot("CHEST", slot.itemInSlot);
+                        MainGame.player.defense += slot.itemInSlot.modifier;
+                        MainGame.player.inventory.RemoveItem(slot.itemInSlot);
+                        break;
+                    case RING:
+                        MainGame.player.equips.AddToSlot("RING", slot.itemInSlot);
+                        MainGame.player.defense += slot.itemInSlot.modifier;
+                        MainGame.player.inventory.RemoveItem(slot.itemInSlot);
+                        break;
+                    case HEAD:
+                        MainGame.player.equips.AddToSlot("HEAD", slot.itemInSlot);
+                        MainGame.player.defense += slot.itemInSlot.modifier;
+                        MainGame.player.inventory.RemoveItem(slot.itemInSlot);
+                        break;
+                }
+            }
+            else if(slot.itemInSlot.weaponType != null) {
+                switch (slot.itemInSlot.weaponType) {
+                    case SWORD:
+                        MainGame.player.equips.AddToSlot("WEAPON", slot.itemInSlot);
+                        MainGame.player.attack += slot.itemInSlot.modifier;
+                        MainGame.player.inventory.RemoveItem(slot.itemInSlot);
+                        break;
+                }
+            }
+        }
     }
 
     private static ImageButtonStyle createStyle(Skin skin, InventorySlot slot){
@@ -48,7 +93,6 @@ public class SlotActor extends ImageButton implements SlotObserver {
     @Override
     public void hasChanged(InventorySlot slot){
         setStyle(createStyle(skin, slot));
-        System.out.println("SDF");
     }
 
     public InventorySlot getSlot(){

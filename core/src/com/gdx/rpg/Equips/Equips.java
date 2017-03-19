@@ -22,6 +22,22 @@ public class Equips {
         equipSlots[3].slotName = "WEAPON";
     }
 
+    public void AddToSlot(String name, Item item){
+        EquipSlot slot;
+        for(int i = 0; i < equipSlots.length; i++) {
+            if (equipSlots[i].slotName == name) {
+                slot = equipSlots[i];
+                if(!slot.hasItem){
+                    slot.itemInSlot = item;
+                    slot.hasItem = true;
+                    slot.notifyListeners();
+                }
+                else if(slot.hasItem){
+                    slot.itemInSlot = item;
+                }
+            }
+        }
+    }
     public void AddItem(Item item){
         for(int i = 0; i < equipSlots.length; i++){
             if(equipSlots[i].itemInSlot == item){

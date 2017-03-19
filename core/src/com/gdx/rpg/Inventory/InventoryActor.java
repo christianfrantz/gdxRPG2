@@ -1,5 +1,6 @@
 package com.gdx.rpg.Inventory;
 
+import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
@@ -18,7 +19,7 @@ public class InventoryActor extends Window {
 
         TextButton closeButton = new TextButton("x", skin);
         closeButton.addListener(new ClickListener());
-       // getButtonTable().add(closeButton).height(getPadTop());
+        //.add(closeButton).height(getPadTop());
 
         setPosition(400, 100);
         defaults().space(8);

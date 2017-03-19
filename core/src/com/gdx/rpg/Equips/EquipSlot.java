@@ -26,7 +26,6 @@ public class EquipSlot {
     }
 
     public void notifyListeners(){
-        System.out.println("SLOT NOTIFIED");
         for(EquipSlotObserver listener : slotListener) {
             listener.hasChanged(this);
         }

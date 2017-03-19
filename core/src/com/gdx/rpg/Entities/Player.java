@@ -29,7 +29,8 @@ public class Player extends Entity {
     public int stamina = 100;
     public int mana = 0;
     public int gold = 10;
-    public int damage = 3;
+    public int attack = 3;
+    public int defense = 0;
 
     public enum PlayerState{
         IDLE,
@@ -93,6 +94,12 @@ public class Player extends Entity {
 
         inventory = new Inventory(10);
         equips = new Equips(4);
+
+        inventory.AddItem(Item.CHEST);
+        inventory.AddItem(Item.RING);
+        inventory.AddItem(Item.BAT_WING);
+        inventory.AddItem(Item.HEAD);
+        inventory.AddItem(Item.SWORD);
     }
 
     public void updatePlayer(float delta, Camera cam){

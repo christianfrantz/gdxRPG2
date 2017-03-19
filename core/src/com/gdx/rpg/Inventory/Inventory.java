@@ -39,8 +39,11 @@ public class Inventory {
             if(inventorySlots[i].itemInSlot == item){
                 inventorySlots[i].itemCount--;
                 inventorySlots[i].notifyListeners();
-                if(inventorySlots[i].itemCount == 0)
+                if(inventorySlots[i].itemCount == 0) {
                     inventorySlots[i].itemInSlot = null;
+                    inventorySlots[i].hasItem = false;
+                    inventorySlots[i].notifyListeners();
+                }
 //                inventorySlots[i].notifyListeners();
                 return;
             }

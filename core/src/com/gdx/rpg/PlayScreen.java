@@ -118,8 +118,8 @@ public class PlayScreen implements Screen{
 
 
         game.batch.begin();
-        font.draw(game.batch, 0 + " " + player.inventory.inventorySlots[0].itemInSlot + " " + player.inventory.inventorySlots[0].itemCount, 10, 800);
-        font.draw(game.batch, 1 + " " + player.inventory.inventorySlots[1].itemInSlot + " " + player.inventory.inventorySlots[1].itemCount, 10, 780);
+        font.draw(game.batch, 0 + "Defense: " + player.defense, 10, 800);
+        font.draw(game.batch, 1 + "Attack " + player.attack, 10, 780);
         font.draw(game.batch, 2 + " " + player.inventory.inventorySlots[2].itemInSlot + " " + player.inventory.inventorySlots[2].itemCount, 10, 760);
         font.draw(game.batch, player.direction.toString(), 10, 740);
         font.draw(game.batch, player.mouseRelativePlayer.toString(), 10, 720);

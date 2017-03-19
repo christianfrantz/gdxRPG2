@@ -31,8 +31,7 @@ public class SlotTooltip extends Window implements SlotObserver {
         }
 
         clear();
-        Label label = new Label(slot.itemInSlot.name(), skin);
-        System.out.println(slot.itemInSlot.name());
+        Label label = new Label(slot.itemInSlot.name() + " " + slot.itemInSlot.getItemType() + " " + slot.itemInSlot.modifier, skin);
         add(label);
         pack();
     }
