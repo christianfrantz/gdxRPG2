@@ -100,6 +100,7 @@ public class Player extends Entity {
         inventory.AddItem(Item.BAT_WING);
         inventory.AddItem(Item.HEAD);
         inventory.AddItem(Item.SWORD);
+        inventory.AddItem(Item.HEALTH_POTION);
     }
 
     public void updatePlayer(float delta, Camera cam){

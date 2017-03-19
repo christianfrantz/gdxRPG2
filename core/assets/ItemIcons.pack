@@ -59,30 +59,37 @@ head
   orig: 64, 64
   offset: 0, 0
   index: -1
-ring
+health_potion
   rotate: false
   xy: 529, 1
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-slimegoo
+ring
   rotate: false
   xy: 595, 1
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-stick
+slimegoo
   rotate: false
   xy: 661, 1
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-sword
+stick
   rotate: false
   xy: 727, 1
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+sword
+  rotate: false
+  xy: 793, 1
   size: 64, 64
   orig: 64, 64
   offset: 0, 0

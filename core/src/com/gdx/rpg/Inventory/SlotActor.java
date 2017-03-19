@@ -43,6 +43,11 @@ public class SlotActor extends ImageButton implements SlotObserver {
     private void useItem(InventorySlot slot){
         if(!slot.hasItem)
             return;
+        if(slot.itemInSlot.getItemType() == Item.ItemType.CONSUMABLE){
+            slot.itemInSlot.onConsume(slot.itemInSlot.consumeType, slot.itemInSlot.modifier);
+            MainGame.player.inventory.RemoveItem(slot.itemInSlot);
+            return;
+        }
         if(slot.itemInSlot.getItemType() == Item.ItemType.EQUIP) {
             if(slot.itemInSlot.armorType != null) {
                 switch (slot.itemInSlot.armorType) {
@@ -62,6 +67,7 @@ public class SlotActor extends ImageButton implements SlotObserver {
                         MainGame.player.inventory.RemoveItem(slot.itemInSlot);
                         break;
                 }
+                return;
             }
             else if(slot.itemInSlot.weaponType != null) {
                 switch (slot.itemInSlot.weaponType) {
@@ -71,6 +77,7 @@ public class SlotActor extends ImageButton implements SlotObserver {
                         MainGame.player.inventory.RemoveItem(slot.itemInSlot);
                         break;
                 }
+                return;
             }
         }
     }
