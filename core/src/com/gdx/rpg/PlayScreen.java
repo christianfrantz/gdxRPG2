@@ -18,6 +18,8 @@ import com.gdx.rpg.Entities.NPC;
 import com.gdx.rpg.Entities.Player;
 import com.gdx.rpg.HUD.HUD;
 
+import java.util.Iterator;
+
 /**
  * Created by imont_000 on 2/26/2017.
  */
@@ -37,6 +39,7 @@ public class PlayScreen implements Screen{
         this.game = game;
         MainGame.player = new Player(game.currentMap.playerSpawns.get("main_start"));
         player = MainGame.player;
+        player.playerClass = MainGame.playerClass;
 
         camera = new OrthographicCamera();
         viewport = new FitViewport(MainGame.vWidth / MainGame.PPM, MainGame.vHeight / MainGame.PPM, camera);
@@ -59,6 +62,14 @@ public class PlayScreen implements Screen{
         game.world.step(1/60f, 6, 2);
 
         if(player.needToMove){
+            Array<Body> bodies = new Array<Body>();
+            MainGame.world.getBodies(bodies);
+            for(Body body : bodies){
+                if (body.getUserData() instanceof Projectile){
+                    MainGame.world.destroyBody(body);
+                }
+            }
+
             game.mapToLoad.loadMap();
             game.currentMap = game.mapToLoad;
 
@@ -120,9 +131,9 @@ public class PlayScreen implements Screen{
         game.batch.begin();
         font.draw(game.batch, 0 + "Defense: " + player.defense, 10, 800);
         font.draw(game.batch, 1 + "Attack " + player.attack, 10, 780);
-        font.draw(game.batch, 2 + " " + player.inventory.inventorySlots[2].itemInSlot + " " + player.inventory.inventorySlots[2].itemCount, 10, 760);
+        font.draw(game.batch, player.playerState.toString(), 10, 760);
         font.draw(game.batch, player.direction.toString(), 10, 740);
-        font.draw(game.batch, player.mouseRelativePlayer.toString(), 10, 720);
+        font.draw(game.batch, player.playerClass.toString(), 10, 720);
 
         if(game.playerQuests.size() > 0){
             for(int i = 0; i < game.playerQuests.size(); i++){

@@ -37,6 +37,7 @@ public class MainGame extends Game {
     public static HUD hud;
 
     public static Player player;
+    public static Player.PlayerClass playerClass;
 
     public static ArrayList<Quest> playerQuests;
     public static HashMap<String, Quest> availableQuests = new HashMap<String, Quest>();
@@ -49,6 +50,8 @@ public class MainGame extends Game {
 
     public static TmxMapLoader mapLoader;
     public static String currentPlayerSpawn;
+
+    public static boolean classChosen = false;
 
     public MainGame(){
         availableQuests.put(Statics.KILL_SLIMES, new Quest(Statics.KILL_SLIMES, Quest.QuestType.KILL));
@@ -75,6 +78,10 @@ public class MainGame extends Game {
 
         renderer = new OrthogonalTiledMapRenderer(MainGame.currentMap.tiledMap, 1 / MainGame.PPM);
 
+        setScreen(new PickClassScreen(this));
+    }
+
+    public void SetPlayScreen(){
         setScreen(new PlayScreen(this));
     }
 

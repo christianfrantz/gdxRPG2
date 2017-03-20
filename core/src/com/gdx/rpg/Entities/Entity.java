@@ -18,11 +18,16 @@ import java.util.Iterator;
  * if object is entity, set sprite, health
  */
 public class Entity {
+    public float attackForce = 4;
     public enum Direction{
         LEFT,
         RIGHT,
         DOWN,
-        UP
+        UP,
+        UP_LEFT,
+        UP_RIGHT,
+        DOWN_LEFT,
+        DOWN_RIGHT
     }
 
     public enum EnemyState{

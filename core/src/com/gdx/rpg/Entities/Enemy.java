@@ -27,6 +27,7 @@ public class Enemy extends Entity {
 
     public EnemySubject enemySubject;
     public Body chaseBody;
+    public float attackForce = 4f;
 
     public Enemy(Vector2 position, String id){
         super( position, id);
@@ -54,7 +55,7 @@ public class Enemy extends Entity {
 
         body.setUserData(this);
         fixtureDef.shape = shape;
-        fixtureDef.restitution = 3f;
+        fixtureDef.restitution = 3;
         body.createFixture(fixtureDef);
 
         BodyDef chaseDef = new BodyDef();

@@ -4,21 +4,21 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
 import com.badlogic.gdx.physics.box2d.*;
 import com.gdx.rpg.Components.PlayerInputComponent;
 import com.gdx.rpg.Components.PlayerPhysicsComponent;
-import com.gdx.rpg.Equips.Equips;
-import com.gdx.rpg.Inventory.Inventory;
+import com.gdx.rpg.HUD.Equips.Equips;
+import com.gdx.rpg.HUD.Inventory.Inventory;
 import com.gdx.rpg.Item;
 import com.gdx.rpg.MainGame;
 import com.gdx.rpg.Observer.ClickObserver;
 import com.gdx.rpg.Observer.DamageObserver;
 import com.gdx.rpg.Observer.PlayerSubject;
 import com.gdx.rpg.Observer.QuestObserver;
+import com.gdx.rpg.Projectile;
 
 
 /**
@@ -31,6 +31,14 @@ public class Player extends Entity {
     public int gold = 10;
     public int attack = 3;
     public int defense = 0;
+
+    public enum PlayerClass{
+        WARRIOR,
+        MAGE,
+        RANGER
+    }
+
+    public PlayerClass playerClass;
 
     public enum PlayerState{
         IDLE,
@@ -121,22 +129,33 @@ public class Player extends Entity {
                 attackBody.setActive(false);
                 break;
             case ATTACKING:
-
-                attackCounter += Gdx.graphics.getDeltaTime();
-                attackBody.setActive(true);
-                if(attackCounter >= attackTime){
-                    playerState = PlayerState.IDLE;
-                    attackCounter = 0;
+                if(playerClass == PlayerClass.WARRIOR){
+                    attackCounter += Gdx.graphics.getDeltaTime();
+                    attackBody.setActive(true);
+                    if(attackCounter >= attackTime){
+                        playerState = PlayerState.IDLE;
+                        attackCounter = 0;
+                    }
+                }
+                if(playerClass == PlayerClass.RANGER){
+                    attackCounter += Gdx.graphics.getDeltaTime();
+                    if(attackCounter >= attackTime){
+                        shootProjectile(delta);
+                        playerState = PlayerState.IDLE;
+                        attackCounter = 0;
+                    }
                 }
                 break;
 
             case DODGING:
-                Ray ray = new Ray();
-                ray.set(new Vector3(body.getWorldCenter().x, body.getWorldCenter().y, 0), pos);
-                System.out.println(ray.direction);
                 body.applyLinearImpulse(new Vector2(body.getLinearVelocity().x * dodgeSpeed, body.getLinearVelocity().y * dodgeSpeed), body.getWorldCenter(), true);
                 break;
         }
+    }
 
+    private void shootProjectile(float dt){
+        Projectile projectile = new Projectile(this);
+        projectile.isActive = true;
+        projectile.update(dt, this);
     }
 }
