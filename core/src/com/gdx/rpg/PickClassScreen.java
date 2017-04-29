@@ -34,7 +34,7 @@ public class PickClassScreen implements Screen {
     public PickClassScreen(MainGame game){
         this.game = game;
 
-        viewport = new FitViewport(640, 360, new OrthographicCamera());
+        viewport = new FitViewport(MainGame.vWidth, MainGame.vHeight, new OrthographicCamera());
         stage = new Stage(viewport, game.batch);
 
         Texture button = new Texture("warriorButton.png");

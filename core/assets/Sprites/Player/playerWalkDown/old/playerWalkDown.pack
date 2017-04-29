@@ -1,0 +1,19 @@
+
+playerWalkDown.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+playerWalkingDown1
+  rotate: false
+  xy: 1, 1
+  size: 32, 64
+  orig: 32, 64
+  offset: 0, 0
+  index: -1
+playerWalkingDown2
+  rotate: false
+  xy: 35, 1
+  size: 32, 64
+  orig: 32, 64
+  offset: 0, 0
+  index: -1

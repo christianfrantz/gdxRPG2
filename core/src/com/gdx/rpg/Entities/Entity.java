@@ -37,7 +37,10 @@ public class Entity {
     }
 
     public EnemyState enemyState;
+
     public Direction direction;
+    public Direction moveDirection;
+
     public Sprite sprite;
     public Body body;
     private float speed;

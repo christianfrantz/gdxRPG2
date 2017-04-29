@@ -94,5 +94,18 @@ public class Map {
             body.createFixture(fixtureDef).setUserData(object);
             body.setUserData("teleport");
         }
+
+        if(tiledMap.getLayers().get("Foliage") != null){
+            for(MapObject object : tiledMap.getLayers().get("Foliage").getObjects().getByType(RectangleMapObject.class)){
+                Rectangle rect = ((RectangleMapObject)object).getRectangle();
+                def.type = BodyDef.BodyType.StaticBody;
+                def.position.set((rect.getX() + rect.getWidth() / 2) / MainGame.PPM , (rect.getY() + rect.getHeight() /2) / MainGame.PPM  );
+                body = MainGame.world.createBody(def);
+
+                shape.setAsBox(rect.getWidth() / 2 / MainGame.PPM , rect.getHeight() / 2 / MainGame.PPM);
+                fixtureDef.shape = shape;
+                body.createFixture(fixtureDef);
+            }
+        }
     }
 }

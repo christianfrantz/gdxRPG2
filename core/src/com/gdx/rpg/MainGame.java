@@ -1,6 +1,9 @@
 package com.gdx.rpg;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -25,10 +28,10 @@ import java.util.HashMap;
  * Created by imont_000 on 2/26/2017.
  */
 public class MainGame extends Game {
-    public SpriteBatch batch;
+    public static SpriteBatch batch;
 
-    public static float vWidth = 800;
-    public static float vHeight = 800;
+    public static float vWidth = 1920;
+    public static float vHeight = 1080;
     public static float PPM = 100;
 
     public static EnemyFactory enemyFactory = new EnemyFactory();
@@ -51,6 +54,8 @@ public class MainGame extends Game {
     public static TmxMapLoader mapLoader;
     public static String currentPlayerSpawn;
 
+    public static ParticleEffect particleEffect;
+
     public static boolean classChosen = false;
 
     public MainGame(){
@@ -62,6 +67,15 @@ public class MainGame extends Game {
     @Override
     public void create() {
         batch = new SpriteBatch();
+
+
+        Pixmap pm = new Pixmap(Gdx.files.internal("cursor.png"));
+        Gdx.graphics.setCursor(Gdx.graphics.newCursor(pm, 0, 0));
+
+
+        particleEffect = new ParticleEffect();
+        particleEffect.load(Gdx.files.internal("particle"), Gdx.files.internal(""));
+        particleEffect.scaleEffect(0.01f);
        
         playerQuests = new ArrayList<Quest>();
         mapLoader = new TmxMapLoader();

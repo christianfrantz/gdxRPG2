@@ -30,7 +30,7 @@ public class NPC extends Entity {
 
     public NPC( Vector2 position, String id) {
         super(position, id);
-        sprite = new Sprite(new Texture("player.png"));
+        sprite = new Sprite(new Texture("Sprites/Player/player.png"));
         createBody(position, sprite.getTexture());
 
         entityUpdateComponent = new NPCUpdateComponent(this);

@@ -1,0 +1,61 @@
+
+warriorWalkUp.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+bodyBasicFaceUp
+  rotate: false
+  xy: 1, 133
+  size: 32, 64
+  orig: 32, 64
+  offset: 0, 0
+  index: -1
+bodyBasicFaceUp1
+  rotate: false
+  xy: 1, 67
+  size: 32, 64
+  orig: 32, 64
+  offset: 0, 0
+  index: -1
+bodyBasicFaceUp2
+  rotate: false
+  xy: 35, 133
+  size: 32, 64
+  orig: 32, 64
+  offset: 0, 0
+  index: -1
+bodyBasicFaceUp3
+  rotate: false
+  xy: 1, 1
+  size: 32, 64
+  orig: 32, 64
+  offset: 0, 0
+  index: -1
+bodyBasicFaceUp4
+  rotate: false
+  xy: 35, 67
+  size: 32, 64
+  orig: 32, 64
+  offset: 0, 0
+  index: -1
+bodyBasicFaceUp5
+  rotate: false
+  xy: 69, 133
+  size: 32, 64
+  orig: 32, 64
+  offset: 0, 0
+  index: -1
+bodyBasicFaceUp6
+  rotate: false
+  xy: 35, 1
+  size: 32, 64
+  orig: 32, 64
+  offset: 0, 0
+  index: -1
+bodyBasicFaceUp7
+  rotate: false
+  xy: 69, 67
+  size: 32, 64
+  orig: 32, 64
+  offset: 0, 0
+  index: -1

@@ -3,11 +3,8 @@ package com.gdx.rpg.Components;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
-import com.badlogic.gdx.physics.box2d.joints.WeldJointDef;
 import com.gdx.rpg.MainGame;
 import com.gdx.rpg.Entities.Player;
-import com.gdx.rpg.RevoluteJoint;
 import com.gdx.rpg.Statics;
 
 public class PlayerPhysicsComponent {
@@ -32,7 +29,7 @@ public class PlayerPhysicsComponent {
 
         FixtureDef fixtureDef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(32 / MainGame.PPM, 32 / MainGame.PPM);
+        shape.setAsBox(16 / MainGame.PPM, 32 / MainGame.PPM);
 
         fixtureDef.shape = shape;
         player.body.setUserData(Statics.PLAYER_BODY);
@@ -111,49 +108,70 @@ public class PlayerPhysicsComponent {
                     }
                     dialogBody.setTransform(body.getWorldCenter().x, body.getWorldCenter().y, 0);
                     break;
+                case DOWN_LEFT:
+                    if(player.playerState == Player.PlayerState.MOVING) {
+                        body.applyLinearImpulse(new Vector2(-speed, -speed), body.getWorldCenter(), true);
+                        attackBody.applyLinearImpulse(new Vector2(-speed, -speed), body.getWorldCenter(), true);
+
+                    }
+                    dialogBody.setTransform(body.getWorldCenter().x, body.getWorldCenter().y, 0);
+
+                    break;
+                case DOWN_RIGHT:
+                    if(player.playerState == Player.PlayerState.MOVING) {
+                        body.applyLinearImpulse(new Vector2(speed, -speed), body.getWorldCenter(), true);
+                        attackBody.applyLinearImpulse(new Vector2(speed, -speed), body.getWorldCenter(), true);
+
+                    }
+                    dialogBody.setTransform(body.getWorldCenter().x, body.getWorldCenter().y, 0);
+
+                    break;
+                case UP_LEFT:
+                    if(player.playerState == Player.PlayerState.MOVING) {
+                        body.applyLinearImpulse(new Vector2(-speed, speed), body.getWorldCenter(), true);
+                        attackBody.applyLinearImpulse(new Vector2(-speed, speed), body.getWorldCenter(), true);
+
+                    }
+                    dialogBody.setTransform(body.getWorldCenter().x, body.getWorldCenter().y, 0);
+
+                    break;
+                case UP_RIGHT:
+                    if(player.playerState == Player.PlayerState.MOVING) {
+                        body.applyLinearImpulse(new Vector2(speed, speed), body.getWorldCenter(), true);
+                        attackBody.applyLinearImpulse(new Vector2(speed, speed), body.getWorldCenter(), true);
+
+                    }
+                    dialogBody.setTransform(body.getWorldCenter().x, body.getWorldCenter().y, 0);
+
+                    break;
             }
 
             switch (player.direction){
                 case UP:
-                    attackBody.setTransform(body.getWorldCenter().x, body.getWorldCenter().y + (48 / MainGame.PPM), 0);
+                    attackBody.setTransform(body.getWorldCenter().x, body.getWorldCenter().y + (70 / MainGame.PPM), 0);
                     break;
                 case DOWN:
-                    attackBody.setTransform(body.getWorldCenter().x, body.getWorldCenter().y - (48 / MainGame.PPM), 0);
+                    attackBody.setTransform(body.getWorldCenter().x, body.getWorldCenter().y - (70 / MainGame.PPM), 0);
                     break;
                 case LEFT:
-                    attackBody.setTransform(body.getWorldCenter().x - (48 / MainGame.PPM), body.getWorldCenter().y, 90 * MathUtils.degreesToRadians);
+                    attackBody.setTransform(body.getWorldCenter().x - (60 / MainGame.PPM), body.getWorldCenter().y, 90 * MathUtils.degreesToRadians);
                     break;
                 case RIGHT:
-                    attackBody.setTransform(body.getWorldCenter().x + (48 / MainGame.PPM), body.getWorldCenter().y, 90 * MathUtils.degreesToRadians);
+                    attackBody.setTransform(body.getWorldCenter().x + (60 / MainGame.PPM), body.getWorldCenter().y, 90 * MathUtils.degreesToRadians);
+                    break;
+                case DOWN_LEFT:
+                    attackBody.setTransform(body.getWorldCenter().x -(48 / MainGame.PPM), body.getWorldCenter().y - (48 / MainGame.PPM), 87);
+                    break;
+                case DOWN_RIGHT:
+                    attackBody.setTransform(body.getWorldCenter().x +(48 / MainGame.PPM), body.getWorldCenter().y - (48 / MainGame.PPM), 180);
+                    break;
+                case UP_LEFT:
+                    attackBody.setTransform(body.getWorldCenter().x -(48 / MainGame.PPM), body.getWorldCenter().y + (48 / MainGame.PPM), 180);
+                    break;
+                case UP_RIGHT:
+                    attackBody.setTransform(body.getWorldCenter().x +(48 / MainGame.PPM), body.getWorldCenter().y +(48 / MainGame.PPM), 87);
                     break;
             }
 
-    }
-
-    private Body createBox(float w, float h, float x, float y, boolean isSensor){
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(10, 10);
-
-        PolygonShape shape = new PolygonShape();
-        float density = 1;
-        shape.setAsBox(w /MainGame.PPM, h / MainGame.PPM);
-
-        Body body = MainGame.world.createBody(bodyDef);
-        body.setTransform(x, y, 0);
-        FixtureDef fixtureDef = createFixtureDef(shape, density, isSensor);
-
-        body.createFixture(fixtureDef);
-        shape.dispose();
-
-        return body;
-    }
-
-    private FixtureDef createFixtureDef(Shape shape, float density, boolean isSensor){
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = shape;
-        fixtureDef.density = density;
-        fixtureDef.isSensor = isSensor;
-        return fixtureDef;
     }
 }

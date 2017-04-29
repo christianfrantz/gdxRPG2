@@ -4,10 +4,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.Array;
+import com.gdx.rpg.Components.PlayerGraphicsComponent;
 import com.gdx.rpg.Components.PlayerInputComponent;
 import com.gdx.rpg.Components.PlayerPhysicsComponent;
 import com.gdx.rpg.HUD.Equips.Equips;
@@ -19,6 +23,8 @@ import com.gdx.rpg.Observer.DamageObserver;
 import com.gdx.rpg.Observer.PlayerSubject;
 import com.gdx.rpg.Observer.QuestObserver;
 import com.gdx.rpg.Projectile;
+
+import java.util.ArrayList;
 
 
 /**
@@ -49,6 +55,7 @@ public class Player extends Entity {
 
     private PlayerPhysicsComponent physicsComponent;
     private PlayerInputComponent inputComponent;
+    public PlayerGraphicsComponent graphicsComponent;
 
     public Body body;
     public Body attackBody;
@@ -59,11 +66,10 @@ public class Player extends Entity {
     private float speed = 0.5f;
     public PlayerState playerState;
 
-    private float attackTime = 0.5f;
+    public float attackTime = 0.5f;
     public float attackCounter = 0;
 
     public PlayerSubject playerSubject;
-    public Sprite cursor;
     public float angle;
     public Vector2 mouseRelativePlayer;
 
@@ -76,14 +82,15 @@ public class Player extends Entity {
 
     public boolean nextDialog = false;
 
-    public Direction moveDirection;
+    public ArrayList<Projectile> projectilesOnScreen = new ArrayList<Projectile>();
+    public Vector2 mousePos;
 
     public Player( Vector2 position){
         super( position, "PLAYER");
 
-        sprite = new Sprite(new Texture("player.png"));
-        sprite.setBounds(0, 0, 64 / MainGame.PPM, 64 / MainGame.PPM);
-        sprite.setOrigin(32 / MainGame.PPM, 32 / MainGame.PPM);
+        sprite = new Sprite(new Texture("Sprites/Player/player.png"));
+        sprite.setBounds(0, 0, sprite.getTexture().getWidth() / MainGame.PPM, sprite.getTexture().getHeight() / MainGame.PPM);
+        sprite.setOrigin(sprite.getTexture().getWidth() / MainGame.PPM, sprite.getTexture().getHeight() / MainGame.PPM);
 
         direction = Direction.DOWN;
         moveDirection = Direction.DOWN;
@@ -96,9 +103,7 @@ public class Player extends Entity {
 
         inputComponent = new PlayerInputComponent(this);
         physicsComponent = new PlayerPhysicsComponent(this, position);
-
-        cursor = new Sprite(new Texture("cursor.png"));
-        cursor.setBounds(0, 0, 16 / MainGame.PPM, 16 / MainGame.PPM);
+        graphicsComponent = new PlayerGraphicsComponent(this);
 
         inventory = new Inventory(10);
         equips = new Equips(4);
@@ -116,13 +121,37 @@ public class Player extends Entity {
 
         Vector3 pos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
         cam.unproject(pos);
-        cursor.setPosition(pos.x - (8 /MainGame.PPM), pos.y - (8 / MainGame.PPM));
+        mousePos = new Vector2(pos.x, pos.y);
 
-        mouseRelativePlayer = new Vector2(cursor.getX() - sprite.getX(), cursor.getY() - sprite.getY());
+        mouseRelativePlayer = new Vector2(mousePos.x - sprite.getX(), mousePos.y - sprite.getY());
         angle = mouseRelativePlayer.angle();
 
         inputComponent.updateInput(this);
         physicsComponent.updatePhysics(this, speed);
+
+        for(Projectile p : projectilesOnScreen){
+            p.update(delta, projectilesOnScreen);
+        }
+
+        if(needToMove){
+            Array<Body> bodies = new Array<Body>();
+            MainGame.world.getBodies(bodies);
+            for(Body body : bodies){
+                if (body.getUserData() instanceof Projectile){
+                    MainGame.world.destroyBody(body);
+                }
+            }
+
+            MainGame.mapToLoad.loadMap();
+            MainGame.currentMap = MainGame.mapToLoad;
+
+            MainGame.renderer = new OrthogonalTiledMapRenderer(MainGame.currentMap.tiledMap, 1 / MainGame.PPM);
+
+            body.setTransform(MainGame.currentMap.playerSpawns.get(MainGame.getCurrentPlayerSpawn()).x, MainGame.currentMap.playerSpawns.get(MainGame.getCurrentPlayerSpawn()).y, 0);
+            needToMove = false;
+            body.setAwake(true);
+            playerState = PlayerState.IDLE;
+        }
 
         switch (playerState){
             case IDLE:
@@ -140,7 +169,7 @@ public class Player extends Entity {
                 if(playerClass == PlayerClass.RANGER){
                     attackCounter += Gdx.graphics.getDeltaTime();
                     if(attackCounter >= attackTime){
-                        shootProjectile(delta);
+                        shootProjectile(Projectile.ProjectileType.ARROW);
                         playerState = PlayerState.IDLE;
                         attackCounter = 0;
                     }
@@ -153,9 +182,9 @@ public class Player extends Entity {
         }
     }
 
-    private void shootProjectile(float dt){
-        Projectile projectile = new Projectile(this);
+    private void shootProjectile( Projectile.ProjectileType projectileType){
+        Projectile projectile = new Projectile(this, projectileType);
+        projectilesOnScreen.add(projectile);
         projectile.isActive = true;
-        projectile.update(dt, this);
     }
 }

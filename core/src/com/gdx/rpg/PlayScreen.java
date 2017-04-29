@@ -18,6 +18,7 @@ import com.gdx.rpg.Entities.NPC;
 import com.gdx.rpg.Entities.Player;
 import com.gdx.rpg.HUD.HUD;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
@@ -40,6 +41,10 @@ public class PlayScreen implements Screen{
         MainGame.player = new Player(game.currentMap.playerSpawns.get("main_start"));
         player = MainGame.player;
         player.playerClass = MainGame.playerClass;
+        switch (player.playerClass){
+            case WARRIOR:
+                player.attackTime = 0.2f;
+        }
 
         camera = new OrthographicCamera();
         viewport = new FitViewport(MainGame.vWidth / MainGame.PPM, MainGame.vHeight / MainGame.PPM, camera);
@@ -60,25 +65,6 @@ public class PlayScreen implements Screen{
 
     private void update(float delta){
         game.world.step(1/60f, 6, 2);
-
-        if(player.needToMove){
-            Array<Body> bodies = new Array<Body>();
-            MainGame.world.getBodies(bodies);
-            for(Body body : bodies){
-                if (body.getUserData() instanceof Projectile){
-                    MainGame.world.destroyBody(body);
-                }
-            }
-
-            game.mapToLoad.loadMap();
-            game.currentMap = game.mapToLoad;
-
-            MainGame.renderer = new OrthogonalTiledMapRenderer(game.currentMap.tiledMap, 1 / MainGame.PPM);
-
-            player.body.setTransform(game.currentMap.playerSpawns.get(MainGame.getCurrentPlayerSpawn()).x, game.currentMap.playerSpawns.get(MainGame.getCurrentPlayerSpawn()).y, 0);
-            player.needToMove = false;
-            player.body.setAwake(true);
-        }
 
         player.updatePlayer(delta, camera);
 
@@ -105,12 +91,18 @@ public class PlayScreen implements Screen{
 
         game.batch.enableBlending();
         game.batch.begin();
-        player.sprite.draw(game.batch);
+
+        player.graphicsComponent.DrawPlayer(game.batch);
+        for(Projectile p : player.projectilesOnScreen){
+            p.sprite.draw(game.batch);
+        }
 
         for(Entity entity : MainGame.currentMap.mapEntities){
             entity.sprite.draw(game.batch);
         }
-        player.cursor.draw(game.batch);
+
+        MainGame.particleEffect.update(Gdx.graphics.getDeltaTime());
+        MainGame.particleEffect.draw(game.batch);
         game.batch.end();
 
         debugRenderer.render(game.world, camera.combined);
@@ -133,7 +125,7 @@ public class PlayScreen implements Screen{
         font.draw(game.batch, 1 + "Attack " + player.attack, 10, 780);
         font.draw(game.batch, player.playerState.toString(), 10, 760);
         font.draw(game.batch, player.direction.toString(), 10, 740);
-        font.draw(game.batch, player.playerClass.toString(), 10, 720);
+        font.draw(game.batch, player.moveDirection.toString(), 10, 720);
 
         if(game.playerQuests.size() > 0){
             for(int i = 0; i < game.playerQuests.size(); i++){

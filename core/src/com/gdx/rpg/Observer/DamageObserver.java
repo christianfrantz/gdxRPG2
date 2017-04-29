@@ -35,6 +35,8 @@ public class DamageObserver implements Observer {
         switch (event) {
             case ENEMY_DAMAGE:
                 enemy.health -= player.attack;
+                MainGame.particleEffect.setPosition(enemy.body.getWorldCenter().x, enemy.body.getWorldCenter().y);
+                MainGame.particleEffect.start();
                 System.out.println("ENEMY_DAMAGE : " + enemy.health  + " " + enemy.id + " " + enemy.flaggedForDelete);
                 break;
             case PLAYER_DAMAGE:
