@@ -17,6 +17,7 @@ import com.gdx.rpg.Entities.Entity;
 import com.gdx.rpg.Entities.NPC;
 import com.gdx.rpg.Entities.Player;
 import com.gdx.rpg.HUD.HUD;
+import javafx.util.converter.IntegerStringConverter;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -35,6 +36,9 @@ public class PlayScreen implements Screen{
     Viewport viewport;
 
     BitmapFont font;
+
+    DayNightCycle dayNightCycle;
+    LightHandler lightHandler;
 
     public PlayScreen(MainGame game){
         this.game = game;
@@ -61,6 +65,9 @@ public class PlayScreen implements Screen{
 
         font = new BitmapFont();
         font.setColor(Color.RED);
+
+        dayNightCycle = new DayNightCycle();
+        lightHandler = new LightHandler();
     }
 
     private void update(float delta){
@@ -75,20 +82,26 @@ public class PlayScreen implements Screen{
         camera.position.set(player.body.getPosition().x, player.body.getPosition().y, 0);
         camera.update();
 
-        game.renderer.setView(camera);
+        float x = camera.position.x - camera.viewportWidth * camera.zoom;
+        float y = camera.position.y - camera.viewportHeight * camera.zoom;
+        float w = camera.viewportWidth * camera.zoom * 8;
+        float h = camera.viewportHeight * camera.zoom * 8;
+
+        game.renderer.setView(camera.combined, x, y, w, h);
+
+        dayNightCycle.updateTime();
+
     }
 
     @Override
     public void render(float delta) {
         update(delta);
-
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         game.renderer.render();
 
         game.batch.setProjectionMatrix(camera.combined);
-
         game.batch.enableBlending();
         game.batch.begin();
 
@@ -104,6 +117,12 @@ public class PlayScreen implements Screen{
         MainGame.particleEffect.update(Gdx.graphics.getDeltaTime());
         MainGame.particleEffect.draw(game.batch);
         game.batch.end();
+
+        //if(MainGame.currentMap.foregroundLayer[0] != 0)
+    //        game.renderer.render(MainGame.currentMap.foregroundLayer);
+
+
+        lightHandler.updateLight(dayNightCycle, camera);
 
         debugRenderer.render(game.world, camera.combined);
 
@@ -126,6 +145,10 @@ public class PlayScreen implements Screen{
         font.draw(game.batch, player.playerState.toString(), 10, 760);
         font.draw(game.batch, player.direction.toString(), 10, 740);
         font.draw(game.batch, player.moveDirection.toString(), 10, 720);
+        font.draw(game.batch, "Day: " + dayNightCycle.getDay(), 10, 500);
+        font.draw(game.batch, String.format("%1$02d", dayNightCycle.getHours()) + " : " +
+                String.format("%1$02d", dayNightCycle.getMinutes()) + " : " +
+                String.format("%1$02d", dayNightCycle.getSeconds()), 10, 520);
 
         if(game.playerQuests.size() > 0){
             for(int i = 0; i < game.playerQuests.size(); i++){

@@ -25,6 +25,7 @@ public class DamageObserver implements Observer {
                 player.health -= 10;
                 MainGame.hud.health = player.health;
                 MainGame.hud.playerHealthLabel.setText(Statics.HUD_HEALTH +  player.health);
+
                 break;
             }
         }

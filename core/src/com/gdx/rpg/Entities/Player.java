@@ -23,6 +23,7 @@ import com.gdx.rpg.Observer.DamageObserver;
 import com.gdx.rpg.Observer.PlayerSubject;
 import com.gdx.rpg.Observer.QuestObserver;
 import com.gdx.rpg.Projectile;
+import com.gdx.rpg.Statics;
 
 import java.util.ArrayList;
 
@@ -144,10 +145,14 @@ public class Player extends Entity {
 
             MainGame.mapToLoad.loadMap();
             MainGame.currentMap = MainGame.mapToLoad;
+            if(MainGame.currentMap.mapName == Statics.M_PURGATORY){
+                MainGame.setCurrentPlayerSpawn(MainGame.gameMaps.get(Statics.M_PURGATORY).playerSpawns.keySet().iterator().next());
+            }
 
             MainGame.renderer = new OrthogonalTiledMapRenderer(MainGame.currentMap.tiledMap, 1 / MainGame.PPM);
+            Vector2 newPosition = new Vector2(MainGame.currentMap.playerSpawns.get(MainGame.getCurrentPlayerSpawn()).x, MainGame.currentMap.playerSpawns.get(MainGame.getCurrentPlayerSpawn()).y);
 
-            body.setTransform(MainGame.currentMap.playerSpawns.get(MainGame.getCurrentPlayerSpawn()).x, MainGame.currentMap.playerSpawns.get(MainGame.getCurrentPlayerSpawn()).y, 0);
+            body.setTransform(newPosition, 0);
             needToMove = false;
             body.setAwake(true);
             playerState = PlayerState.IDLE;
@@ -179,6 +184,11 @@ public class Player extends Entity {
             case DODGING:
                 body.applyLinearImpulse(new Vector2(body.getLinearVelocity().x * dodgeSpeed, body.getLinearVelocity().y * dodgeSpeed), body.getWorldCenter(), true);
                 break;
+        }
+
+        if(health <= 0){
+            MainGame.PurgatoryLoad();
+            health = 100;
         }
     }
 

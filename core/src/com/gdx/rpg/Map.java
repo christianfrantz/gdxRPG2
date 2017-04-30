@@ -2,9 +2,11 @@ package com.gdx.rpg;
 
 import com.badlogic.gdx.assets.loaders.resolvers.ExternalFileHandleResolver;
 import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.objects.PolygonMapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
@@ -26,7 +28,8 @@ public class Map {
     public ArrayList<Entity> mapEntities = new ArrayList<Entity>();
     public HashMap<String, Vector2> playerSpawns;
     public TiledMap tiledMap;
-    public Vector2 playerSpawn;
+    public int[] foregroundLayer;
+
 
     public Map( String name, TmxMapLoader loader){
         this.mapName = name;
@@ -35,6 +38,12 @@ public class Map {
 
 
     public void loadMap(){
+        foregroundLayer = new int[1];
+        if(MainGame.currentMap.tiledMap.getLayers().get("Foreground") != null){
+            foregroundLayer[0] = MainGame.currentMap.tiledMap.getLayers().getIndex("Foreground");
+        }else
+            foregroundLayer[0] = 0;
+
         BodyDef def = new BodyDef();
         PolygonShape shape = new PolygonShape();
         FixtureDef fixtureDef = new FixtureDef();
@@ -74,7 +83,6 @@ public class Map {
                mapEntities.add( MainGame.enemyFactory.createEnemy(Enemy.EnemyType.BAT, new Vector2(rect.getX() / MainGame.PPM, rect.getY() / MainGame.PPM)));
             }
             if(object.getProperties().containsKey("player_start")){
-                playerSpawn = new Vector2(rect.getX() / MainGame.PPM, rect.getY() / MainGame.PPM);
                 playerSpawns.put(object.getProperties().get("player_start").toString(), new Vector2(rect.getX() / MainGame.PPM, rect.getY() / MainGame.PPM));
             }
             if(object.getProperties().containsKey("npc")){

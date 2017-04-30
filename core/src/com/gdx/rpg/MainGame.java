@@ -5,9 +5,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -83,6 +86,7 @@ public class MainGame extends Game {
         gameMaps.put(Statics.M_MAIN_MAP, new Map(Statics.M_MAIN_MAP, mapLoader));
         gameMaps.put(Statics.M_HOUSE, new Map(Statics.M_HOUSE, mapLoader));
         gameMaps.put(Statics.M_HOUSE_2, new Map(Statics.M_HOUSE_2, mapLoader));
+        gameMaps.put(Statics.M_PURGATORY, new Map(Statics.M_PURGATORY, mapLoader));
 
         currentMap = gameMaps.get(Statics.M_MAIN_MAP);
 
@@ -102,6 +106,11 @@ public class MainGame extends Game {
     public static void ChangeMap(String name){
         player.needToMove = true;
         mapToLoad = gameMaps.get(name);
+    }
+
+    public static void PurgatoryLoad(){
+        player.needToMove = true;
+        mapToLoad = gameMaps.get(Statics.M_PURGATORY);
     }
 
     public static String getCurrentPlayerSpawn(){
