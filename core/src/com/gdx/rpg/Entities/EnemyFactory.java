@@ -39,6 +39,8 @@ public  class EnemyFactory {
                 enemy.health = 10;
                 enemy.enemyType = EnemyType.SLIME;
                 enemy.itemToDrop = Item.SLIME_GOO;
+                enemy.attackCount = 0;
+                enemy.attackTimer = 0.2f;
                 break;
             case BAT:
                 id = "bat" + idNumber;

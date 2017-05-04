@@ -11,19 +11,16 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
+import com.gdx.rpg.*;
 import com.gdx.rpg.Components.PlayerGraphicsComponent;
 import com.gdx.rpg.Components.PlayerInputComponent;
 import com.gdx.rpg.Components.PlayerPhysicsComponent;
 import com.gdx.rpg.HUD.Equips.Equips;
 import com.gdx.rpg.HUD.Inventory.Inventory;
-import com.gdx.rpg.Item;
-import com.gdx.rpg.MainGame;
 import com.gdx.rpg.Observer.ClickObserver;
 import com.gdx.rpg.Observer.DamageObserver;
 import com.gdx.rpg.Observer.PlayerSubject;
 import com.gdx.rpg.Observer.QuestObserver;
-import com.gdx.rpg.Projectile;
-import com.gdx.rpg.Statics;
 
 import java.util.ArrayList;
 
@@ -83,7 +80,6 @@ public class Player extends Entity {
 
     public boolean nextDialog = false;
 
-    public ArrayList<Projectile> projectilesOnScreen = new ArrayList<Projectile>();
     public Vector2 mousePos;
 
     public Player( Vector2 position){
@@ -117,7 +113,7 @@ public class Player extends Entity {
         inventory.AddItem(Item.HEALTH_POTION);
     }
 
-    public void updatePlayer(float delta, Camera cam){
+    public void updatePlayer(float delta, Camera cam, LightHandler lightHandler){
         sprite.setPosition(body.getPosition().x - sprite.getWidth() / 2, body.getPosition().y - sprite.getHeight() / 2);
 
         Vector3 pos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
@@ -129,10 +125,6 @@ public class Player extends Entity {
 
         inputComponent.updateInput(this);
         physicsComponent.updatePhysics(this, speed);
-
-        for(Projectile p : projectilesOnScreen){
-            p.update(delta, projectilesOnScreen);
-        }
 
         if(needToMove){
             Array<Body> bodies = new Array<Body>();
@@ -148,7 +140,7 @@ public class Player extends Entity {
             if(MainGame.currentMap.mapName == Statics.M_PURGATORY){
                 MainGame.setCurrentPlayerSpawn(MainGame.gameMaps.get(Statics.M_PURGATORY).playerSpawns.keySet().iterator().next());
             }
-
+            lightHandler.updateLights();
             MainGame.renderer = new OrthogonalTiledMapRenderer(MainGame.currentMap.tiledMap, 1 / MainGame.PPM);
             Vector2 newPosition = new Vector2(MainGame.currentMap.playerSpawns.get(MainGame.getCurrentPlayerSpawn()).x, MainGame.currentMap.playerSpawns.get(MainGame.getCurrentPlayerSpawn()).y);
 
@@ -171,14 +163,6 @@ public class Player extends Entity {
                         attackCounter = 0;
                     }
                 }
-                if(playerClass == PlayerClass.RANGER){
-                    attackCounter += Gdx.graphics.getDeltaTime();
-                    if(attackCounter >= attackTime){
-                        shootProjectile(Projectile.ProjectileType.ARROW);
-                        playerState = PlayerState.IDLE;
-                        attackCounter = 0;
-                    }
-                }
                 break;
 
             case DODGING:
@@ -192,9 +176,9 @@ public class Player extends Entity {
         }
     }
 
-    private void shootProjectile( Projectile.ProjectileType projectileType){
+    /*private void shootProjectile( Projectile.ProjectileType projectileType){
         Projectile projectile = new Projectile(this, projectileType);
         projectilesOnScreen.add(projectile);
         projectile.isActive = true;
-    }
+    }*/
 }

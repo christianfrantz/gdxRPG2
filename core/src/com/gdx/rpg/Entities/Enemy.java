@@ -28,6 +28,8 @@ public class Enemy extends Entity {
     public EnemySubject enemySubject;
     public Body chaseBody;
     public float attackForce = 4f;
+    public float attackCount;
+    public float attackTimer;
 
     public Enemy(Vector2 position, String id){
         super( position, id);

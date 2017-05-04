@@ -5,7 +5,13 @@ import box2dLight.RayHandler;
 import box2dLight.*;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+
+import java.util.ArrayList;
 
 /**
  * if object is entity, set sprite, health, call
@@ -16,6 +22,7 @@ public class LightHandler {
     private RayHandler rayHandler;
     private PointLight playerLight;
     private float ambientR, ambientG, ambientB, ambientA;
+    public ArrayList<PointLight> lightsOnScreen = new ArrayList<PointLight>();
 
     public LightHandler(){
         RayHandler.useDiffuseLight(true);
@@ -28,6 +35,27 @@ public class LightHandler {
         playerLight.setDistance(3);
         playerLight.attachToBody(MainGame.player.body);
         playerLight.setIgnoreAttachedBody(true);
+    }
+
+    public void updateLights(){
+
+        for(int i = 0; i < lightsOnScreen.size(); i++){
+            lightsOnScreen.get(i).setActive(false);
+        }
+        lightsOnScreen.clear();
+
+        if(MainGame.currentMap.tiledMap.getLayers().get("Lights") != null)
+        for(MapObject object : MainGame.currentMap.tiledMap.getLayers().get("Lights").getObjects().getByType(RectangleMapObject.class)){
+            Rectangle rect = ((RectangleMapObject)object).getRectangle();
+
+            PointLight light = new PointLight(rayHandler, 50);
+            light.setStaticLight(true);
+            light.setActive(true);
+            light.setDistance(3);
+            light.setPosition(rect.x / MainGame.PPM, rect.y / MainGame.PPM);
+
+            lightsOnScreen.add(light);
+        }
     }
 
     public void updateLight(DayNightCycle dayNightCycle, Camera camera){

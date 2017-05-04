@@ -68,13 +68,18 @@ public class PlayScreen implements Screen{
 
         dayNightCycle = new DayNightCycle();
         lightHandler = new LightHandler();
+        lightHandler.updateLights();
     }
 
     private void update(float delta){
         game.world.step(1/60f, 6, 2);
 
-        player.updatePlayer(delta, camera);
+        player.updatePlayer(delta, camera, lightHandler);
 
+        for(Projectile p : MainGame.projectilesOnScreen){
+            if(p.isActive)
+                p.update(delta, MainGame.projectilesOnScreen);
+        }
         for(int i = MainGame.currentMap.mapEntities.size() - 1; i >= 0; i--){
             if(!MainGame.currentMap.mapEntities.get(i).flaggedForDelete)
                  MainGame.currentMap.mapEntities.get(i).entityUpdateComponent.Update();
@@ -106,7 +111,8 @@ public class PlayScreen implements Screen{
         game.batch.begin();
 
         player.graphicsComponent.DrawPlayer(game.batch);
-        for(Projectile p : player.projectilesOnScreen){
+        for(Projectile p : MainGame.projectilesOnScreen){
+            if(p.isActive)
             p.sprite.draw(game.batch);
         }
 
@@ -118,8 +124,8 @@ public class PlayScreen implements Screen{
         MainGame.particleEffect.draw(game.batch);
         game.batch.end();
 
-        //if(MainGame.currentMap.foregroundLayer[0] != 0)
-    //        game.renderer.render(MainGame.currentMap.foregroundLayer);
+        if(MainGame.currentMap.foregroundLayer[0] != 0)
+            game.renderer.render(MainGame.currentMap.foregroundLayer);
 
 
         lightHandler.updateLight(dayNightCycle, camera);

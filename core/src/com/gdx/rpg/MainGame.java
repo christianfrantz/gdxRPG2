@@ -61,6 +61,8 @@ public class MainGame extends Game {
 
     public static boolean classChosen = false;
 
+    public static ArrayList<Projectile> projectilesOnScreen = new ArrayList<Projectile>();
+
     public MainGame(){
         availableQuests.put(Statics.KILL_SLIMES, new Quest(Statics.KILL_SLIMES, Quest.QuestType.KILL));
         availableQuests.put(Statics.KILL_BATS, new Quest(Statics.KILL_BATS, Quest.QuestType.KILL));
