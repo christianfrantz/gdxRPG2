@@ -44,11 +44,7 @@ public class PlayScreen implements Screen{
         this.game = game;
         MainGame.player = new Player(game.currentMap.playerSpawns.get("main_start"));
         player = MainGame.player;
-        player.playerClass = MainGame.playerClass;
-        switch (player.playerClass){
-            case WARRIOR:
-                player.attackTime = 0.2f;
-        }
+        player.attackTime = 0.2f;
 
         camera = new OrthographicCamera();
         viewport = new FitViewport(MainGame.vWidth / MainGame.PPM, MainGame.vHeight / MainGame.PPM, camera);
@@ -136,11 +132,9 @@ public class PlayScreen implements Screen{
         game.hud.stage.act(Gdx.graphics.getDeltaTime());
         if(player.showInventory){
             game.hud.inventoryActor.setVisible(true);
-            game.hud.equipActor.setVisible(true);
         }
         else if(player.showInventory == false) {
             game.hud.inventoryActor.setVisible(false);
-            game.hud.equipActor.setVisible(false);
         }
         game.hud.stage.draw();
 
@@ -151,6 +145,7 @@ public class PlayScreen implements Screen{
         font.draw(game.batch, player.playerState.toString(), 10, 760);
         font.draw(game.batch, player.direction.toString(), 10, 740);
         font.draw(game.batch, player.moveDirection.toString(), 10, 720);
+        font.draw(game.batch, "Stamina " + player.stamina, 10, 300);
         font.draw(game.batch, "Day: " + dayNightCycle.getDay(), 10, 500);
         font.draw(game.batch, String.format("%1$02d", dayNightCycle.getHours()) + " : " +
                 String.format("%1$02d", dayNightCycle.getMinutes()) + " : " +

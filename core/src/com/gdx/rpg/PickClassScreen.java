@@ -60,30 +60,6 @@ public class PickClassScreen implements Screen {
         table.add(mageButton).expandX().padTop(10);
         table.add(rangerButton).expandX().padTop(10);
 
-        warriorButton.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y){
-                MainGame.playerClass = Player.PlayerClass.WARRIOR;
-                MainGame.classChosen = true;
-        }
-        });
-
-        mageButton.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y){
-                MainGame.playerClass = Player.PlayerClass.MAGE;
-                MainGame.classChosen = true;
-            }
-        });
-
-        rangerButton.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y){
-                MainGame.playerClass = Player.PlayerClass.RANGER;
-                MainGame.classChosen = true;
-            }
-        });
-
         stage.addActor(table);
         Gdx.input.setInputProcessor(stage);
     }
@@ -102,11 +78,11 @@ public class PickClassScreen implements Screen {
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
 
-        if(MainGame.classChosen) {
+        /*if(MainGame.classChosen) {
             game.SetPlayScreen();
             this.dispose();
         }
-
+*/
     }
 
     @Override

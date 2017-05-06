@@ -4,25 +4,20 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.math.collision.Ray;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.gdx.rpg.*;
 import com.gdx.rpg.Components.PlayerGraphicsComponent;
 import com.gdx.rpg.Components.PlayerInputComponent;
 import com.gdx.rpg.Components.PlayerPhysicsComponent;
-import com.gdx.rpg.HUD.Equips.Equips;
 import com.gdx.rpg.HUD.Inventory.Inventory;
 import com.gdx.rpg.Observer.ClickObserver;
 import com.gdx.rpg.Observer.DamageObserver;
 import com.gdx.rpg.Observer.PlayerSubject;
 import com.gdx.rpg.Observer.QuestObserver;
-
-import java.util.ArrayList;
 
 
 /**
@@ -36,18 +31,11 @@ public class Player extends Entity {
     public int attack = 3;
     public int defense = 0;
 
-    public enum PlayerClass{
-        WARRIOR,
-        MAGE,
-        RANGER
-    }
-
-    public PlayerClass playerClass;
-
     public enum PlayerState{
         IDLE,
         MOVING,
-        ATTACKING,
+        SWORD_ATTACK,
+        PROJECTILE_ATTACK,
         DODGING
     }
 
@@ -55,13 +43,12 @@ public class Player extends Entity {
     private PlayerInputComponent inputComponent;
     public PlayerGraphicsComponent graphicsComponent;
 
-    public Body body;
     public Body attackBody;
     public Body dialogBody;
 
     public float dodgeSpeed = 6f;
     public float attackForce = 4f;
-    private float speed = 0.5f;
+    private float speed = 2f;
     public PlayerState playerState;
 
     public float attackTime = 0.5f;
@@ -72,9 +59,9 @@ public class Player extends Entity {
     public Vector2 mouseRelativePlayer;
 
     public boolean needToMove = false;
+    private boolean projectileShot = false;
 
     public Inventory inventory;
-    public Equips equips;
 
     public boolean showInventory;
 
@@ -103,14 +90,6 @@ public class Player extends Entity {
         graphicsComponent = new PlayerGraphicsComponent(this);
 
         inventory = new Inventory(10);
-        equips = new Equips(4);
-
-        inventory.AddItem(Item.CHEST);
-        inventory.AddItem(Item.RING);
-        inventory.AddItem(Item.BAT_WING);
-        inventory.AddItem(Item.HEAD);
-        inventory.AddItem(Item.SWORD);
-        inventory.AddItem(Item.HEALTH_POTION);
     }
 
     public void updatePlayer(float delta, Camera cam, LightHandler lightHandler){
@@ -127,6 +106,7 @@ public class Player extends Entity {
         physicsComponent.updatePhysics(this, speed);
 
         if(needToMove){
+            MainGame.currentMap.foregroundLayer[0] = 0;
             Array<Body> bodies = new Array<Body>();
             MainGame.world.getBodies(bodies);
             for(Body body : bodies){
@@ -154,17 +134,26 @@ public class Player extends Entity {
             case IDLE:
                 attackBody.setActive(false);
                 break;
-            case ATTACKING:
-                if(playerClass == PlayerClass.WARRIOR){
-                    attackCounter += Gdx.graphics.getDeltaTime();
-                    attackBody.setActive(true);
-                    if(attackCounter >= attackTime){
-                        playerState = PlayerState.IDLE;
-                        attackCounter = 0;
-                    }
+            case SWORD_ATTACK:
+                attackCounter += Gdx.graphics.getDeltaTime();
+                attackBody.setActive(true);
+                if(attackCounter >= attackTime){
+                    playerState = PlayerState.IDLE;
+                    attackCounter = 0;
                 }
                 break;
-
+            case PROJECTILE_ATTACK:
+                attackCounter += Gdx.graphics.getDeltaTime();
+                if(attackCounter < attackTime && !projectileShot) {
+                    Projectile p = new Projectile(this, Projectile.ProjectileType.FIREBALL, mousePos);
+                    projectileShot = true;
+                }
+                if(attackCounter >= attackTime){
+                    projectileShot = false;
+                    playerState = PlayerState.IDLE;
+                    attackCounter = 0;
+                }
+                break;
             case DODGING:
                 body.applyLinearImpulse(new Vector2(body.getLinearVelocity().x * dodgeSpeed, body.getLinearVelocity().y * dodgeSpeed), body.getWorldCenter(), true);
                 break;
@@ -173,6 +162,9 @@ public class Player extends Entity {
         if(health <= 0){
             MainGame.PurgatoryLoad();
             health = 100;
+        }
+        if(stamina < 100 && playerState == PlayerState.IDLE){
+            stamina++;
         }
     }
 

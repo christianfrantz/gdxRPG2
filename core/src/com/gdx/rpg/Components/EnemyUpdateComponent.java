@@ -96,8 +96,7 @@ public class EnemyUpdateComponent extends EntityUpdateComponent{
             entity.attackCount += Gdx.graphics.getDeltaTime();
             if(entity.attackCount >= entity.attackTimer){
                 Projectile p = new Projectile(entity, Projectile.ProjectileType.SLIME_SHOT, MainGame.player.body.getWorldCenter());
-                MainGame.projectilesOnScreen.add(p);
-                System.out.println(p.target);
+                //MainGame.projectilesOnScreen.add(p);
                 entity.attackCount = 0;
             }
             float speed = 10f;

@@ -46,38 +46,6 @@ public class SlotActor extends ImageButton implements SlotObserver {
             MainGame.player.inventory.RemoveItem(slot.itemInSlot);
             return;
         }
-        if(slot.itemInSlot.getItemType() == Item.ItemType.EQUIP) {
-            if(slot.itemInSlot.armorType != null) {
-                switch (slot.itemInSlot.armorType) {
-                    case CHEST:
-                        MainGame.player.equips.AddToSlot("CHEST", slot.itemInSlot);
-                        MainGame.player.defense += slot.itemInSlot.modifier;
-                        MainGame.player.inventory.RemoveItem(slot.itemInSlot);
-                        break;
-                    case RING:
-                        MainGame.player.equips.AddToSlot("RING", slot.itemInSlot);
-                        MainGame.player.defense += slot.itemInSlot.modifier;
-                        MainGame.player.inventory.RemoveItem(slot.itemInSlot);
-                        break;
-                    case HEAD:
-                        MainGame.player.equips.AddToSlot("HEAD", slot.itemInSlot);
-                        MainGame.player.defense += slot.itemInSlot.modifier;
-                        MainGame.player.inventory.RemoveItem(slot.itemInSlot);
-                        break;
-                }
-                return;
-            }
-            else if(slot.itemInSlot.weaponType != null) {
-                switch (slot.itemInSlot.weaponType) {
-                    case SWORD:
-                        MainGame.player.equips.AddToSlot("WEAPON", slot.itemInSlot);
-                        MainGame.player.attack += slot.itemInSlot.modifier;
-                        MainGame.player.inventory.RemoveItem(slot.itemInSlot);
-                        break;
-                }
-                return;
-            }
-        }
     }
 
     private static ImageButtonStyle createStyle(Skin skin, InventorySlot slot){

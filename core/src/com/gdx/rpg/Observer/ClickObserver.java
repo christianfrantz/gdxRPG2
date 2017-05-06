@@ -6,6 +6,7 @@ import com.gdx.rpg.Entities.NPC;
 import com.gdx.rpg.Entities.Player;
 import com.gdx.rpg.Item;
 import com.gdx.rpg.MainGame;
+import com.gdx.rpg.Projectile;
 import com.gdx.rpg.Quests.Quest;
 
 /**
@@ -33,6 +34,11 @@ public class ClickObserver implements Observer{
 
     @Override
     public void onNotify(Player player, Entity enemy, Event event) {
+
+    }
+
+    @Override
+    public void onNotify(Projectile p, Entity enemy, Event event) {
 
     }
 

@@ -28,6 +28,7 @@ public class PlayerPhysicsComponent {
         player.body = MainGame.world.createBody(bodyDef);
 
         FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.filter.groupIndex = Statics.PLAYER_FILTER;
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(16 / MainGame.PPM, 32 / MainGame.PPM);
 

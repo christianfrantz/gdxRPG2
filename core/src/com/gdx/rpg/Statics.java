@@ -1,6 +1,13 @@
 package com.gdx.rpg;
 
 public interface Statics {
+    short PLAYER_FILTER = -2;
+    short ENEMY_FILTER = -4;
+    short PLAYER_PROJECTILE_FILTER = -2;
+    short ENEMY_PROJECTILE_FILTER = -4;
+    String ENEMY_PROJECTILE = "enemy_projectile";
+    String PLAYER_PROJECTILE = "player_projectile";
+
     String PLAYER_BODY = "player";
     String PLAYER_ATTACK_BODY = "playerAttackBody";
     String PLAYER_DIALOG_BODY = "playerDialogBody";

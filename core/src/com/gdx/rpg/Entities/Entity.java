@@ -81,7 +81,7 @@ public class Entity {
 
         body.setUserData(this);
         fixtureDef.shape = shape;
-        fixtureDef.restitution = 0.001f;
+        //fixtureDef.restitution = 0.001f;
         fixtureDef.density = 100f;
 
         body.createFixture(fixtureDef);

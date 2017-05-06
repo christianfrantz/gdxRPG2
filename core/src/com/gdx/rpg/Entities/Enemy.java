@@ -10,6 +10,7 @@ import com.gdx.rpg.Components.EnemyUpdateComponent;
 import com.gdx.rpg.MainGame;
 import com.gdx.rpg.Observer.DamageObserver;
 import com.gdx.rpg.Observer.EnemySubject;
+import com.gdx.rpg.Statics;
 
 
 /**
@@ -57,7 +58,8 @@ public class Enemy extends Entity {
 
         body.setUserData(this);
         fixtureDef.shape = shape;
-        fixtureDef.restitution = 3;
+        //fixtureDef.restitution = 3;
+        fixtureDef.filter.groupIndex = Statics.ENEMY_FILTER;
         body.createFixture(fixtureDef);
 
         BodyDef chaseDef = new BodyDef();

@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.gdx.rpg.Entities.Entity;
 import com.gdx.rpg.Entities.Player;
 import com.gdx.rpg.MainGame;
@@ -77,7 +76,7 @@ public class PlayerGraphicsComponent {
                         || player.moveDirection == Entity.Direction.RIGHT) {
                     player.sprite.setRegion(walkLeft.getKeyFrame(animationTime, true));
                 }
-                if(player.playerState == Player.PlayerState.ATTACKING){
+                if(player.playerState == Player.PlayerState.SWORD_ATTACK){
                     player.sprite.setBounds(0, 0, 64 / MainGame.PPM, 64 / MainGame.PPM);
                     player.sprite.setRegion(attackLeft.getKeyFrame(animationTime, false));
                 }

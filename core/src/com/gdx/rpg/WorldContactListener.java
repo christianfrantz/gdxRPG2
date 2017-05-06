@@ -1,7 +1,5 @@
 package com.gdx.rpg;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.loaders.SynchronousAssetLoader;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
@@ -33,15 +31,35 @@ public class WorldContactListener implements ContactListener{
 
         Player player;
         Entity entity;
+        Projectile projectile;
 
         if(fixtureA == null || fixtureB == null)return;
         if(fixtureA.getBody().getUserData() == null || fixtureB.getBody().getUserData() == null)return;
+
+        if(isProjectileHitEnemy(fixtureA, fixtureB)){
+            entity = fixtureB.getBody().getUserData() instanceof Entity ? (Enemy)fixtureB.getBody().getUserData() : (Enemy)fixtureA.getBody().getUserData();
+            projectile = fixtureA.getBody().getUserData().equals(Statics.PLAYER_PROJECTILE) ? (Projectile)fixtureA.getUserData() : (Projectile)fixtureB.getUserData();
+
+            subject.notify(projectile, entity, Event.ENEMY_DAMAGE);
+//            projectile.isActive = false;
+            System.out.println("PROJECTILE HIT ENEMY");
+        }
+
+        if(isProjectileHitPlayer(fixtureA, fixtureB)){
+            projectile = fixtureB.getBody().getUserData().equals(Statics.ENEMY_PROJECTILE) ? (Projectile)fixtureB.getUserData() : (Projectile)fixtureA.getUserData();
+            player = fixtureA.getBody().getUserData().equals(Statics.PLAYER_ATTACK_BODY) ? (Player)fixtureA.getUserData() : (Player)fixtureB.getUserData();
+
+//            projectile.body.setActive(false);
+            subject.notify(player, Event.PLAYER_DAMAGE);
+            System.out.println("PROJECTILE HIT PLAYER");
+
+        }
 
         if(isPlayerAttackContact(fixtureA, fixtureB)){
             entity = fixtureB.getBody().getUserData() instanceof Entity ? (Enemy)fixtureB.getBody().getUserData() : (Enemy)fixtureA.getBody().getUserData();
             player = fixtureA.getBody().getUserData().equals(Statics.PLAYER_ATTACK_BODY) ? (Player)fixtureA.getUserData() : (Player)fixtureB.getUserData();
 
-            if(player.playerState == Player.PlayerState.ATTACKING) {
+            if(player.playerState == Player.PlayerState.SWORD_ATTACK) {
                 float x = entity.body.getLinearVelocity().x * player.attackForce;
                 x = x * -1;
                 float y = entity.body.getLinearVelocity().y * player.attackForce;
@@ -109,6 +127,27 @@ public class WorldContactListener implements ContactListener{
     public boolean isOtherContactPlayer(Fixture a, Fixture b){
         if (a.getBody().getUserData() instanceof Enemy|| b.getBody().getUserData() instanceof Enemy){
             if(a.getBody().getUserData().equals(Statics.PLAYER_BODY) || b.getBody().getUserData().equals(Statics.PLAYER_BODY)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isProjectileHitPlayer(Fixture a, Fixture b){
+        if(a.getBody().getUserData().equals(Statics.ENEMY_PROJECTILE) || b.getBody().getUserData().equals(Statics.ENEMY_PROJECTILE)){
+            if(a.getBody().getUserData().equals(Statics.PLAYER_BODY) || b.getBody().getUserData().equals(Statics.PLAYER_BODY)){
+                System.out.println("PROJECTILE HIT PLAYER");
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isProjectileHitEnemy(Fixture a, Fixture b){
+        if(a.getBody().getUserData() instanceof Enemy || b.getBody().getUserData() instanceof Enemy){
+            if(a.getBody().getUserData().equals(Statics.PLAYER_PROJECTILE) || b.getBody().getUserData().equals(Statics.PLAYER_PROJECTILE)){
+
+                System.out.println("PROJECTILE HIT ENEMY");
                 return true;
             }
         }

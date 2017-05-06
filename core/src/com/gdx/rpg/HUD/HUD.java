@@ -13,7 +13,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.gdx.rpg.Entities.NPC;
-import com.gdx.rpg.HUD.Equips.EquipActor;
+
 import com.gdx.rpg.HUD.Inventory.InventoryActor;
 import com.gdx.rpg.MainGame;
 import com.gdx.rpg.Observer.Event;
@@ -43,7 +43,6 @@ public class HUD implements Disposable {
     private boolean dialogShown = false;
 
     public InventoryActor inventoryActor;
-    public EquipActor equipActor;
 
     public HUD(SpriteBatch batch){
         subject = new Subject();
@@ -71,9 +70,6 @@ public class HUD implements Disposable {
 
         inventoryActor = new InventoryActor(MainGame.player.inventory, this, skin);
         stage.addActor(inventoryActor);
-
-        equipActor = new EquipActor(MainGame.player.equips, this, skin);
-        stage.addActor(equipActor);
 
         stage.addActor(table);
 

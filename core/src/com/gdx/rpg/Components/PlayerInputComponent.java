@@ -3,9 +3,6 @@ package com.gdx.rpg.Components;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.gdx.rpg.Entities.Entity;
 import com.gdx.rpg.MainGame;
 import com.gdx.rpg.Observer.Event;
@@ -33,43 +30,47 @@ public class PlayerInputComponent implements InputProcessor{
             player.playerState = Player.PlayerState.IDLE;
         }
 
-        if(leftPressed && player.playerState != Player.PlayerState.ATTACKING){
+        if(leftPressed && player.playerState != Player.PlayerState.SWORD_ATTACK){
             player.playerState = Player.PlayerState.MOVING;
             player.moveDirection = Entity.Direction.LEFT;
         }
-         if(rightPressed && player.playerState != Player.PlayerState.ATTACKING){
+         if(rightPressed && player.playerState != Player.PlayerState.SWORD_ATTACK){
             player.playerState = Player.PlayerState.MOVING;
             player.moveDirection = Entity.Direction.RIGHT;
         }
-         if(upPressed && player.playerState != Player.PlayerState.ATTACKING){
+         if(upPressed && player.playerState != Player.PlayerState.SWORD_ATTACK){
             player.playerState = Player.PlayerState.MOVING;
             player.moveDirection = Entity.Direction.UP;
         }
-         if(downPressed  && player.playerState != Player.PlayerState.ATTACKING){
+         if(downPressed  && player.playerState != Player.PlayerState.SWORD_ATTACK){
             player.playerState = Player.PlayerState.MOVING;
             player.moveDirection = Entity.Direction.DOWN;
         }
-         if(leftPressed && downPressed && player.playerState != Player.PlayerState.ATTACKING){
+         if(leftPressed && downPressed && player.playerState != Player.PlayerState.SWORD_ATTACK){
             player.playerState = Player.PlayerState.MOVING;
             player.moveDirection = Entity.Direction.DOWN_LEFT;
         }
-         if(rightPressed && downPressed && player.playerState != Player.PlayerState.ATTACKING){
+         if(rightPressed && downPressed && player.playerState != Player.PlayerState.SWORD_ATTACK){
             player.playerState = Player.PlayerState.MOVING;
             player.moveDirection = Entity.Direction.DOWN_RIGHT;
         }
-        if(leftPressed && upPressed && player.playerState != Player.PlayerState.ATTACKING){
+        if(leftPressed && upPressed && player.playerState != Player.PlayerState.SWORD_ATTACK){
             player.playerState = Player.PlayerState.MOVING;
             player.moveDirection = Entity.Direction.UP_LEFT;
         }
-        if(rightPressed && upPressed && player.playerState != Player.PlayerState.ATTACKING){
+        if(rightPressed && upPressed && player.playerState != Player.PlayerState.SWORD_ATTACK){
             player.playerState = Player.PlayerState.MOVING;
             player.moveDirection = Entity.Direction.UP_RIGHT;
         }
 
 
 
-        if(Gdx.input.justTouched() && player.playerState != Player.PlayerState.ATTACKING){
-            player.playerState = Player.PlayerState.ATTACKING;
+        if(Gdx.input.justTouched() && player.playerState != Player.PlayerState.SWORD_ATTACK){
+            player.playerState = Player.PlayerState.SWORD_ATTACK;
+        }
+
+        if(Gdx.input.isButtonPressed(Input.Buttons.RIGHT) && player.playerState != Player.PlayerState.PROJECTILE_ATTACK){
+            player.playerState = Player.PlayerState.PROJECTILE_ATTACK;
         }
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.T)){
@@ -97,8 +98,9 @@ public class PlayerInputComponent implements InputProcessor{
             player.direction = Entity.Direction.DOWN_LEFT;
 
 
-        if(Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_LEFT)){
+        if(Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_LEFT)){// && player.stamina >= 25){
             player.playerState = Player.PlayerState.DODGING;
+            player.stamina -= 25;
         }
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.I) && player.showInventory)
@@ -113,6 +115,7 @@ public class PlayerInputComponent implements InputProcessor{
                 }
             }
         }
+
     }
 
     @Override

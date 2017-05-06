@@ -43,7 +43,6 @@ public class MainGame extends Game {
     public static HUD hud;
 
     public static Player player;
-    public static Player.PlayerClass playerClass;
 
     public static ArrayList<Quest> playerQuests;
     public static HashMap<String, Quest> availableQuests = new HashMap<String, Quest>();
@@ -58,8 +57,6 @@ public class MainGame extends Game {
     public static String currentPlayerSpawn;
 
     public static ParticleEffect particleEffect;
-
-    public static boolean classChosen = false;
 
     public static ArrayList<Projectile> projectilesOnScreen = new ArrayList<Projectile>();
 
@@ -98,7 +95,7 @@ public class MainGame extends Game {
 
         renderer = new OrthogonalTiledMapRenderer(MainGame.currentMap.tiledMap, 1 / MainGame.PPM);
 
-        setScreen(new PickClassScreen(this));
+        setScreen(new PlayScreen(this));
     }
 
     public void SetPlayScreen(){
