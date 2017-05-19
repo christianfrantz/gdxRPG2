@@ -35,19 +35,31 @@ public  class EnemyFactory {
                 enemy = new Enemy(position, id);
                 enemy.isEnemy = true;
                 enemy.sprite = new Sprite(new Texture("slime.png"));
-                enemy.createBody(position, enemy.sprite.getTexture());
+                enemy.createBody(position, enemy.sprite.getTexture(), false);
                 enemy.health = 10;
                 enemy.enemyType = EnemyType.SLIME;
                 enemy.itemToDrop = Item.SLIME_GOO;
                 enemy.attackCount = 0;
                 enemy.attackTimer = 0.2f;
                 break;
+            case SKELETON:
+                id = "skeleton" + idNumber;
+                enemy = new Enemy(position, id);
+                enemy.isEnemy = true;
+                enemy.sprite = new Sprite(new Texture("skeleton.png"));
+                enemy.createBody(position, enemy.sprite.getTexture(), false);
+                enemy.health = 20;
+                enemy.enemyType = EnemyType.SKELETON;
+                enemy.itemToDrop = Item.SKELETON_BONE;
+                enemy.attackCount = 0;
+                enemy.attackTimer = 0.15f;
+                break;
             case BAT:
                 id = "bat" + idNumber;
                 enemy = new Enemy(position, id);
                 enemy.isEnemy = true;
                 enemy.sprite = new Sprite(new Texture("bat.png"));
-                enemy.createBody(position, enemy.sprite.getTexture());
+                enemy.createBody(position, enemy.sprite.getTexture(), false);
                 enemy.health = 10;
                 enemy.enemyType = EnemyType.BAT;
                 enemy.itemToDrop = Item.BAT_WING;

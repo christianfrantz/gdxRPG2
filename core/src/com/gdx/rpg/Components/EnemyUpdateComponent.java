@@ -7,6 +7,7 @@ import com.gdx.rpg.Entities.Entity;
 import com.gdx.rpg.MainGame;
 import com.gdx.rpg.Projectile;
 
+import java.rmi.activation.ActivationGroup_Stub;
 import java.util.Random;
 
 /**
@@ -66,12 +67,30 @@ public class EnemyUpdateComponent extends EntityUpdateComponent{
                 break;
             case BAT:
                 updateBat();
+                break;
+            case SKELETON:
+                updateSkeleton();
+                break;
         }
 
         checkIfAlive();
     }
 
     private void updateBat() {
+        entity.chaseBody.setTransform(entity.body.getWorldCenter(), 0);
+
+        if(entity.enemyState == Enemy.EnemyState.IDLE) {
+            randomMove();
+        }
+        else if(entity.enemyState == Entity.EnemyState.ATTACKING){
+            float speed = 10f;
+            Vector2 force = new Vector2();
+            force.set(MainGame.player.body.getPosition()).sub(entity.body.getPosition()).nor().scl(speed);
+            entity.body.applyForceToCenter(force, true);
+        }
+    }
+
+    private void updateSkeleton(){
         entity.chaseBody.setTransform(entity.body.getWorldCenter(), 0);
 
         if(entity.enemyState == Enemy.EnemyState.IDLE) {

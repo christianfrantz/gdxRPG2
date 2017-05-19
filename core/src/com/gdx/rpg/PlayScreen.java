@@ -40,6 +40,7 @@ public class PlayScreen implements Screen{
     DayNightCycle dayNightCycle;
     LightHandler lightHandler;
 
+
     public PlayScreen(MainGame game){
         this.game = game;
         MainGame.player = new Player(game.currentMap.playerSpawns.get("main_start"));
@@ -120,8 +121,8 @@ public class PlayScreen implements Screen{
         MainGame.particleEffect.draw(game.batch);
         game.batch.end();
 
-        if(MainGame.currentMap.foregroundLayer[0] != 0)
-            game.renderer.render(MainGame.currentMap.foregroundLayer);
+       // if(MainGame.currentMap.foregroundLayer[0] != 0)
+//            game.renderer.render(MainGame.currentMap.foregroundLayer);
 
 
         lightHandler.updateLight(dayNightCycle, camera);

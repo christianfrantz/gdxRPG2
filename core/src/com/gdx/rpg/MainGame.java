@@ -86,6 +86,7 @@ public class MainGame extends Game {
         gameMaps.put(Statics.M_HOUSE, new Map(Statics.M_HOUSE, mapLoader));
         gameMaps.put(Statics.M_HOUSE_2, new Map(Statics.M_HOUSE_2, mapLoader));
         gameMaps.put(Statics.M_PURGATORY, new Map(Statics.M_PURGATORY, mapLoader));
+        gameMaps.put(Statics.M_TOWER_FLOOR_1, new Map(Statics.M_TOWER_FLOOR_1, mapLoader));
 
         currentMap = gameMaps.get(Statics.M_MAIN_MAP);
 

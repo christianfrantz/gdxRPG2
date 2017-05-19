@@ -23,4 +23,5 @@ public interface Statics {
     String M_HOUSE = "house";
     String M_HOUSE_2 = "house2";
     String M_PURGATORY = "purgatory";
+    String M_TOWER_FLOOR_1 = "towerFloor1";
 }

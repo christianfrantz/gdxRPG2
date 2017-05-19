@@ -68,6 +68,8 @@ public class Player extends Entity {
     public boolean nextDialog = false;
 
     public Vector2 mousePos;
+    public     boolean isOutside = true;
+
 
     public Player( Vector2 position){
         super( position, "PLAYER");
@@ -117,6 +119,12 @@ public class Player extends Entity {
 
             MainGame.mapToLoad.loadMap();
             MainGame.currentMap = MainGame.mapToLoad;
+            if(MainGame.currentMap.mapName == Statics.M_MAIN_MAP){
+                isOutside = true;
+            }
+            else
+                isOutside = false;
+
             if(MainGame.currentMap.mapName == Statics.M_PURGATORY){
                 MainGame.setCurrentPlayerSpawn(MainGame.gameMaps.get(Statics.M_PURGATORY).playerSpawns.keySet().iterator().next());
             }

@@ -9,6 +9,7 @@ public enum Item {
     STICK("stick", ItemType.JUNK),
     SLIME_GOO("slimegoo", ItemType.JUNK),
     BAT_WING("batwing", ItemType.JUNK),
+    SKELETON_BONE("skeleton_bone", ItemType.JUNK),
 
     HEALTH_POTION("health_potion", ConsumeType.HEALTH, 25);
 

@@ -82,11 +82,17 @@ public class Map {
             if(object.getProperties().containsKey("bat")){
                mapEntities.add( MainGame.enemyFactory.createEnemy(Enemy.EnemyType.BAT, new Vector2(rect.getX() / MainGame.PPM, rect.getY() / MainGame.PPM)));
             }
+            if(object.getProperties().containsKey("skeleton")){
+                mapEntities.add( MainGame.enemyFactory.createEnemy(Enemy.EnemyType.SKELETON, new Vector2(rect.getX() / MainGame.PPM, rect.getY() / MainGame.PPM)));
+            }
             if(object.getProperties().containsKey("player_start")){
                 playerSpawns.put(object.getProperties().get("player_start").toString(), new Vector2(rect.getX() / MainGame.PPM, rect.getY() / MainGame.PPM));
             }
             if(object.getProperties().containsKey("npc")){
                 mapEntities.add(MainGame.npcFactory.createNPC(NPC.NPCType.NORMAL, new Vector2(rect.getX() / MainGame.PPM, rect.getY() / MainGame.PPM), MainGame.availableQuests.get(object.getProperties().get("npc"))));
+            }
+            if(object.getProperties().containsKey("ghost")){
+                mapEntities.add(MainGame.npcFactory.createNPC(NPC.NPCType.GHOST, new Vector2(rect.getX() / MainGame.PPM, rect.getY() / MainGame.PPM), null));
             }
         }
 

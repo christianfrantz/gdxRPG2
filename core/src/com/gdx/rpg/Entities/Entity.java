@@ -64,7 +64,7 @@ public class Entity {
         entityUpdateComponent = new EntityUpdateComponent(this);
     }
 
-    public void createBody(Vector2 position, Texture texture){
+    public void createBody(Vector2 position, Texture texture, boolean isSensor){
         sprite.setBounds(0, 0, texture.getWidth() / MainGame.PPM, texture.getHeight() / MainGame.PPM);
         sprite.setOrigin(32 / MainGame.PPM, 32 / MainGame.PPM);
 
@@ -76,6 +76,7 @@ public class Entity {
         body = MainGame.world.createBody(bodyDef);
 
         FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.isSensor = isSensor;
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(texture.getWidth() / 2 / MainGame.PPM, texture.getHeight() / 2 / MainGame.PPM);
 

@@ -20,7 +20,8 @@ public class Enemy extends Entity {
 
     public enum EnemyType{
         SLIME,
-        BAT
+        BAT,
+        SKELETON
     };
 
 
@@ -42,7 +43,7 @@ public class Enemy extends Entity {
     }
 
     @Override
-    public void createBody(Vector2 position, Texture texture){
+    public void createBody(Vector2 position, Texture texture, boolean isSensor){
         sprite.setBounds(0, 0, texture.getWidth() / MainGame.PPM, texture.getHeight() / MainGame.PPM);
         sprite.setOrigin(32 / MainGame.PPM, 32 / MainGame.PPM);
 

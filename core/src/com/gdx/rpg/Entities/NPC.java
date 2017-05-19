@@ -14,7 +14,8 @@ import com.gdx.rpg.Statics;
  */
 public class NPC extends Entity {
     public enum NPCType{
-        NORMAL
+        NORMAL,
+        GHOST
     }
 
     public NPCType npcType;
@@ -30,12 +31,8 @@ public class NPC extends Entity {
 
     public NPC( Vector2 position, String id) {
         super(position, id);
-        sprite = new Sprite(new Texture("Sprites/Player/player.png"));
-        createBody(position, sprite.getTexture());
-
-        entityUpdateComponent = new NPCUpdateComponent(this);
+        //entityUpdateComponent = new NPCUpdateComponent(this);
         health = 10;
-        npcType = NPCType.NORMAL;
         isClicked = false;
     }
 

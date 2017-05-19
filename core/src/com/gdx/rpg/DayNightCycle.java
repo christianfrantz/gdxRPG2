@@ -37,7 +37,7 @@ public class DayNightCycle {
     }
 
     public void updateTime(){
-        minutes += Gdx.graphics.getDeltaTime() * 100;
+        minutes += Gdx.graphics.getDeltaTime() * 200;
         seconds = (int)fseconds;
         if(fseconds >= 60){
             minutes++;

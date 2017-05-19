@@ -59,47 +59,55 @@ public class LightHandler {
     }
 
     public void updateLight(DayNightCycle dayNightCycle, Camera camera){
-        if(dayNightCycle.getHours() == 6){
-            ambientB = 0.3f;
-            ambientR = 0.8f;
-            ambientG = 0.35f;
-        }
-        if(dayNightCycle.getHours() == 7){
-            ambientG = 0.65f;
-            ambientR = 0.9f;
-            ambientB = 0.01f;
-        }
+        if(MainGame.player.isOutside) {
+            if (dayNightCycle.getHours() == 6) {
+                ambientB = 0.3f;
+                ambientR = 0.8f;
+                ambientG = 0.35f;
+            }
+            if (dayNightCycle.getHours() == 7) {
+                ambientG = 0.65f;
+                ambientR = 0.9f;
+                ambientB = 0.01f;
+            }
 
-        if(dayNightCycle.getHours() == 8){
+            if (dayNightCycle.getHours() == 8) {
+                ambientB = 1;
+                ambientG = 1;
+                ambientR = 1;
+            }
+            if (dayNightCycle.getHours() == 17) {
+                ambientR = 1;
+                ambientG = 0.8f;
+                ambientB = 0;
+            }
+            if (dayNightCycle.getHours() == 19) {
+                ambientR = 1;
+                ambientG = 0.5f;
+                ambientB = 0;
+            }
+            if (dayNightCycle.getHours() == 20) {
+                ambientR = 1;
+                ambientB = 0.3f;
+                ambientG = 0.3f;
+            }
+            if (dayNightCycle.getHours() == 21) {
+                ambientG = 0.2f;
+                ambientB = 0.7f;
+                ambientR = 0.3f;
+            }
+            if (dayNightCycle.getHours() == 22) {
+                ambientR = 0.2f;
+                ambientG = 0.15f;
+                ambientB = 0.4f;
+                ambientA = 0.3f;
+            }
+        }
+        else if(MainGame.player.isOutside = false){
+            ambientA = 1;
             ambientB = 1;
             ambientG = 1;
             ambientR = 1;
-        }
-        if(dayNightCycle.getHours() == 17){
-            ambientR = 1;
-            ambientG = 0.8f;
-            ambientB = 0;
-        }
-        if(dayNightCycle.getHours() == 19){
-            ambientR = 1;
-            ambientG = 0.5f;
-            ambientB = 0;
-        }
-        if(dayNightCycle.getHours() == 20){
-            ambientR = 1;
-            ambientB = 0.3f;
-            ambientG = 0.3f;
-        }
-        if(dayNightCycle.getHours() == 21){
-            ambientG = 0.2f;
-            ambientB = 0.7f;
-            ambientR = 0.3f;
-        }
-        if(dayNightCycle.getHours() == 22){
-            ambientR = 0.2f;
-            ambientG = 0.15f;
-            ambientB = 0.4f;
-            ambientA = 0.3f;
         }
         rayHandler.setAmbientLight(ambientR, ambientG, ambientB, ambientA);
         playerLight.setPosition(MainGame.player.sprite.getX(), MainGame.player.sprite.getY());

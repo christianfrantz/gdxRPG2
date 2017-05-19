@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="64" tileheight="64" nextobjectid="2">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="64" tileheight="64" nextobjectid="35">
  <tileset firstgid="1" name="temp" tilewidth="64" tileheight="64" tilecount="9" columns="0">
   <tile id="0">
    <image width="64" height="64" source="Tiles/tempBiomes/beach.png"/>
@@ -45,8 +45,8 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -139,7 +139,173 @@
     <property name="player_start" value="player_died"/>
    </properties>
   </object>
+  <object id="2" x="2712" y="4784" width="144" height="144">
+   <properties>
+    <property name="ghost" value=""/>
+   </properties>
+  </object>
+  <object id="3" x="3136" y="4888" width="72" height="96">
+   <properties>
+    <property name="ghost" value=""/>
+   </properties>
+  </object>
+  <object id="4" x="3392" y="4664" width="112" height="136">
+   <properties>
+    <property name="ghost" value=""/>
+   </properties>
+  </object>
+  <object id="5" x="2672" y="4288" width="112" height="136">
+   <properties>
+    <property name="ghost" value=""/>
+   </properties>
+  </object>
+  <object id="6" x="3840" y="4248" width="56" height="176">
+   <properties>
+    <property name="ghost" value=""/>
+   </properties>
+  </object>
+  <object id="7" x="3184" y="4376" width="8">
+   <properties>
+    <property name="ghost" value=""/>
+   </properties>
+  </object>
+  <object id="8" x="3472" y="4216" width="16" height="8">
+   <properties>
+    <property name="ghost" value=""/>
+   </properties>
+  </object>
+  <object id="9" x="2656" y="3808" height="8">
+   <properties>
+    <property name="ghost" value=""/>
+   </properties>
+  </object>
+  <object id="10" x="3000" y="3992">
+   <properties>
+    <property name="ghost" value=""/>
+   </properties>
+  </object>
+  <object id="11" x="3648" y="3840">
+   <properties>
+    <property name="ghost" value=""/>
+   </properties>
+  </object>
+  <object id="12" x="3264" y="3640" height="8">
+   <properties>
+    <property name="ghost" value=""/>
+   </properties>
+  </object>
+  <object id="13" x="2904" y="3488">
+   <properties>
+    <property name="ghost" value=""/>
+   </properties>
+  </object>
+  <object id="14" x="3584" y="3392">
+   <properties>
+    <property name="ghost" value=""/>
+   </properties>
+  </object>
+  <object id="15" x="2664" y="3160" height="8">
+   <properties>
+    <property name="ghost" value=""/>
+   </properties>
+  </object>
+  <object id="16" x="3616" y="3104" height="16">
+   <properties>
+    <property name="ghost" value=""/>
+   </properties>
+  </object>
+  <object id="17" x="3000" y="2936">
+   <properties>
+    <property name="ghost" value=""/>
+   </properties>
+  </object>
+  <object id="18" x="3424" y="2744">
+   <properties>
+    <property name="ghost" value=""/>
+   </properties>
+  </object>
+  <object id="19" x="2776" y="5240">
+   <properties>
+    <property name="ghost" value=""/>
+   </properties>
+  </object>
+  <object id="20" x="3168" y="5280">
+   <properties>
+    <property name="ghost" value=""/>
+   </properties>
+  </object>
+  <object id="21" x="3544" y="5248" height="8">
+   <properties>
+    <property name="ghost" value=""/>
+   </properties>
+  </object>
+  <object id="22" x="3848" y="4872" height="16">
+   <properties>
+    <property name="ghost" value=""/>
+   </properties>
+  </object>
+  <object id="23" x="2504" y="5568">
+   <properties>
+    <property name="ghost" value=""/>
+   </properties>
+  </object>
+  <object id="24" x="2456" y="4624">
+   <properties>
+    <property name="ghost" value=""/>
+   </properties>
+  </object>
+  <object id="25" x="2488" y="3448">
+   <properties>
+    <property name="ghost" value=""/>
+   </properties>
+  </object>
+  <object id="26" x="2488" y="4072" height="8">
+   <properties>
+    <property name="ghost" value=""/>
+   </properties>
+  </object>
+  <object id="27" x="3888" y="5264">
+   <properties>
+    <property name="ghost" value=""/>
+   </properties>
+  </object>
+  <object id="28" x="3640" y="4520">
+   <properties>
+    <property name="ghost" value=""/>
+   </properties>
+  </object>
+  <object id="29" x="3264" y="3944">
+   <properties>
+    <property name="ghost" value=""/>
+   </properties>
+  </object>
+  <object id="30" x="3120" y="3184">
+   <properties>
+    <property name="ghost" value=""/>
+   </properties>
+  </object>
+  <object id="31" x="2592" y="2824" height="8">
+   <properties>
+    <property name="ghost" value=""/>
+   </properties>
+  </object>
+  <object id="32" x="3888" y="2856" width="8" height="16">
+   <properties>
+    <property name="ghost" value=""/>
+   </properties>
+  </object>
+  <object id="33" x="3848" y="3344" width="8" height="16">
+   <properties>
+    <property name="ghost" value=""/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup name="CollisionLayer"/>
- <objectgroup name="TeleportLayer"/>
+ <objectgroup name="TeleportLayer">
+  <object id="34" name="untitled" x="3072" y="896" width="128" height="128">
+   <properties>
+    <property name="untitled" value="exit_purgatory"/>
+   </properties>
+  </object>
+ </objectgroup>
 </map>
