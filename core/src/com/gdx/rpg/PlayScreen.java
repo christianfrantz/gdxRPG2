@@ -6,26 +6,23 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.gdx.rpg.Entities.Enemy;
 import com.gdx.rpg.Entities.Entity;
-import com.gdx.rpg.Entities.NPC;
 import com.gdx.rpg.Entities.Player;
 import com.gdx.rpg.HUD.HUD;
-import javafx.util.converter.IntegerStringConverter;
-
-import java.util.ArrayList;
-import java.util.Iterator;
+import com.sun.javaws.Main;
 
 /**
  * Created by imont_000 on 2/26/2017.
  */
 public class PlayScreen implements Screen{
+
+    ShapeRenderer shapeRenderer;
 
     private MainGame game;
     Player player;
@@ -36,10 +33,6 @@ public class PlayScreen implements Screen{
     Viewport viewport;
 
     BitmapFont font;
-
-    DayNightCycle dayNightCycle;
-    LightHandler lightHandler;
-
 
     public PlayScreen(MainGame game){
         this.game = game;
@@ -59,19 +52,25 @@ public class PlayScreen implements Screen{
         game.hud.playerHealthLabel.setText(Statics.HUD_HEALTH + player.health);
 
         debugRenderer = new Box2DDebugRenderer();
+        debugRenderer.setDrawContacts(true);
+        debugRenderer.setDrawInactiveBodies(false);
+        debugRenderer.SHAPE_NOT_ACTIVE.set(Color.WHITE);
+        debugRenderer.SHAPE_STATIC.set(Color.RED);
 
         font = new BitmapFont();
         font.setColor(Color.RED);
 
-        dayNightCycle = new DayNightCycle();
-        lightHandler = new LightHandler();
-        lightHandler.updateLights();
+        MainGame.dayNightCycle = new DayNightCycle();
+        MainGame.lightHandler = new LightHandler(MainGame.dayNightCycle);
+        MainGame.lightHandler.setLights();
+
+        shapeRenderer = new ShapeRenderer();
     }
 
     private void update(float delta){
-        game.world.step(1/60f, 6, 2);
+        game.world.step(1/60f, 16, 12);
 
-        player.updatePlayer(delta, camera, lightHandler);
+        player.updatePlayer(delta, camera, MainGame.lightHandler);
 
         for(Projectile p : MainGame.projectilesOnScreen){
             if(p.isActive)
@@ -91,13 +90,16 @@ public class PlayScreen implements Screen{
 
         game.renderer.setView(camera.combined, x, y, w, h);
 
-        dayNightCycle.updateTime();
-
+        MainGame.dayNightCycle.updateTime();
     }
 
     @Override
     public void render(float delta) {
-        update(delta);
+        game.batch.setColor(1, 1, 1, 0.1f);
+        if(MainGame.gameState == MainGame.GameState.PLAYING) {
+            update(delta);
+        }
+
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -117,15 +119,18 @@ public class PlayScreen implements Screen{
             entity.sprite.draw(game.batch);
         }
 
-        MainGame.particleEffect.update(Gdx.graphics.getDeltaTime());
-        MainGame.particleEffect.draw(game.batch);
+       //MainGame.particleEffect.update(Gdx.graphics.getDeltaTime());
+        //MainGame.particleEffect.draw(game.batch);
+        for(ParticleEffectPool.PooledEffect effect : MainGame.effects){
+            effect.draw(game.batch, delta);
+        }
         game.batch.end();
 
-       // if(MainGame.currentMap.foregroundLayer[0] != 0)
-//            game.renderer.render(MainGame.currentMap.foregroundLayer);
+        if(MainGame.currentMap.foregroundLayer[0] != 0)
+            game.renderer.render(MainGame.currentMap.foregroundLayer);
 
 
-        lightHandler.updateLight(dayNightCycle, camera);
+        MainGame.lightHandler.updateLight( camera);
 
         debugRenderer.render(game.world, camera.combined);
 
@@ -144,13 +149,13 @@ public class PlayScreen implements Screen{
         font.draw(game.batch, 0 + "Defense: " + player.defense, 10, 800);
         font.draw(game.batch, 1 + "Attack " + player.attack, 10, 780);
         font.draw(game.batch, player.playerState.toString(), 10, 760);
-        font.draw(game.batch, player.direction.toString(), 10, 740);
-        font.draw(game.batch, player.moveDirection.toString(), 10, 720);
+        font.draw(game.batch, "Foreground layer " + MainGame.gameState, 10, 740);
+        font.draw(game.batch, "Player spawns " + MainGame.currentMap.playerSpawns.size(), 10, 720);
         font.draw(game.batch, "Stamina " + player.stamina, 10, 300);
-        font.draw(game.batch, "Day: " + dayNightCycle.getDay(), 10, 500);
-        font.draw(game.batch, String.format("%1$02d", dayNightCycle.getHours()) + " : " +
-                String.format("%1$02d", dayNightCycle.getMinutes()) + " : " +
-                String.format("%1$02d", dayNightCycle.getSeconds()), 10, 520);
+        font.draw(game.batch, "Day: " + MainGame.dayNightCycle.getDay(), 10, 500);
+        font.draw(game.batch, String.format("%1$02d", MainGame.dayNightCycle.getHours()) + " : " +
+                String.format("%1$02d", MainGame.dayNightCycle.getMinutes()) + " : " +
+                String.format("%1$02d", MainGame.dayNightCycle.getSeconds()), 10, 520);
 
         if(game.playerQuests.size() > 0){
             for(int i = 0; i < game.playerQuests.size(); i++){
@@ -159,6 +164,10 @@ public class PlayScreen implements Screen{
             }
         }
         game.batch.end();
+
+        if(MainGame.gameState == MainGame.GameState.CAMP_FADE){
+            WorldEventController.drawEvent();
+        }
 
     }
 

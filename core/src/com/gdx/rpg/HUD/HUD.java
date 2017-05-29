@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.gdx.rpg.Components.PlayerInputComponent;
 import com.gdx.rpg.Entities.NPC;
 
 import com.gdx.rpg.HUD.Inventory.InventoryActor;
@@ -20,6 +21,7 @@ import com.gdx.rpg.Observer.Event;
 import com.gdx.rpg.Observer.QuestObserver;
 import com.gdx.rpg.Observer.Subject;
 import com.gdx.rpg.Statics;
+import com.gdx.rpg.WorldEventController;
 
 /**
  * Created by imont_000 on 3/1/2017.
@@ -73,10 +75,36 @@ public class HUD implements Disposable {
 
         stage.addActor(table);
 
-        //Gdx.input.setInputProcessor(stage);
-
     }
+    public void ShowCampMenu(){
+        if(!dialogShown) {
+            dialogShown = true;
+            dialog = new Dialog("Camp", skin, "dialog") {
+                public void result(Object obj) {
+                    if(obj.equals(false)){
+                        dialogShown = false;
+                        MainGame.gameState = MainGame.GameState.PLAYING;
+                        Gdx.input.setInputProcessor(MainGame.inputMultiplexer);
+                    }
+                    if(obj.equals(true)){
+                        dialogShown = false;
+                        MainGame.gameState = MainGame.GameState.CAMP_FADE;
+                        Gdx.input.setInputProcessor(MainGame.inputMultiplexer);
+                    }
+                }
+            };
 
+            dialog.text("Rest for the night?");
+            dialog.setSize(400, 100);
+            dialog.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
+            dialog.setMovable(false);
+
+            dialog.button("Yes", true);
+            dialog.button("No", false);
+            stage.addActor(dialog);
+            Gdx.input.setInputProcessor(stage);
+        }
+    }
 
     public void ShowDialogue(final NPC entity){
         if(!dialogShown) {

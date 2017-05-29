@@ -22,10 +22,14 @@ public class PlayerInputComponent implements InputProcessor{
     Player player;
     public PlayerInputComponent(Player player){
         this.player = player;
-        Gdx.input.setInputProcessor(this);
+        MainGame.inputMultiplexer.addProcessor(this);
     }
 
     public void updateInput(Player player){
+        if(!rightPressed && !leftPressed && !downPressed && !upPressed){
+            player.playerState = Player.PlayerState.IDLE;
+        }
+
         if(player.attackCounter == 0){
             player.playerState = Player.PlayerState.IDLE;
         }
@@ -107,6 +111,16 @@ public class PlayerInputComponent implements InputProcessor{
             player.showInventory = false;
         else if(Gdx.input.isKeyJustPressed(Input.Keys.I) && !player.showInventory)
             player.showInventory = true;
+
+        if(Gdx.input.isKeyJustPressed(Input.Keys.C) && MainGame.gameState == MainGame.GameState.PLAYING && MainGame.player.isOutside){
+            for(Entity entity : MainGame.currentMap.mapEntities){
+                if(entity.enemyState == Entity.EnemyState.ATTACKING){
+                    return;
+                }
+            }
+            MainGame.gameState = MainGame.GameState.PAUSE_CAMP;
+            MainGame.hud.ShowCampMenu();
+        }
 
         if(Gdx.input.justTouched()){
             for(Entity entity : MainGame.currentMap.mapEntities){

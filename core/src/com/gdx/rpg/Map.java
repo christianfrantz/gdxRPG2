@@ -18,6 +18,7 @@ import com.gdx.rpg.Quests.Quest;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 /**
  * if object is entity, set sprite, health, call
@@ -34,15 +35,16 @@ public class Map {
     public Map( String name, TmxMapLoader loader){
         this.mapName = name;
         tiledMap = loader.load(name + ".tmx");
+
+        foregroundLayer = new int[1];
+        if(tiledMap.getLayers().get("Foreground") != null){
+            foregroundLayer[0] = tiledMap.getLayers().getIndex("Foreground");
+        }else
+            foregroundLayer[0] = 2;
     }
 
 
     public void loadMap(){
-        foregroundLayer = new int[1];
-        if(MainGame.currentMap.tiledMap.getLayers().get("Foreground") != null){
-            foregroundLayer[0] = MainGame.currentMap.tiledMap.getLayers().getIndex("Foreground");
-        }else
-            foregroundLayer[0] = 0;
 
         BodyDef def = new BodyDef();
         PolygonShape shape = new PolygonShape();
@@ -76,15 +78,10 @@ public class Map {
 
         for(MapObject object : tiledMap.getLayers().get("SpawnLayer").getObjects().getByType(RectangleMapObject.class)){
             Rectangle rect = ((RectangleMapObject)object).getRectangle();
-            if(object.getProperties().containsKey("slime")){
-                mapEntities.add(MainGame.enemyFactory.createEnemy(Enemy.EnemyType.SLIME, new Vector2(rect.getX() / MainGame.PPM, rect.getY() / MainGame.PPM)));
+            if(object.getProperties().containsKey("enemySpawn")){
+                setupEnemyGroup(object.getProperties().get("enemySpawn").toString(), rect);
             }
-            if(object.getProperties().containsKey("bat")){
-               mapEntities.add( MainGame.enemyFactory.createEnemy(Enemy.EnemyType.BAT, new Vector2(rect.getX() / MainGame.PPM, rect.getY() / MainGame.PPM)));
-            }
-            if(object.getProperties().containsKey("skeleton")){
-                mapEntities.add( MainGame.enemyFactory.createEnemy(Enemy.EnemyType.SKELETON, new Vector2(rect.getX() / MainGame.PPM, rect.getY() / MainGame.PPM)));
-            }
+
             if(object.getProperties().containsKey("player_start")){
                 playerSpawns.put(object.getProperties().get("player_start").toString(), new Vector2(rect.getX() / MainGame.PPM, rect.getY() / MainGame.PPM));
             }
@@ -107,6 +104,31 @@ public class Map {
             fixtureDef.isSensor = true;
             body.createFixture(fixtureDef).setUserData(object);
             body.setUserData("teleport");
+        }
+    }
+
+    private void setupEnemyGroup(String enemyType, Rectangle bounds){
+        float x = bounds.getX() / MainGame.PPM;
+        float y = bounds.getY() / MainGame.PPM;
+        float width = bounds.getWidth() / MainGame.PPM;
+        float height = bounds.getHeight() / MainGame.PPM;
+
+        Random random = new Random();
+        int enemyCount = 4 + random.nextInt(4);
+
+        if(enemyType.equals("slime")){
+            for(int i = 0; i < enemyCount; i++){
+                float xPos = x + (float)random.nextInt((int)width);
+                float yPos = y + (float)random.nextInt((int)height);
+                mapEntities.add(MainGame.enemyFactory.createEnemy(Enemy.EnemyType.SLIME, new Vector2(xPos, yPos)));
+            }
+        }
+        else if(enemyType.equals("bat")) {
+            for (int i = 0; i < enemyCount; i++) {
+                float xPos = x + (float) random.nextInt((int) width);
+                float yPos = y + (float) random.nextInt((int) height);
+                mapEntities.add(MainGame.enemyFactory.createEnemy(Enemy.EnemyType.BAT, new Vector2(xPos, yPos)));
+            }
         }
     }
 }

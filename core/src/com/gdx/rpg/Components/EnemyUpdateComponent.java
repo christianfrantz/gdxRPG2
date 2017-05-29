@@ -114,15 +114,9 @@ public class EnemyUpdateComponent extends EntityUpdateComponent{
             randomMove();
             entity.attackCount += Gdx.graphics.getDeltaTime();
             if(entity.attackCount >= entity.attackTimer){
-                Projectile p = new Projectile(entity, Projectile.ProjectileType.SLIME_SHOT, MainGame.player.body.getWorldCenter());
-                //MainGame.projectilesOnScreen.add(p);
+                new Projectile(entity, Projectile.ProjectileType.SLIME_SHOT, MainGame.player.body.getWorldCenter());
                 entity.attackCount = 0;
             }
-            float speed = 10f;
-            /*Vector2 force = new Vector2();
-            force.set(MainGame.player.body.getPosition()).sub(entity.body.getPosition()).nor().scl(speed);
-            entity.body.applyForceToCenter(force, true);*/
         }
-
     }
 }

@@ -1,5 +1,6 @@
 package com.gdx.rpg;
 
+import com.badlogic.gdx.assets.loaders.SynchronousAssetLoader;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
@@ -49,7 +50,7 @@ public class WorldContactListener implements ContactListener{
             projectile = fixtureB.getBody().getUserData().equals(Statics.ENEMY_PROJECTILE) ? (Projectile)fixtureB.getUserData() : (Projectile)fixtureA.getUserData();
             player = fixtureA.getBody().getUserData().equals(Statics.PLAYER_ATTACK_BODY) ? (Player)fixtureA.getUserData() : (Player)fixtureB.getUserData();
 
-//            projectile.body.setActive(false);
+            //projectile.body.setActive(false);
             subject.notify(player, Event.PLAYER_DAMAGE);
             System.out.println("PROJECTILE HIT PLAYER");
 
@@ -81,15 +82,25 @@ public class WorldContactListener implements ContactListener{
         }
 
         if(isPlayerTeleport(fixtureA, fixtureB)){
+            MapObject object = null;
             if(fixtureA.getBody().getUserData().equals("teleport")) {
-                MapObject object = (MapObject)fixtureA.getUserData();
+                object = (MapObject)fixtureA.getUserData();
+                System.out.println("SHIT" + object.getName());
                 MainGame.ChangeMap(object.getName());
                 MainGame.setCurrentPlayerSpawn(object.getProperties().get(object.getName()).toString());
             }
-            else if(fixtureA.getBody().getUserData().equals("teleport")){
-                MapObject object = (MapObject)fixtureB.getUserData();
+            else if(fixtureB.getBody().getUserData().equals("teleport")){
+                object = (MapObject)fixtureB.getUserData();
+                System.out.println("SHIT" + object.getName());
+
                 MainGame.ChangeMap(object.getName());
                 MainGame.setCurrentPlayerSpawn(object.getProperties().get(object.getName()).toString());
+            }
+            else {
+                object = (MapObject)fixtureB.getUserData();
+               // MapObject object2 = (MapObject)fixtureA.getUserData();
+                System.out.println("uh oh" + fixtureA.getBody().getUserData().toString() + " " +
+                        fixtureB.getBody().getUserData().toString());
             }
         }
 

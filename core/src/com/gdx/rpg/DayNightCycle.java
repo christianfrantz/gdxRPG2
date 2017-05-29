@@ -26,6 +26,24 @@ public class DayNightCycle {
     private float fseconds;
     private int seconds;
     private int minutes;
+
+    public void setSeconds(int seconds) {
+        this.seconds = seconds;
+    }
+
+    public void setMinutes(int minutes) {
+        this.minutes = minutes;
+    }
+
+    public void setHours(int hours) {
+        this.hours = hours;
+    }
+
+    public void setCampTime(){
+        hours = 22;
+        minutes = 0;
+        seconds = 0;
+    }
     private int hours;
     private int day;
 

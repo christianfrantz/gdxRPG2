@@ -2,22 +2,18 @@ package com.gdx.rpg;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.gdx.rpg.Entities.EnemyFactory;
-import com.gdx.rpg.Entities.Entity;
 import com.gdx.rpg.Entities.NPCFactory;
 import com.gdx.rpg.Entities.Player;
 import com.gdx.rpg.HUD.HUD;
@@ -31,6 +27,22 @@ import java.util.HashMap;
  * Created by imont_000 on 2/26/2017.
  */
 public class MainGame extends Game {
+
+    public static InputMultiplexer inputMultiplexer;
+
+    public static DayNightCycle dayNightCycle;
+    public static LightHandler lightHandler;
+
+    public static enum GameState{
+        PLAYING,
+        PAUSE_MENU,
+        PAUSE_CAMP,
+        CAMP_FADE,
+        CAMPING
+    };
+
+    public static GameState gameState;
+
     public static SpriteBatch batch;
 
     public static float vWidth = 1920;
@@ -48,6 +60,7 @@ public class MainGame extends Game {
     public static HashMap<String, Quest> availableQuests = new HashMap<String, Quest>();
 
     public static HashMap<String, Map> gameMaps = new HashMap<String, Map>();
+    public static ParticleEffectPool fireballPool;
     public static Map currentMap;
     public static Map mapToLoad;
     public static World world;
@@ -56,7 +69,8 @@ public class MainGame extends Game {
     public static TmxMapLoader mapLoader;
     public static String currentPlayerSpawn;
 
-    public static ParticleEffect particleEffect;
+    public static Array<ParticleEffectPool.PooledEffect> effects;
+    public static ParticleEffect fireball;
 
     public static ArrayList<Projectile> projectilesOnScreen = new ArrayList<Projectile>();
 
@@ -68,16 +82,20 @@ public class MainGame extends Game {
 
     @Override
     public void create() {
+        inputMultiplexer = new InputMultiplexer();
+        Gdx.input.setInputProcessor(inputMultiplexer);
+
         batch = new SpriteBatch();
-
-
         Pixmap pm = new Pixmap(Gdx.files.internal("cursor.png"));
         Gdx.graphics.setCursor(Gdx.graphics.newCursor(pm, 0, 0));
 
 
-        particleEffect = new ParticleEffect();
-        particleEffect.load(Gdx.files.internal("particle"), Gdx.files.internal(""));
-        particleEffect.scaleEffect(0.01f);
+        fireball = new ParticleEffect();
+        fireball.load(Gdx.files.internal("fire.particle"), Gdx.files.internal(""));
+        fireball.scaleEffect(0.005f);
+        fireballPool = new ParticleEffectPool(fireball, 0, 100);
+        effects = new Array<ParticleEffectPool.PooledEffect>();
+
        
         playerQuests = new ArrayList<Quest>();
         mapLoader = new TmxMapLoader();
@@ -97,6 +115,7 @@ public class MainGame extends Game {
         renderer = new OrthogonalTiledMapRenderer(MainGame.currentMap.tiledMap, 1 / MainGame.PPM);
 
         setScreen(new PlayScreen(this));
+        gameState = GameState.PLAYING;
     }
 
     public void SetPlayScreen(){
@@ -104,13 +123,16 @@ public class MainGame extends Game {
     }
 
     public static void ChangeMap(String name){
-        player.needToMove = true;
+        player.setNeedToMove(true);
         mapToLoad = gameMaps.get(name);
     }
 
     public static void PurgatoryLoad(){
-        player.needToMove = true;
+        player.setNeedToMove(true);
         mapToLoad = gameMaps.get(Statics.M_PURGATORY);
+        player.health = 5;
+        MainGame.hud.health = 5;
+        MainGame.hud.playerHealthLabel.setText("Health: " + player.health);
     }
 
     public static String getCurrentPlayerSpawn(){

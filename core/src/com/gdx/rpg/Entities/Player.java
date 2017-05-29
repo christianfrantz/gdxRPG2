@@ -36,7 +36,8 @@ public class Player extends Entity {
         MOVING,
         SWORD_ATTACK,
         PROJECTILE_ATTACK,
-        DODGING
+        DODGING,
+        CAMPING
     }
 
     private PlayerPhysicsComponent physicsComponent;
@@ -58,13 +59,20 @@ public class Player extends Entity {
     public float angle;
     public Vector2 mouseRelativePlayer;
 
-    public boolean needToMove = false;
+    public boolean isNeedToMove() {
+        return needToMove;
+    }
+
+    public void setNeedToMove(boolean needToMove) {
+        this.needToMove = needToMove;
+    }
+
+    private boolean needToMove = false;
     private boolean projectileShot = false;
 
     public Inventory inventory;
 
     public boolean showInventory;
-
     public boolean nextDialog = false;
 
     public Vector2 mousePos;
@@ -108,7 +116,6 @@ public class Player extends Entity {
         physicsComponent.updatePhysics(this, speed);
 
         if(needToMove){
-            MainGame.currentMap.foregroundLayer[0] = 0;
             Array<Body> bodies = new Array<Body>();
             MainGame.world.getBodies(bodies);
             for(Body body : bodies){
@@ -116,19 +123,19 @@ public class Player extends Entity {
                     MainGame.world.destroyBody(body);
                 }
             }
-
+            MainGame.projectilesOnScreen.clear();
             MainGame.mapToLoad.loadMap();
             MainGame.currentMap = MainGame.mapToLoad;
-            if(MainGame.currentMap.mapName == Statics.M_MAIN_MAP){
+            if (MainGame.currentMap.mapName == Statics.M_MAIN_MAP) {
                 isOutside = true;
-            }
-            else
+            } else
                 isOutside = false;
 
-            if(MainGame.currentMap.mapName == Statics.M_PURGATORY){
+            if (MainGame.currentMap.mapName == Statics.M_PURGATORY) {
                 MainGame.setCurrentPlayerSpawn(MainGame.gameMaps.get(Statics.M_PURGATORY).playerSpawns.keySet().iterator().next());
             }
-            lightHandler.updateLights();
+
+            lightHandler.setLights();
             MainGame.renderer = new OrthogonalTiledMapRenderer(MainGame.currentMap.tiledMap, 1 / MainGame.PPM);
             Vector2 newPosition = new Vector2(MainGame.currentMap.playerSpawns.get(MainGame.getCurrentPlayerSpawn()).x, MainGame.currentMap.playerSpawns.get(MainGame.getCurrentPlayerSpawn()).y);
 
@@ -169,7 +176,6 @@ public class Player extends Entity {
 
         if(health <= 0){
             MainGame.PurgatoryLoad();
-            health = 100;
         }
         if(stamina < 100 && playerState == PlayerState.IDLE){
             stamina++;

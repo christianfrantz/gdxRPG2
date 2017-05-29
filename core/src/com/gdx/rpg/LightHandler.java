@@ -23,8 +23,9 @@ public class LightHandler {
     private PointLight playerLight;
     private float ambientR, ambientG, ambientB, ambientA;
     public ArrayList<PointLight> lightsOnScreen = new ArrayList<PointLight>();
+    private DayNightCycle dayNightCycle;
 
-    public LightHandler(){
+    public LightHandler(DayNightCycle dayNightCycle){
         RayHandler.useDiffuseLight(true);
         rayHandler = new RayHandler(MainGame.world);
         rayHandler.setCulling(true);
@@ -35,9 +36,10 @@ public class LightHandler {
         playerLight.setDistance(3);
         playerLight.attachToBody(MainGame.player.body);
         playerLight.setIgnoreAttachedBody(true);
+        this.dayNightCycle = dayNightCycle;
     }
 
-    public void updateLights(){
+    public void setLights(){
 
         for(int i = 0; i < lightsOnScreen.size(); i++){
             lightsOnScreen.get(i).setActive(false);
@@ -56,9 +58,20 @@ public class LightHandler {
 
             lightsOnScreen.add(light);
         }
+
+        setRGBA();
     }
 
-    public void updateLight(DayNightCycle dayNightCycle, Camera camera){
+    public void updateLight( Camera camera){
+        setRGBA();
+
+        rayHandler.setAmbientLight(ambientR, ambientG, ambientB, ambientA);
+        playerLight.setPosition(MainGame.player.sprite.getX(), MainGame.player.sprite.getY());
+        rayHandler.setCombinedMatrix(camera.combined);
+        rayHandler.updateAndRender();
+    }
+
+    private void setRGBA(){
         if(MainGame.player.isOutside) {
             if (dayNightCycle.getHours() == 6) {
                 ambientB = 0.3f;
@@ -96,22 +109,18 @@ public class LightHandler {
                 ambientB = 0.7f;
                 ambientR = 0.3f;
             }
-            if (dayNightCycle.getHours() == 22) {
+            if (dayNightCycle.getHours() >= 22 && dayNightCycle.getHours() <= 5) {
                 ambientR = 0.2f;
                 ambientG = 0.15f;
                 ambientB = 0.4f;
                 ambientA = 0.3f;
             }
         }
-        else if(MainGame.player.isOutside = false){
+        else {
             ambientA = 1;
             ambientB = 1;
             ambientG = 1;
             ambientR = 1;
         }
-        rayHandler.setAmbientLight(ambientR, ambientG, ambientB, ambientA);
-        playerLight.setPosition(MainGame.player.sprite.getX(), MainGame.player.sprite.getY());
-        rayHandler.setCombinedMatrix(camera.combined);
-        rayHandler.updateAndRender();
     }
 }

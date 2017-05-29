@@ -38,8 +38,8 @@ public class DamageObserver implements Observer {
         switch (event) {
             case ENEMY_DAMAGE:
                 enemy.health -= player.attack;
-                MainGame.particleEffect.setPosition(enemy.body.getWorldCenter().x, enemy.body.getWorldCenter().y);
-                MainGame.particleEffect.start();
+                //MainGame.particleEffect.setPosition(enemy.body.getWorldCenter().x, enemy.body.getWorldCenter().y);
+                //MainGame.particleEffect.start();
                 System.out.println("ENEMY_DAMAGE : " + enemy.health  + " " + enemy.id + " " + enemy.flaggedForDelete);
                 break;
             case PLAYER_DAMAGE:
@@ -54,9 +54,11 @@ public class DamageObserver implements Observer {
     public void onNotify(Projectile p, Entity enemy, Event event){
         switch (event) {
             case ENEMY_DAMAGE:
-            enemy.health -= 5;
-            MainGame.particleEffect.setPosition(enemy.body.getWorldCenter().x, enemy.body.getWorldCenter().y);
-            MainGame.particleEffect.start();
+                if(enemy.enemyState == Entity.EnemyState.IDLE)
+                    enemy.enemyState = Entity.EnemyState.ATTACKING;
+            enemy.health -= MainGame.player.attack;
+            //MainGame.particleEffect.setPosition(enemy.body.getWorldCenter().x, enemy.body.getWorldCenter().y);
+            //MainGame.particleEffect.start();
                 break;
         }
     }

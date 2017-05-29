@@ -76,10 +76,10 @@ public class PlayerGraphicsComponent {
                         || player.moveDirection == Entity.Direction.RIGHT) {
                     player.sprite.setRegion(walkLeft.getKeyFrame(animationTime, true));
                 }
-                if(player.playerState == Player.PlayerState.SWORD_ATTACK){
+                /*if(player.playerState == Player.PlayerState.SWORD_ATTACK){
                     player.sprite.setBounds(0, 0, 64 / MainGame.PPM, 64 / MainGame.PPM);
                     player.sprite.setRegion(attackLeft.getKeyFrame(animationTime, false));
-                }
+                }*/
                 break;
             case RIGHT:
                 if(player.playerState == Player.PlayerState.IDLE)
